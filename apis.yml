@@ -1,0 +1,187 @@
+aid: alto-vebra
+url: https://raw.githubusercontent.com/api-evangelist/alto-vebra/refs/heads/main/apis.yml
+name: Alto (Vebra / Zoopla)
+kind: company
+description: >-
+  Alto — formerly Vebra Alto, and still trading through vebra.com — is the United Kingdom's most
+  widely deployed estate agency CRM, used by more than 6,000 sales and lettings agencies to run
+  valuations, listings, applicant matching, offers, sales and lettings progression, tenancies,
+  property management, work orders and client accounting. It is owned by Houseful Limited, the
+  parent of the Zoopla portal, which places Alto at the exact chokepoint of the UK residential
+  market — the country has no MLS, so listings reach Rightmove and Zoopla through agency CRM
+  software rather than a shared cooperative database, and Alto is the largest of those pipes.
+  Its API posture is genuinely strong on the contract side and closed on the access side: Alto
+  publishes an open, unauthenticated developer portal at developers.vebraalto.com carrying a
+  complete OpenAPI 3.0.4 document (95 paths across 27 resource families) served verbatim from
+  api-docs.vebraalto.com, alongside 24 documented CloudEvents 1.0 webhook event types. But
+  credentials are partner-only — a developer must register an integration in Alto Connect, be
+  bound by an existing contract with Vebra Solutions, and then wait for an individual agency to
+  activate the integration and issue an AgencyRef before a single call can be made. Sibling
+  Zoopla portal product APIs (Leads, Premium Listing Activations, Weekly Featured Property) are
+  documented publicly at developers.zoopla.co.uk with downloadable specs but are likewise
+  restricted to contracted Zoopla agency customers. No RESO Web API or Data Dictionary
+  certification exists — RESO is a North American NAR-driven standard with no UK counterpart —
+  and Alto publishes no open data; the UK's open property layer sits with HM Land Registry and
+  Ordnance Survey, not with the private CRM duopoly feeders.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+tags:
+- Real Estate
+- United Kingdom
+- PropTech
+- Property Listings
+- CRM
+- Property Management
+- Rentals
+- Conveyancing
+- Estate Agency
+- Tenancy
+created: '2026-07-26'
+modified: '2026-07-26'
+specificationVersion: '0.19'
+apis:
+- aid: alto-vebra:alto-api
+  name: Alto API
+  description: >-
+    The full Alto REST API for UK estate agency operations — 95 documented paths across 27
+    resource families covering contacts and applicants, property inventory, listings and media,
+    appraisals and valuations, appointments and viewings, leads, offers, sales progression,
+    lettings progression, tenancies, landlords and owners, work orders, suppliers, documents,
+    file notes, branches, negotiators and partner integration status. OpenAPI 3.0.4 with a
+    sandbox and a production server, Bearer JWT obtained via OAuth2 client-credentials against
+    the /token endpoint, an AgencyRef header scoping every call to one agency, and route-level
+    scopes of the form alto/read:contacts and alto/route:get-inventory.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Real Estate
+  - CRM
+  - Property Listings
+  - Tenancy
+  - Property Management
+  - United Kingdom
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-api-openapi.json
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+- aid: alto-vebra:zoopla-leads-api
+  name: Zoopla Leads API
+  description: >-
+    Swagger 2.0 poll API for retrieving applicant leads and appraisal (valuation) leads generated
+    on the Zoopla portal, published by Houseful for contracted Zoopla agency customers and their
+    software partners. OAuth2 client-credentials against services-auth.services.zoopla.co.uk with
+    the scopes leads/list:applicant-leads and leads/list:appraisal-leads. A push variant is
+    documented alongside the poll contract.
+  humanURL: https://developers.zoopla.co.uk/leads/reference/api
+  baseURL: https://services.zoopla.co.uk
+  tags:
+  - Real Estate
+  - Leads
+  - Property Listings
+  - United Kingdom
+  properties:
+  - type: OpenAPI
+    url: openapi/zoopla-leads-api-openapi.json
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+- aid: alto-vebra:zoopla-premium-listing-activations-api
+  name: Zoopla Premium Listing Activations API
+  description: >-
+    OpenAPI 3.0.0 contract for activating and inspecting Zoopla Premium Listing products against
+    a property listing, exposed at /products/premium-listings and /products/premium-listings/{uuid}.
+    OAuth2 client-credentials with the api/api_access scope.
+  humanURL: https://developers.zoopla.co.uk/premium-listings/reference/api
+  baseURL: https://services.zoopla.co.uk
+  tags:
+  - Real Estate
+  - Property Listings
+  - Advertising
+  - United Kingdom
+  properties:
+  - type: OpenAPI
+    url: openapi/zoopla-premium-listing-activations-openapi.json
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+- aid: alto-vebra:zoopla-weekly-featured-property-api
+  name: Zoopla Weekly Featured Property (WFP) Activations API
+  description: >-
+    OpenAPI 3.0.0 contract for activating Zoopla Weekly Featured Property placements against a
+    listing, exposed at /products/weekly-featured-properties and
+    /products/weekly-featured-properties/{uuid}. OAuth2 client-credentials with the api/api_access
+    scope.
+  humanURL: https://developers.zoopla.co.uk/wfp/reference/api
+  baseURL: https://services.zoopla.co.uk
+  tags:
+  - Real Estate
+  - Property Listings
+  - Advertising
+  - United Kingdom
+  properties:
+  - type: OpenAPI
+    url: openapi/zoopla-weekly-featured-property-openapi.json
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+common:
+- type: Website
+  url: https://www.altosoftware.co.uk/
+- type: Documentation
+  url: https://developers.vebraalto.com/
+- type: Portal
+  url: https://connect.vebraalto.com/connect
+- type: Blog
+  url: https://www.altosoftware.co.uk/blog/
+- type: BlogRSS
+  url: https://www.altosoftware.co.uk/feed/
+- type: Integrations
+  url: https://www.altosoftware.co.uk/integrations/
+- type: TermsOfService
+  url: https://developers.vebraalto.com/api-terms-of-use
+- type: Support
+  url: https://partnerfeedback.vebraalto.com/
+- type: GitHubOrganization
+  url: https://github.com/AltoSoftware
+- type: GitHubOrganization
+  url: https://github.com/zoopla-eng
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
