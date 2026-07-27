@@ -1,0 +1,81 @@
+generated: '2026-07-26'
+method: searched
+source: https://files.vebraalto.com/alto/downloads/
+summary: >-
+  There is no API changelog. Neither developers.vebraalto.com nor developers.zoopla.co.uk
+  publishes a dated release feed, a "what's new" page, or a versioned diff of any kind, and the
+  Alto OpenAPI carries a flat info.version of "1.0" that does not move. What Alto does publish
+  is a long-running series of PRODUCT release notes — "Alto Upgrade Notes" PDFs on
+  files.vebraalto.com — covering the CRM application rather than the API contract. They are not
+  indexed: the directory listing is denied and each PDF must be known by filename, so this
+  record is a set of confirmed artifacts rather than a complete history.
+api_changelog:
+  exists: false
+  probed:
+  - url: https://developers.vebraalto.com/
+    result: no changelog/release-notes entry in the site navigation
+  - url: https://developers.zoopla.co.uk/_sidebar.md
+    result: no changelog entry in the docs sidebar
+  - url: https://www.altosoftware.co.uk/release-notes/
+    status: 404
+  scheme: none — the Alto OpenAPI declares info.version "1.0" with no dated revisions
+product_release_notes:
+  format: PDF
+  host: https://files.vebraalto.com/alto/downloads/
+  indexed: false
+  index_note: >-
+    The directory itself returns an empty body and an S3 list-objects request returns 403
+    AccessDenied; the PDFs are reachable only by exact filename. Filenames follow no single
+    convention — Alto_Upgrade_Notes_V<v>.pdf, AltoUpgradeNotesv<v>.pdf and
+    Alto_Upgrade_Notes_+v<v>.pdf all appear.
+  versioning_scheme: mixed — an early V112.x / V200.x product line, then a YYYY.N calendar
+    series
+  entries:
+  - version: '2021.1'
+    date: '2021-01-19'
+    file: https://files.vebraalto.com/alto/downloads/AltoUpgradeNotesv2021.1.pdf
+    date_source: PDF CreationDate
+  - version: '2020.9'
+    date: '2020-04-28'
+    file: https://files.vebraalto.com/alto/downloads/AltoUpgradeNotesv2020.9.pdf
+    date_source: PDF CreationDate
+  - version: '2019.13'
+    date: '2019-06-27'
+    file: https://files.vebraalto.com/alto/downloads/AltoUpgradeNotesv2019.13.pdf
+    date_source: PDF CreationDate
+    highlights: Making Tax Digital VAT Fee Analysis reports (cash and accrual)
+  - version: '2018.95'
+    file: https://files.vebraalto.com/alto/downloads/AltoUpgradeNotesv2018.95.pdf
+    highlights: Alto Diary export of appointment information
+  - version: 200.430.0
+    date: '2018-07-23'
+    file: https://files.vebraalto.com/alto/downloads/AltoUpgradeNotesv200.430.0.pdf
+    date_source: PDF CreationDate
+  - version: '200.3'
+    date: '2018-05-14'
+    file: https://files.vebraalto.com/alto/downloads/AltoUpgradeNotesv200.3.pdf
+    date_source: PDF CreationDate
+    highlights: Right To Erasure, property management report changes (GDPR-era release)
+  - version: '200.2'
+    date: '2018-04-09'
+    file: https://files.vebraalto.com/alto/downloads/Alto_Upgrade_Notes_V200.2.pdf
+    date_source: PDF CreationDate
+    highlights: Consent management, property management features
+  - version: 112.710
+    file: https://files.vebraalto.com/alto/downloads/Alto_Upgrade_Notes_+v112.710.pdf
+  - version: 112.610
+    file: https://files.vebraalto.com/alto/downloads/Alto_Upgrade_Notes_v112.610.pdf
+breaking_change_signalling:
+  in_spec: >-
+    The only change signal inside the contract is a single deprecated operation — GET /clients,
+    whose summary reads "This endpoint is now obsolete. Use /contacts endpoint instead." It
+    carries deprecated: true. Nothing dates it and nothing says when it will be removed.
+  headers: no Sunset or Deprecation header is documented (RFC 8594 not implemented)
+  webhooks: >-
+    The webhooks guide does commit to forward compatibility on the event payload — "We may add
+    fields to the payload over time. Ignore any fields you do not recognise rather than
+    failing." That is the only published compatibility promise in the estate.
+gaps:
+- No dated API changelog on either developer site.
+- No index for the product release notes, so consumers cannot discover the current version.
+- No Sunset/Deprecation header support and no removal timeline on the one deprecated operation.

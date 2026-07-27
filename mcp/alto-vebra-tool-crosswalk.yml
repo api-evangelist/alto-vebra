@@ -1,0 +1,1339 @@
+generated: '2026-07-26'
+method: derived
+source: mcp/alto-vebra-mcp.yml + the four OpenAPI documents in openapi/
+summary: 'A one-to-one crosswalk, because there is no divergence to record: Alto and Zoopla publish no MCP server
+  and no GraphQL endpoint, so every tool in mcp/alto-vebra-mcp.yml is a derived projection of a REST operation and
+  inherits that operation''s parameters and requestBody as its input schema. There are no MCP-only capabilities
+  and no REST operations without a tool. The crosswalk is emitted anyway so that when Alto (or a partner) ships
+  a real server, the divergence is measured against a recorded baseline rather than guessed.'
+surfaces:
+  openapi:
+  - file: openapi/alto-api-openapi.json
+    version: 3.0.4
+    operations: 112
+    gated: contract is public and anonymous; CREDENTIALS are partner-only
+  - file: openapi/zoopla-leads-api-openapi.json
+    version: swagger 2.0
+    operations: 2
+    gated: contracted Zoopla customers only
+  - file: openapi/zoopla-premium-listing-activations-openapi.json
+    version: 3.0.0
+    operations: 4
+    gated: contracted Zoopla customers only
+  - file: openapi/zoopla-weekly-featured-property-openapi.json
+    version: 3.0.0
+    operations: 3
+    gated: contracted Zoopla customers only
+  graphql:
+    endpoint: null
+    note: No /graphql surface exists on any host in the estate; introspection was not attempted because there is
+      nothing to introspect.
+  mcp:
+    url: null
+    note: No published MCP server; tools/list could not be called. Tools below are candidates derived from OpenAPI.
+  asyncapi:
+  - file: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+    note: 26 CloudEvents 1.0 event types — an event surface with no tool equivalent; an agent subscribes rather
+      than calls.
+  - file: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+    note: Push twin of the polled Leads API.
+coverage:
+  tools_named: 121
+  tools_bound: 121
+  mcp_only: 0
+  graphql_only: 0
+  rest_ops_total: 121
+  rest_ops_with_tool: 121
+  bound_by_operation_id: 35
+  bound_by_method_and_path: 86
+by_category:
+  Contacts: 18
+  Inventory: 12
+  Tenancies: 9
+  Appointments: 7
+  Listing: 7
+  Parameters: 6
+  Documents: 5
+  FileNotes: 5
+  ManagementEvents: 5
+  Leads: 4
+  WorkOrders: 4
+  Zoopla Premium Listing Activations API: 4
+  Media: 3
+  Partners: 3
+  Suppliers: 3
+  Zoopla Weekly Featured Property (WFP) Activations API: 3
+  Appraisals: 2
+  Branches: 2
+  Negotiators: 2
+  ReferenceChecks: 2
+  Referrals: 2
+  Landlords: 2
+  Charges: 2
+  SalesProgression: 2
+  REST Endpoints: 2
+  Clients: 1
+  Owners: 1
+  LettingsProgression: 1
+  Offers: 1
+  Referral: 1
+mcp_only: []
+graphql_only: []
+rest_only: []
+crosswalk:
+- tool: get_appointments
+  category: Appointments
+  rest:
+  - GET /appointments/{appointmentId}/{instanceId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /appointments/{appointmentId}/{instanceId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/read:appointments
+  - alto/route:get-appointments-appointmentid-instanceid
+- tool: create_appointments_general
+  category: Appointments
+  rest:
+  - POST /appointments/general
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /appointments/general
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-appointments-general
+  - alto/write:appointments_general
+- tool: update_appointments_general
+  category: Appointments
+  rest:
+  - PATCH /appointments/general/{appointmentId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /appointments/general/{appointmentId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:patch-appointments-general-appointmentid
+  - alto/write:appointments_general
+- tool: get_appointments_negotiators
+  category: Appointments
+  rest:
+  - GET /appointments/negotiators
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /appointments/negotiators
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/read:appointments
+  - alto/route:get-appointments-negotiators
+- tool: get_appointments_valuations
+  category: Appointments
+  rest:
+  - GET /appointments/valuations
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /appointments/valuations
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-appointments-valuations
+- tool: create_appointments_viewings
+  category: Appointments
+  rest:
+  - POST /appointments/viewings
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /appointments/viewings
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-appointments-viewings
+  - alto/write:appointments_viewings
+- tool: update_appointments_viewings
+  category: Appointments
+  rest:
+  - PATCH /appointments/viewings/{appointmentId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /appointments/viewings/{appointmentId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:patch-appointments-viewings-appointmentid
+  - alto/write:appointments_viewings
+- tool: get_parameters_appointment_subtypes
+  category: Parameters
+  rest:
+  - GET /parameters/appointment-subtypes
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/appointment-subtypes
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/read:appointments
+  - alto/route:get-parameters-appointment-subtypes
+- tool: create_appraisal
+  category: Appraisals
+  rest:
+  - CreateAppraisal
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#POST /appraisals
+  scopes:
+  - alto/route:post-appraisals
+- tool: patch_appraisal
+  category: Appraisals
+  rest:
+  - PatchAppraisal
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /inventory/{propertyId}/appraisal
+  scopes:
+  - alto/route:patch-inventory-propertyid-appraisal
+- tool: get_clients
+  category: Clients
+  rest:
+  - GET /clients
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /clients
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-clients
+- tool: get_branches
+  category: Branches
+  rest:
+  - GET /branches
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /branches
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-branches
+- tool: get_branches_2
+  category: Branches
+  rest:
+  - GET /branches/{branchId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /branches/{branchId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-branches-branchid
+- tool: get_negotiators
+  category: Negotiators
+  rest:
+  - GET /negotiators
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /negotiators
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-negotiators
+- tool: get_negotiators_2
+  category: Negotiators
+  rest:
+  - GET /negotiators/{negotiatorId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /negotiators/{negotiatorId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-negotiators-negotiatorid
+- tool: get_contacts_by_id
+  category: Contacts
+  rest:
+  - GetContactsById
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts
+  scopes:
+  - alto/route:get-contacts
+- tool: create_contact
+  category: Contacts
+  rest:
+  - CreateContact
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#POST /contacts
+  scopes:
+  - alto/route:get-contacts
+- tool: get_contact
+  category: Contacts
+  rest:
+  - GetContact
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}
+  scopes:
+  - alto/route:get-contacts-contactid
+- tool: update_contact
+  category: Contacts
+  rest:
+  - UpdateContact
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /contacts/{contactId}
+  scopes:
+  - alto/route:get-contacts-contactid
+- tool: create_applicant_requirement
+  category: Contacts
+  rest:
+  - CreateApplicantRequirement
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/applicant-requirements
+  scopes:
+  - alto/route:post-contacts-contactid-applicant-requirements
+- tool: update_applicant_requirement
+  category: Contacts
+  rest:
+  - UpdateApplicantRequirement
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /contacts/{contactId}/applicant-requirements/{requirementId}
+  scopes:
+  - alto/route:patch-contacts-contactid-applicant-requirements-requirementid
+- tool: list_bank_accounts
+  category: Contacts
+  rest:
+  - ListBankAccounts
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/bank-accounts
+  scopes:
+  - alto/read:contact_bank_accounts
+  - alto/route:get-contacts-contactid-bank-accounts
+- tool: create_forwarding_address
+  category: Contacts
+  rest:
+  - CreateForwardingAddress
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/forwarding-address
+  scopes:
+  - alto/route:post-contacts-contactid-forwarding-address
+- tool: get_persons
+  category: Contacts
+  rest:
+  - GetPersons
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/persons
+  scopes:
+  - alto/route:get-contacts-contactid-persons
+- tool: update_person
+  category: Contacts
+  rest:
+  - UpdatePerson
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /contacts/{contactId}/persons/{personId}
+  scopes:
+  - alto/route:patch-contacts-contactid-persons-personid
+- tool: get_person
+  category: Contacts
+  rest:
+  - GetPerson
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/persons/{personId}
+  scopes:
+  - alto/route:patch-contacts-contactid-persons-personid
+- tool: get_preferences
+  category: Contacts
+  rest:
+  - GetPreferences
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/preferences
+  scopes:
+  - alto/route:post-contacts-contactid-preferences
+- tool: create_contacts_preferences
+  category: Contacts
+  rest:
+  - POST /contacts/{contactId}/preferences
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/preferences
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-contacts-contactid-preferences
+- tool: get_contact_relationship
+  category: Contacts
+  rest:
+  - GetContactRelationship
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/relationship
+  scopes:
+  - alto/route:get-contacts-contactid-relationship
+- tool: create_contact_relationship
+  category: Contacts
+  rest:
+  - CreateContactRelationship
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/relationship
+  scopes:
+  - alto/route:get-contacts-contactid-relationship
+- tool: delete_contact_relationship
+  category: Contacts
+  rest:
+  - DeleteContactRelationship
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#DELETE /contacts/{contactId}/relationship/{contactRelationshipId}
+  scopes:
+  - alto/route:delete-contacts-contactid-relationship-contactrelationshipid
+- tool: get_all_contacts
+  category: Contacts
+  rest:
+  - GetAllContacts
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/all
+  scopes:
+  - alto/route:get-contacts-all
+- tool: get_contacts_search
+  category: Contacts
+  rest:
+  - GET /contacts/search
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/search
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-contacts-search
+- tool: get_owners
+  category: Owners
+  rest:
+  - GetOwners
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /owners
+  scopes:
+  - alto/read:contacts
+  - alto/route:get-owners
+- tool: get_client_disposal_statuses
+  category: Parameters
+  rest:
+  - GetClientDisposalStatuses
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/client-disposal-statuses
+  scopes:
+  - alto/route:get-parameters-client-disposal-statuses
+- tool: get_intentions
+  category: Parameters
+  rest:
+  - GetIntentions
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/client-intentions
+  scopes:
+  - alto/route:get-parameters-client-intentions
+- tool: get_positions
+  category: Parameters
+  rest:
+  - GetPositions
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/client-positions
+  scopes:
+  - alto/route:get-parameters-client-positions
+- tool: get_lead_sources
+  category: Parameters
+  rest:
+  - GetLeadSources
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/lead-sources
+  scopes:
+  - alto/route:get-parameters-lead-sources
+- tool: get_property_types
+  category: Parameters
+  rest:
+  - GetPropertyTypes
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/property-types
+  scopes:
+  - alto/route:get-parameters-property-types
+- tool: get_documents_by_type
+  category: Documents
+  rest:
+  - GetDocumentsByType
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /documents
+  scopes:
+  - alto/route:get-documents
+- tool: get_documents_content
+  category: Documents
+  rest:
+  - GET /documents/{documentId}/content
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /documents/{documentId}/content
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-documents-documentid-content
+- tool: create_documents_post
+  category: Documents
+  rest:
+  - POST /documents/post
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /documents/post
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-documents-post
+- tool: get_inventory_documents
+  category: Documents
+  rest:
+  - GET /inventory/{inventoryId}/documents
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/documents
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid-documents
+- tool: get_work_orders_documents
+  category: Documents
+  rest:
+  - GET /work-orders/{workOrderId}/documents
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /work-orders/{workOrderId}/documents
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-work-orders-workorderid-documents
+- tool: create_file_note
+  category: FileNotes
+  rest:
+  - CreateFileNote
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#POST /file-notes
+  scopes:
+  - alto/route:post-file-notes
+- tool: get_file_note
+  category: FileNotes
+  rest:
+  - GetFileNote
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /file-notes/{fileNoteId}
+  scopes:
+  - alto/route:get-file-notes-filenoteid
+- tool: patch_file_note
+  category: FileNotes
+  rest:
+  - PatchFileNote
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /file-notes/{fileNoteId}
+  scopes:
+  - alto/route:get-file-notes-filenoteid
+- tool: search_file_notes
+  category: FileNotes
+  rest:
+  - SearchFileNotes
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /file-notes/search
+  scopes:
+  - alto/route:get-file-notes-search
+- tool: get_file_notes_by_property
+  category: FileNotes
+  rest:
+  - GetFileNotesByProperty
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{propertyId}/file-notes
+  scopes:
+  - alto/route:get-inventory-propertyid-file-notes
+- tool: get_inventory
+  category: Inventory
+  rest:
+  - GET /inventory
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory
+- tool: get_inventory_2
+  category: Inventory
+  rest:
+  - GET /inventory/{inventoryId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid
+- tool: update_inventory
+  category: Inventory
+  rest:
+  - PATCH /inventory/{inventoryId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /inventory/{inventoryId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid
+- tool: create_inventory_keyset
+  category: Inventory
+  rest:
+  - POST /inventory/{inventoryId}/keyset
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/keyset
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-inventoryid-keyset
+- tool: update_inventory_keyset
+  category: Inventory
+  rest:
+  - PATCH /inventory/{inventoryId}/keyset/{keySetId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /inventory/{inventoryId}/keyset/{keySetId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:delete-inventory-inventoryid-keyset-keysetid
+- tool: delete_inventory_keyset
+  category: Inventory
+  rest:
+  - DELETE /inventory/{inventoryId}/keyset/{keySetId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#DELETE /inventory/{inventoryId}/keyset/{keySetId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:delete-inventory-inventoryid-keyset-keysetid
+- tool: get_inventory_keysets
+  category: Inventory
+  rest:
+  - GET /inventory/{inventoryId}/keysets
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/keysets
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid-keysets
+- tool: create_inventory_owner
+  category: Inventory
+  rest:
+  - POST /inventory/{inventoryId}/owner
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/owner
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-inventoryid-owner
+- tool: get_inventory_filter
+  category: Inventory
+  rest:
+  - GET /inventory/filter
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/filter
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-filter
+- tool: get_inventory_items
+  category: Inventory
+  rest:
+  - GET /inventory/items
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/items
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-items
+- tool: create_inventory_new
+  category: Inventory
+  rest:
+  - POST /inventory/new
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/new
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-new
+- tool: get_inventory_search
+  category: Inventory
+  rest:
+  - GET /inventory/search
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/search
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-search
+- tool: get_leads
+  category: Leads
+  rest:
+  - GET /leads
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /leads
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/read:leads
+  - alto/route:get-leads
+- tool: create_leads
+  category: Leads
+  rest:
+  - POST /leads
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /leads
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-leads
+- tool: get_by_id
+  category: Leads
+  rest:
+  - GetById
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /leads/{leadId}
+  scopes:
+  - alto/route:get-leads-leadid
+- tool: update_lead
+  category: Leads
+  rest:
+  - UpdateLead
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /leads/{leadId}
+  scopes:
+  - alto/route:get-leads-leadid
+  - alto/update:leads
+- tool: get_guarantor_ids
+  category: LettingsProgression
+  rest:
+  - GET /guarantorIds
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /guarantorIds
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-guarantorids
+- tool: get_reference_checks
+  category: ReferenceChecks
+  rest:
+  - GET /ReferenceChecks
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /ReferenceChecks
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-referencechecks
+- tool: update_reference_checks
+  category: ReferenceChecks
+  rest:
+  - PATCH /ReferenceChecks/{referenceCheckId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /ReferenceChecks/{referenceCheckId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:patch-referencechecks-referencecheckid
+- tool: get_listing_filter
+  category: Listing
+  rest:
+  - GET /listing/filter
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /listing/filter
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-listing-filter
+- tool: get_listing_property
+  category: Listing
+  rest:
+  - GET /listing/property/{propertyId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/{propertyId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-listing-property-propertyid
+- tool: get_listing_property_images
+  category: Listing
+  rest:
+  - GET /listing/property/{propertyId}/images
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/{propertyId}/images
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-listing-property-propertyid-images
+- tool: get_listing_property_images_2
+  category: Listing
+  rest:
+  - GET /listing/property/{propertyId}/images/{imageId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/{propertyId}/images/{imageId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-listing-property-propertyid-images-imageid
+- tool: patch_listing_rooms
+  category: Listing
+  rest:
+  - PatchListingRooms
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /listing/property/{propertyId}/rooms
+  scopes:
+  - alto/route:patch-listing-property-propertyid-rooms
+- tool: patch_listing_summary
+  category: Listing
+  rest:
+  - PatchListingSummary
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#PATCH /listing/property/{propertyId}/summary
+  scopes:
+  - alto/route:patch-listing-property-propertyid-summary
+- tool: get_listing_property_items
+  category: Listing
+  rest:
+  - GET /listing/property/items
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/items
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-listing-property-items
+- tool: create_inventory_media_link
+  category: Media
+  rest:
+  - POST /inventory/{inventoryId}/media-link
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/media-link
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-inventoryid-media-link
+- tool: create_media_item
+  category: Media
+  rest:
+  - POST /media-item
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /media-item
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-media-item
+- tool: delete_media_item
+  category: Media
+  rest:
+  - DELETE /media-item/{mediaItemId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#DELETE /media-item/{mediaItemId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:delete-media-item-mediaitemid
+- tool: get_offers_sales_offer
+  category: Offers
+  rest:
+  - GET /offers/sales-offer/{offerId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /offers/sales-offer/{offerId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-offers-sales-offer-offerid
+- tool: get_referrals
+  category: Referrals
+  rest:
+  - GET /referrals/{referralId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /referrals/{referralId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-referrals-referralid
+- tool: update_referrals
+  category: Referrals
+  rest:
+  - PATCH /referrals/{referralId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /referrals/{referralId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-referrals-referralid
+- tool: get_integration_opt_out_status
+  category: Partners
+  rest:
+  - GetIntegrationOptOutStatus
+  binding: rest
+  confidence: high
+  source_operation: openapi/alto-api-openapi.json#GET /opt-out-status/{linkedType}/{linkedId}
+  scopes:
+  - alto/route:get-opt-out-status-linkedtype-linkedid
+- tool: get_partners_integration
+  category: Partners
+  rest:
+  - GET /partners/integration
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /partners/integration
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-partners-integration
+- tool: create_partners_integration_status
+  category: Partners
+  rest:
+  - POST /partners/integration/status
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /partners/integration/status
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-partners-integration-status
+- tool: get_inventory_landlords
+  category: Landlords
+  rest:
+  - GET /inventory/{inventoryId}/landlords
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/landlords
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid-landlords
+- tool: get_inventory_management_events
+  category: ManagementEvents
+  rest:
+  - GET /inventory/{inventoryId}/management-events
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/management-events
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid-management-events
+- tool: get_inventory_suppliers
+  category: Suppliers
+  rest:
+  - GET /inventory/{inventoryId}/suppliers
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/suppliers
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid-suppliers
+- tool: get_inventory_tenancies
+  category: Tenancies
+  rest:
+  - GET /inventory/{inventoryId}/tenancies
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/tenancies
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-inventoryid-tenancies
+- tool: create_inventory_tenancies
+  category: Tenancies
+  rest:
+  - POST /inventory/{inventoryId}/tenancies
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/tenancies
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-inventoryid-tenancies
+- tool: get_inventory_work_orders
+  category: WorkOrders
+  rest:
+  - GET /inventory/{inventoryId}/work-orders
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/work-orders
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-inventory-inventoryid-work-orders
+- tool: create_inventory_charges
+  category: Charges
+  rest:
+  - POST /inventory/{propertyId}/charges
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{propertyId}/charges
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-inventory-propertyid-charges
+- tool: get_landlords
+  category: Landlords
+  rest:
+  - GET /landlords
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /landlords
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-landlords
+- tool: get_management_events
+  category: ManagementEvents
+  rest:
+  - GET /management-events
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /management-events
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-management-events
+- tool: create_management_events
+  category: ManagementEvents
+  rest:
+  - POST /management-events
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /management-events
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-management-events
+- tool: get_management_events_2
+  category: ManagementEvents
+  rest:
+  - GET /management-events/{eventId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /management-events/{eventId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-management-events-eventid
+- tool: update_management_events
+  category: ManagementEvents
+  rest:
+  - PATCH /management-events/{eventId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /management-events/{eventId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-management-events-eventid
+- tool: get_suppliers
+  category: Suppliers
+  rest:
+  - GET /suppliers
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /suppliers
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-suppliers
+- tool: get_suppliers_2
+  category: Suppliers
+  rest:
+  - GET /suppliers/{supplierId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /suppliers/{supplierId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-suppliers-supplierid
+- tool: get_tenancies
+  category: Tenancies
+  rest:
+  - GET /tenancies
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-tenancies
+- tool: get_tenancies_2
+  category: Tenancies
+  rest:
+  - GET /tenancies/{tenancyId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies/{tenancyId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-tenancies-tenancyid
+- tool: update_tenancies
+  category: Tenancies
+  rest:
+  - PATCH /tenancies/{tenancyId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /tenancies/{tenancyId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-tenancies-tenancyid
+- tool: create_tenancies_charges
+  category: Charges
+  rest:
+  - POST /tenancies/{tenancyId}/charges
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /tenancies/{tenancyId}/charges
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-tenancies-tenancyid-charges
+- tool: get_tenancies_meter_readings
+  category: Tenancies
+  rest:
+  - GET /tenancies/{tenancyId}/meter-readings
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies/{tenancyId}/meter-readings
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-tenancies-tenancyid-meter-readings
+- tool: create_tenancies_meter_readings
+  category: Tenancies
+  rest:
+  - POST /tenancies/{tenancyId}/meter-readings
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /tenancies/{tenancyId}/meter-readings
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-tenancies-tenancyid-meter-readings
+- tool: update_tenancies_meter_readings
+  category: Tenancies
+  rest:
+  - PATCH /tenancies/{tenancyId}/meter-readings/{utilityType}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /tenancies/{tenancyId}/meter-readings/{utilityType}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:patch-tenancies-tenancyid-meter-readings-utilitytype
+- tool: get_tenancies_tenant_ids
+  category: Tenancies
+  rest:
+  - GET /tenancies/{tenancyId}/tenantIds
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies/{tenancyId}/tenantIds
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-tenancies-tenancyid-tenantids
+- tool: create_work_orders
+  category: WorkOrders
+  rest:
+  - POST /work-orders
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#POST /work-orders
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:post-work-orders
+- tool: get_work_orders
+  category: WorkOrders
+  rest:
+  - GET /work-orders/{id}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /work-orders/{id}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-work-orders-id
+- tool: update_work_orders
+  category: WorkOrders
+  rest:
+  - PATCH /work-orders/{id}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /work-orders/{id}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-work-orders-id
+- tool: get_sales_progressions
+  category: SalesProgression
+  rest:
+  - GET /sales-progressions
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /sales-progressions
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-sales-progressions
+- tool: get_sales_progressions_2
+  category: SalesProgression
+  rest:
+  - GET /sales-progressions/{offerId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#GET /sales-progressions/{offerId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - alto/route:get-sales-progressions-offerid
+- tool: update_voidswitching_referrals
+  category: Referral
+  rest:
+  - PATCH /voidswitching/referrals/{referralId}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/alto-api-openapi.json#PATCH /voidswitching/referrals/{referralId}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: get_applicant_leads
+  category: REST Endpoints
+  rest:
+  - GET /applicant-leads
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-leads-api-openapi.json#GET /applicant-leads
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - leads/list:applicant-leads
+- tool: get_appraisal_leads
+  category: REST Endpoints
+  rest:
+  - GET /appraisal-leads
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-leads-api-openapi.json#GET /appraisal-leads
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+  scopes:
+  - leads/list:appraisal-leads
+- tool: get_products_premium_listings
+  category: Zoopla Premium Listing Activations API
+  rest:
+  - GET /products/premium-listings/{uuid}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#GET /products/premium-listings/{uuid}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: update_products_premium_listings
+  category: Zoopla Premium Listing Activations API
+  rest:
+  - PATCH /products/premium-listings/{uuid}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#PATCH /products/premium-listings/{uuid}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: get_products_premium_listings_2
+  category: Zoopla Premium Listing Activations API
+  rest:
+  - GET /products/premium-listings
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#GET /products/premium-listings
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: create_products_premium_listings
+  category: Zoopla Premium Listing Activations API
+  rest:
+  - POST /products/premium-listings
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#POST /products/premium-listings
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: get_products_weekly_featured_properties
+  category: Zoopla Weekly Featured Property (WFP) Activations API
+  rest:
+  - GET /products/weekly-featured-properties/{uuid}
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-weekly-featured-property-openapi.json#GET /products/weekly-featured-properties/{uuid}
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: get_products_weekly_featured_properties_2
+  category: Zoopla Weekly Featured Property (WFP) Activations API
+  rest:
+  - GET /products/weekly-featured-properties
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-weekly-featured-property-openapi.json#GET /products/weekly-featured-properties
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.
+- tool: create_products_weekly_featured_properties
+  category: Zoopla Weekly Featured Property (WFP) Activations API
+  rest:
+  - POST /products/weekly-featured-properties
+  binding: rest
+  confidence: medium
+  source_operation: openapi/zoopla-weekly-featured-property-openapi.json#POST /products/weekly-featured-properties
+  note: The Alto OpenAPI leaves 77 of its 112 operations without an operationId, so this tool binds by method+path
+    rather than by a stable id.

@@ -1,0 +1,131 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json, well-known/, https://developers.vebraalto.com/guides/webhooks/
+summary: >-
+  Alto's conformance profile is narrow and honest: OAuth 2.0 client credentials, OpenAPI 3.0.4,
+  and a genuine CloudEvents 1.0 webhook envelope. Everything property-industry-specific is
+  absent — there is no RESO Web API, no RESO Data Dictionary, no OData, and no UK equivalent,
+  because the United Kingdom has no MLS and no NAR-style body mandating a machine-readable
+  standard. No compliance certification (SOC 2, ISO 27001, PCI DSS) is published anywhere on
+  the Alto, Vebra, Houseful or Zoopla developer or marketing surfaces.
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: Alto API publishes OpenAPI 3.0.4 (95 paths); Premium Listings and WFP publish
+    OpenAPI 3.0.0
+- id: swagger-2.0
+  conforms: true
+  evidence: openapi/zoopla-leads-api-openapi.json declares swagger 2.0
+- id: oauth2
+  conforms: true
+  evidence: client-credentials grant on both estates; securityDefinitions/securitySchemes of
+    type oauth2 in three specs, prose-documented for Alto
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: 'grant_type=client_credentials with client_secret_basic on both
+    https://api.alto.zoopladev.co.uk/token and https://services-auth.services.zoopla.co.uk/oauth2/token'
+- id: rfc8414-authorization-server-metadata
+  conforms: partial
+  evidence: served by the id.vebraalto.com Auth0 tenant (well-known/alto-vebra-oauth-authorization-server.json)
+    but NOT by either API token endpoint
+- id: openid-connect-discovery
+  conforms: partial
+  evidence: https://id.vebraalto.com/.well-known/openid-configuration returns 200; it is the
+    human login for Alto Connect, not the API authorization server
+- id: rfc9116-security-txt
+  conforms: partial
+  evidence: https://www.zoopla.co.uk/.well-known/security.txt returns 200 (Expires 2026-02-04,
+    already elapsed); no security.txt on any Alto or Vebra host
+- id: cloudevents-1.0
+  conforms: true
+  evidence: 'webhook notifications carry specversion/id/type/source/subject/time/datacontenttype/data
+    exactly per the CloudEvents 1.0 JSON format — https://developers.vebraalto.com/guides/webhooks/'
+- id: rfc7807-problem-details
+  conforms: partial
+  evidence: the Alto API returns the ProblemDetails object shape (type/title/status/detail/instance)
+    but never with the application/problem+json media type
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: no application/problem+json media type in any of the four specs; no populated `type`
+    URI
+- id: rfc6902-json-patch
+  conforms: partial
+  evidence: PATCH /tenancies/{tenancyId} and PATCH /referrals/{referralId} are documented as
+    "Updates ... using JSON Patch"; every other PATCH takes a resource-shaped body
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header documented; one deprecated operation with no removal
+    date
+- id: idempotency-key
+  conforms: false
+  evidence: no Idempotency-Key header or equivalent on any write operation; duplicates are
+    detected server-side and answered with 409 + Location
+- id: cursor-pagination
+  conforms: partial
+  evidence: next-token/max-results cursor pagination on the Alto API, but declared in three
+    different casings across the same document
+- id: reso-web-api
+  conforms: false
+  evidence: no RESO reference in any Alto, Vebra, Houseful or Zoopla developer material; RESO is
+    a North American NAR-driven standard with no UK counterpart
+- id: reso-data-dictionary
+  conforms: false
+  evidence: property fields are Alto-proprietary; no Data Dictionary field names, no Universal
+    Property Identifier
+- id: odata
+  conforms: false
+  evidence: probed https://developers.vebraalto.com/$metadata and /api/$metadata — both 404; the
+    API is plain REST/JSON
+- id: json-api
+  conforms: false
+  evidence: no application/vnd.api+json anywhere
+- id: fhir
+  conforms: false
+  evidence: not a healthcare API
+- id: fapi
+  conforms: false
+  evidence: no mTLS, no PAR, no PKCE, no proof-of-possession; plain client_secret_basic
+- id: psd2
+  conforms: false
+  evidence: not a payments API; Vebra Payments is marketed as a product but exposes no API
+    surface in the published specs
+- id: scim
+  conforms: false
+  evidence: no /Users or /Groups paths; negotiators and branches are Alto-proprietary resources
+- id: mutual-tls
+  conforms: false
+  evidence: no mutualTLS security scheme in any spec
+- id: hsts
+  conforms: false
+  evidence: not one API host in the estate sets Strict-Transport-Security (security/alto-vebra-domain-security.yml)
+- id: tls-1.3
+  conforms: partial
+  evidence: both Alto API hosts negotiate TLSv1.2; all Zoopla hosts negotiate TLSv1.3
+compliance_certifications:
+  published: false
+  searched:
+  - https://www.altosoftware.co.uk/ (71-page sitemap; no security, trust, compliance or
+    certification page)
+  - https://developers.vebraalto.com/
+  - https://developers.zoopla.co.uk/
+  - trust.<domain> / security.<domain> probes on altosoftware.co.uk, vebraalto.com, zoopla.co.uk
+  result: >-
+    No SOC 2, ISO 27001, PCI DSS, Cyber Essentials or equivalent certification is claimed on any
+    public surface. Alto does publish UK statutory corporate disclosures — a modern slavery
+    statement and a tax strategy — but those are not security or API compliance artifacts.
+  related_published:
+  - https://www.altosoftware.co.uk/modern-slavery-statement/
+  - https://www.altosoftware.co.uk/tax-strategy/
+  - https://www.altosoftware.co.uk/privacy-notice/
+  - https://www.altosoftware.co.uk/product-features/national-trading-standards-compliance/
+uk_regulatory_context:
+  note: >-
+    Alto markets National Trading Standards material-information compliance and a Renters'
+    Rights Act compliance tool as product features, and the OpenAPI carries a Material
+    Information subsystem (Alto.Api.Material.* schemas). These are UK property-law obligations
+    surfaced through the CRM, not API certifications — recorded here because they are the
+    closest thing to a domain standard the UK market has.
+  references:
+  - https://www.altosoftware.co.uk/product-features/national-trading-standards-compliance/
+  - https://www.altosoftware.co.uk/renters-rights-act-compliance-tool/

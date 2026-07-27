@@ -1,0 +1,98 @@
+generated: '2026-07-26'
+method: searched
+source: npm registry search, PyPI, Packagist, pkg.go.dev, RubyGems, NuGet, crates.io, Maven
+  Central, github.com/AltoSoftware, github.com/zoopla-eng, developers.vebraalto.com,
+  developers.zoopla.co.uk
+summary: >-
+  Alto and Zoopla publish no client libraries in any language. Both GitHub organisations exist
+  but neither ships an SDK — github.com/AltoSoftware has zero public repositories and
+  github.com/zoopla-eng has two unrelated ones (an org profile and a hiring exercise). Neither
+  developer site links a package, a code sample repository, or a Postman collection. For a CRM
+  with 6,000+ agencies and 39 listed integration partners, every integration in the market is
+  hand-rolled REST against the OpenAPI. The only libraries that exist are third-party CMS
+  connectors, and the two "zoopla" packages on npm and PyPI wrap the long-retired public Zoopla
+  property API, not the current partner APIs in this repo.
+official_packages: []
+official_count: 0
+registries_checked:
+- registry: npm
+  queries:
+  - vebra
+  - vebraalto
+  - alto-api
+  - zoopla
+  first_party_hits: 0
+- registry: pypi
+  queries:
+  - vebra
+  - alto-api
+  - zoopla
+  - pyzoopla
+  first_party_hits: 0
+- registry: packagist
+  first_party_hits: 0
+- registry: nuget
+  first_party_hits: 0
+  note: The Alto API is an ASP.NET Core service (ProblemDetails / Microsoft.AspNetCore.Mvc
+    schemas in the spec) yet no .NET client package is published.
+- registry: maven-central
+  first_party_hits: 0
+- registry: pkg.go.dev
+  first_party_hits: 0
+  note: The Leads service is written in Go (x-go-package
+    gitlab.com/zoopla/internal/zoopla-software/leads/... in the Swagger) but the module is
+    internal and unpublished.
+- registry: rubygems
+  first_party_hits: 0
+- registry: crates.io
+  first_party_hits: 0
+third_party_packages:
+- language: php
+  registry: packagist
+  name: jegardvebra/vebra-alto-wrapper
+  url: https://packagist.org/packages/jegardvebra/vebra-alto-wrapper
+  repository: https://github.com/madebyshape/vebra-alto-wrapper
+  description: Craft CMS 5 plugin that imports properties from Vebra Alto.
+  official: false
+  maintainer: MadeByShape (third-party agency)
+- language: php
+  registry: wordpress.org
+  name: Property Hive (Alto by Vebra add-on)
+  url: https://docs.wp-property-hive.com/article/362-alto-by-vebra
+  description: WordPress connector supporting the legacy Vebra Alto feed API (v12/v13), not the
+    current REST API in this repo.
+  official: false
+- language: javascript
+  registry: npm
+  name: zoopla
+  url: https://www.npmjs.com/package/zoopla
+  description: Wrapper for the retired public Zoopla property API — unrelated to the partner
+    Leads/Premium Listings APIs documented here.
+  official: false
+- language: python
+  registry: pypi
+  name: zoopla
+  version: 1.0.0
+  url: https://pypi.org/project/zoopla/
+  description: Python wrapper for the retired public Zoopla API.
+  official: false
+source_repositories:
+- org: https://github.com/AltoSoftware
+  public_repos: 0
+- org: https://github.com/zoopla-eng
+  public_repos: 2
+  repos:
+  - .github (org profile and shared workflows)
+  - tech-interview (full-stack developer interview exercise)
+  note: The Zoopla docsify site declares repo https://github.com/zoopla-eng/zoopla-docs, which
+    returns 404 — the docs source is private.
+postman:
+  published: false
+  searched: developers.vebraalto.com, developers.zoopla.co.uk, postman.com public workspaces
+cli:
+  published: false
+gaps:
+- No SDK in any language, in a market where every counterparty is a small PropTech vendor.
+- No published Postman collection or code-sample repository.
+- The API is .NET and the Leads service is Go; both toolchains generate clients trivially from
+  the specs Alto already publishes.

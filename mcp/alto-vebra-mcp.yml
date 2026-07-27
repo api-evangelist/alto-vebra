@@ -1,0 +1,1279 @@
+generated: '2026-07-26'
+method: derived
+status: candidate
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json
+summary: 'Alto and Zoopla publish NO MCP server. Searched the developer portals, both GitHub organisations, npm
+  (@modelcontextprotocol and vendor namespaces) and the public MCP registries on 2026-07-26 — nothing first-party
+  or third-party exists for this estate. This file is a DERIVED candidate manifest: one tool per published OpenAPI
+  operation, with the real input contract inherited from that operation''s parameters and requestBody in the spec.
+  It is a design input, not a deployed server, and nothing here is claimed to be running.'
+server:
+  name: alto-vebra
+  status: candidate
+  transport: http
+  url: null
+  published_by_provider: false
+  note: 'A real server would need two credentials per session, not one: the OAuth2 client-credentials bearer token
+    AND the per-agency AgencyRef header that scopes every call. AgencyRef belongs in server configuration or per-session
+    context, not in a tool argument, or an agent will silently address the wrong agency.'
+searched:
+- source: https://developers.vebraalto.com/
+  result: no MCP, agent or AI integration page
+- source: https://developers.zoopla.co.uk/
+  result: no MCP reference in the docs sidebar
+- source: https://github.com/AltoSoftware
+  result: 0 public repositories
+- source: https://github.com/zoopla-eng
+  result: 2 public repositories, neither MCP-related
+- source: npm registry search (vebra, vebraalto, alto-api, zoopla)
+  result: no first-party MCP package
+safety_notes:
+- Write tools mutate a live estate agency CRM of record — contacts, offers, tenancies and work orders are legally
+  significant records. Treat every non-GET tool as requiring confirmation.
+- create_lead, create_contact, create_appraisal, create_work_order and create_media_item have no idempotency key;
+  a retried call creates a duplicate. Alto answers 409 with a Location header on some resources only.
+- The Zoopla activation tools spend money — Premium Listing and WFP activations are billable products under the
+  customer contract.
+- GET /contacts/{contactId}/bank-accounts returns landlord/tenant bank details and is gated behind its own semantic
+  scope (alto/read:contact_bank_accounts). Exclude it from any general-purpose agent surface.
+coverage:
+  tools: 121
+  apis: 4
+  read_only_tools: 73
+  write_tools: 48
+tools:
+- name: get_appointments
+  description: Retrieves an appointment by their unique identifier and numeric instance
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /appointments/{appointmentId}/{instanceId}
+  method: GET
+  path: /appointments/{appointmentId}/{instanceId}
+  read_only: true
+  resource_family: Appointments
+  required_scopes:
+  - alto/read:appointments
+  - alto/route:get-appointments-appointmentid-instanceid
+- name: create_appointments_general
+  description: Create a general appointment.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /appointments/general
+  method: POST
+  path: /appointments/general
+  read_only: false
+  resource_family: Appointments
+  required_scopes:
+  - alto/route:post-appointments-general
+  - alto/write:appointments_general
+- name: update_appointments_general
+  description: Updates an existing general appointment
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /appointments/general/{appointmentId}
+  method: PATCH
+  path: /appointments/general/{appointmentId}
+  read_only: false
+  resource_family: Appointments
+  required_scopes:
+  - alto/route:patch-appointments-general-appointmentid
+  - alto/write:appointments_general
+- name: get_appointments_negotiators
+  description: Get negotiator's appointments within a selected time range.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /appointments/negotiators
+  method: GET
+  path: /appointments/negotiators
+  read_only: true
+  resource_family: Appointments
+  required_scopes:
+  - alto/read:appointments
+  - alto/route:get-appointments-negotiators
+- name: get_appointments_valuations
+  description: Get valuations within a selected time range.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /appointments/valuations
+  method: GET
+  path: /appointments/valuations
+  read_only: true
+  resource_family: Appointments
+  required_scopes:
+  - alto/route:get-appointments-valuations
+- name: create_appointments_viewings
+  description: Create a viewing appointment.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /appointments/viewings
+  method: POST
+  path: /appointments/viewings
+  read_only: false
+  resource_family: Appointments
+  required_scopes:
+  - alto/route:post-appointments-viewings
+  - alto/write:appointments_viewings
+- name: update_appointments_viewings
+  description: Updates an existing viewing
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /appointments/viewings/{appointmentId}
+  method: PATCH
+  path: /appointments/viewings/{appointmentId}
+  read_only: false
+  resource_family: Appointments
+  required_scopes:
+  - alto/route:patch-appointments-viewings-appointmentid
+  - alto/write:appointments_viewings
+- name: get_parameters_appointment_subtypes
+  description: Get general appointment sub-types.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/appointment-subtypes
+  method: GET
+  path: /parameters/appointment-subtypes
+  read_only: true
+  resource_family: Parameters
+  required_scopes:
+  - alto/read:appointments
+  - alto/route:get-parameters-appointment-subtypes
+- name: create_appraisal
+  description: Create an appraisal
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /appraisals
+  method: POST
+  path: /appraisals
+  read_only: false
+  operation_id: CreateAppraisal
+  resource_family: Appraisals
+  required_scopes:
+  - alto/route:post-appraisals
+- name: patch_appraisal
+  description: Update an appraisal
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /inventory/{propertyId}/appraisal
+  method: PATCH
+  path: /inventory/{propertyId}/appraisal
+  read_only: false
+  operation_id: PatchAppraisal
+  resource_family: Appraisals
+  required_scopes:
+  - alto/route:patch-inventory-propertyid-appraisal
+- name: get_clients
+  description: This endpoint is now obsolete. Use /contacts endpoint instead.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /clients
+  method: GET
+  path: /clients
+  read_only: true
+  resource_family: Clients
+  required_scopes:
+  - alto/route:get-clients
+  deprecated: true
+- name: get_branches
+  description: Get Branches
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /branches
+  method: GET
+  path: /branches
+  read_only: true
+  resource_family: Branches
+  required_scopes:
+  - alto/route:get-branches
+- name: get_branches_2
+  description: Get Branch By Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /branches/{branchId}
+  method: GET
+  path: /branches/{branchId}
+  read_only: true
+  resource_family: Branches
+  required_scopes:
+  - alto/route:get-branches-branchid
+- name: get_negotiators
+  description: Get Negotiators
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /negotiators
+  method: GET
+  path: /negotiators
+  read_only: true
+  resource_family: Negotiators
+  required_scopes:
+  - alto/route:get-negotiators
+- name: get_negotiators_2
+  description: Get Negotiator By Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /negotiators/{negotiatorId}
+  method: GET
+  path: /negotiators/{negotiatorId}
+  read_only: true
+  resource_family: Negotiators
+  required_scopes:
+  - alto/route:get-negotiators-negotiatorid
+- name: get_contacts_by_id
+  description: Get Contact(s) by Id(s)
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts
+  method: GET
+  path: /contacts
+  read_only: true
+  operation_id: GetContactsById
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts
+- name: create_contact
+  description: Create Contact
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /contacts
+  method: POST
+  path: /contacts
+  read_only: false
+  operation_id: CreateContact
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts
+- name: get_contact
+  description: Get Person(s) by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}
+  method: GET
+  path: /contacts/{contactId}
+  read_only: true
+  operation_id: GetContact
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-contactid
+- name: update_contact
+  description: Update Contact by Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /contacts/{contactId}
+  method: PATCH
+  path: /contacts/{contactId}
+  read_only: false
+  operation_id: UpdateContact
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-contactid
+- name: create_applicant_requirement
+  description: Create Applicant Requirement
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/applicant-requirements
+  method: POST
+  path: /contacts/{contactId}/applicant-requirements
+  read_only: false
+  operation_id: CreateApplicantRequirement
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:post-contacts-contactid-applicant-requirements
+- name: update_applicant_requirement
+  description: Update Applicant Requirement by Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /contacts/{contactId}/applicant-requirements/{requirementId}
+  method: PATCH
+  path: /contacts/{contactId}/applicant-requirements/{requirementId}
+  read_only: false
+  operation_id: UpdateApplicantRequirement
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:patch-contacts-contactid-applicant-requirements-requirementid
+- name: list_bank_accounts
+  description: Get Bank Accounts by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/bank-accounts
+  method: GET
+  path: /contacts/{contactId}/bank-accounts
+  read_only: true
+  operation_id: ListBankAccounts
+  resource_family: Contacts
+  required_scopes:
+  - alto/read:contact_bank_accounts
+  - alto/route:get-contacts-contactid-bank-accounts
+- name: create_forwarding_address
+  description: Create Contact Forwarding Address
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/forwarding-address
+  method: POST
+  path: /contacts/{contactId}/forwarding-address
+  read_only: false
+  operation_id: CreateForwardingAddress
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:post-contacts-contactid-forwarding-address
+- name: get_persons
+  description: Get Person(s) by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/persons
+  method: GET
+  path: /contacts/{contactId}/persons
+  read_only: true
+  operation_id: GetPersons
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-contactid-persons
+- name: update_person
+  description: Update Person by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /contacts/{contactId}/persons/{personId}
+  method: PATCH
+  path: /contacts/{contactId}/persons/{personId}
+  read_only: false
+  operation_id: UpdatePerson
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:patch-contacts-contactid-persons-personid
+- name: get_person
+  description: Get Person by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/persons/{personId}
+  method: GET
+  path: /contacts/{contactId}/persons/{personId}
+  read_only: true
+  operation_id: GetPerson
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:patch-contacts-contactid-persons-personid
+- name: get_preferences
+  description: Get Marketing Preferences by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/preferences
+  method: GET
+  path: /contacts/{contactId}/preferences
+  read_only: true
+  operation_id: GetPreferences
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:post-contacts-contactid-preferences
+- name: create_contacts_preferences
+  description: Update Contact Marketing Preferences
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/preferences
+  method: POST
+  path: /contacts/{contactId}/preferences
+  read_only: false
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:post-contacts-contactid-preferences
+- name: get_contact_relationship
+  description: Get Relationships by Contact Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/{contactId}/relationship
+  method: GET
+  path: /contacts/{contactId}/relationship
+  read_only: true
+  operation_id: GetContactRelationship
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-contactid-relationship
+- name: create_contact_relationship
+  description: Create Contact Relationship
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /contacts/{contactId}/relationship
+  method: POST
+  path: /contacts/{contactId}/relationship
+  read_only: false
+  operation_id: CreateContactRelationship
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-contactid-relationship
+- name: delete_contact_relationship
+  description: Delete Contact Relationship
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#DELETE /contacts/{contactId}/relationship/{contactRelationshipId}
+  method: DELETE
+  path: /contacts/{contactId}/relationship/{contactRelationshipId}
+  read_only: false
+  operation_id: DeleteContactRelationship
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:delete-contacts-contactid-relationship-contactrelationshipid
+- name: get_all_contacts
+  description: Get All Contacts
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/all
+  method: GET
+  path: /contacts/all
+  read_only: true
+  operation_id: GetAllContacts
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-all
+- name: get_contacts_search
+  description: Search All Contacts
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /contacts/search
+  method: GET
+  path: /contacts/search
+  read_only: true
+  resource_family: Contacts
+  required_scopes:
+  - alto/route:get-contacts-search
+- name: get_owners
+  description: Get Owners
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /owners
+  method: GET
+  path: /owners
+  read_only: true
+  operation_id: GetOwners
+  resource_family: Owners
+  required_scopes:
+  - alto/read:contacts
+  - alto/route:get-owners
+- name: get_client_disposal_statuses
+  description: Get Client Disposal Statuses
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/client-disposal-statuses
+  method: GET
+  path: /parameters/client-disposal-statuses
+  read_only: true
+  operation_id: GetClientDisposalStatuses
+  resource_family: Parameters
+  required_scopes:
+  - alto/route:get-parameters-client-disposal-statuses
+- name: get_intentions
+  description: Get Client Intentions
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/client-intentions
+  method: GET
+  path: /parameters/client-intentions
+  read_only: true
+  operation_id: GetIntentions
+  resource_family: Parameters
+  required_scopes:
+  - alto/route:get-parameters-client-intentions
+- name: get_positions
+  description: Get Client Positions
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/client-positions
+  method: GET
+  path: /parameters/client-positions
+  read_only: true
+  operation_id: GetPositions
+  resource_family: Parameters
+  required_scopes:
+  - alto/route:get-parameters-client-positions
+- name: get_lead_sources
+  description: Get Lead Sources
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/lead-sources
+  method: GET
+  path: /parameters/lead-sources
+  read_only: true
+  operation_id: GetLeadSources
+  resource_family: Parameters
+  required_scopes:
+  - alto/route:get-parameters-lead-sources
+- name: get_property_types
+  description: Get Property Types
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /parameters/property-types
+  method: GET
+  path: /parameters/property-types
+  read_only: true
+  operation_id: GetPropertyTypes
+  resource_family: Parameters
+  required_scopes:
+  - alto/route:get-parameters-property-types
+- name: get_documents_by_type
+  description: Get documents by document type.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /documents
+  method: GET
+  path: /documents
+  read_only: true
+  operation_id: GetDocumentsByType
+  resource_family: Documents
+  required_scopes:
+  - alto/route:get-documents
+- name: get_documents_content
+  description: Get document content by DocumentId.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /documents/{documentId}/content
+  method: GET
+  path: /documents/{documentId}/content
+  read_only: true
+  resource_family: Documents
+  required_scopes:
+  - alto/route:get-documents-documentid-content
+- name: create_documents_post
+  description: Upload a new document
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /documents/post
+  method: POST
+  path: /documents/post
+  read_only: false
+  resource_family: Documents
+  required_scopes:
+  - alto/route:post-documents-post
+- name: get_inventory_documents
+  description: Get documents by PropertyId.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/documents
+  method: GET
+  path: /inventory/{inventoryId}/documents
+  read_only: true
+  resource_family: Documents
+  required_scopes:
+  - alto/route:get-inventory-inventoryid-documents
+- name: get_work_orders_documents
+  description: Get documents by WorkOrderId.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /work-orders/{workOrderId}/documents
+  method: GET
+  path: /work-orders/{workOrderId}/documents
+  read_only: true
+  resource_family: Documents
+  required_scopes:
+  - alto/route:get-work-orders-workorderid-documents
+- name: create_file_note
+  description: Create a file note
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /file-notes
+  method: POST
+  path: /file-notes
+  read_only: false
+  operation_id: CreateFileNote
+  resource_family: FileNotes
+  required_scopes:
+  - alto/route:post-file-notes
+- name: get_file_note
+  description: Get a file note
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /file-notes/{fileNoteId}
+  method: GET
+  path: /file-notes/{fileNoteId}
+  read_only: true
+  operation_id: GetFileNote
+  resource_family: FileNotes
+  required_scopes:
+  - alto/route:get-file-notes-filenoteid
+- name: patch_file_note
+  description: Patch a file note
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /file-notes/{fileNoteId}
+  method: PATCH
+  path: /file-notes/{fileNoteId}
+  read_only: false
+  operation_id: PatchFileNote
+  resource_family: FileNotes
+  required_scopes:
+  - alto/route:get-file-notes-filenoteid
+- name: search_file_notes
+  description: Retrieves file notes by criteria
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /file-notes/search
+  method: GET
+  path: /file-notes/search
+  read_only: true
+  operation_id: SearchFileNotes
+  resource_family: FileNotes
+  required_scopes:
+  - alto/route:get-file-notes-search
+- name: get_file_notes_by_property
+  description: Get file notes by property ID
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{propertyId}/file-notes
+  method: GET
+  path: /inventory/{propertyId}/file-notes
+  read_only: true
+  operation_id: GetFileNotesByProperty
+  resource_family: FileNotes
+  required_scopes:
+  - alto/route:get-inventory-propertyid-file-notes
+- name: get_inventory
+  description: GET /inventory
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory
+  method: GET
+  path: /inventory
+  read_only: true
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory
+- name: get_inventory_2
+  description: Get an inventory item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}
+  method: GET
+  path: /inventory/{inventoryId}
+  read_only: true
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory-inventoryid
+- name: update_inventory
+  description: PATCH /inventory/{inventoryId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /inventory/{inventoryId}
+  method: PATCH
+  path: /inventory/{inventoryId}
+  read_only: false
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory-inventoryid
+- name: create_inventory_keyset
+  description: Create a key set for an inventory item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/keyset
+  method: POST
+  path: /inventory/{inventoryId}/keyset
+  read_only: false
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:post-inventory-inventoryid-keyset
+- name: update_inventory_keyset
+  description: Update a key set for an inventory item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /inventory/{inventoryId}/keyset/{keySetId}
+  method: PATCH
+  path: /inventory/{inventoryId}/keyset/{keySetId}
+  read_only: false
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:delete-inventory-inventoryid-keyset-keysetid
+- name: delete_inventory_keyset
+  description: Delete a key set for an inventory item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#DELETE /inventory/{inventoryId}/keyset/{keySetId}
+  method: DELETE
+  path: /inventory/{inventoryId}/keyset/{keySetId}
+  read_only: false
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:delete-inventory-inventoryid-keyset-keysetid
+- name: get_inventory_keysets
+  description: Get key sets by inventoryId
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/keysets
+  method: GET
+  path: /inventory/{inventoryId}/keysets
+  read_only: true
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory-inventoryid-keysets
+- name: create_inventory_owner
+  description: Associates a Contact with an Inventory item as its Owner
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/owner
+  method: POST
+  path: /inventory/{inventoryId}/owner
+  read_only: false
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:post-inventory-inventoryid-owner
+- name: get_inventory_filter
+  description: Filter inventory items
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/filter
+  method: GET
+  path: /inventory/filter
+  read_only: true
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory-filter
+- name: get_inventory_items
+  description: Get multiple inventory items
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/items
+  method: GET
+  path: /inventory/items
+  read_only: true
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory-items
+- name: create_inventory_new
+  description: Creates an inventory item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/new
+  method: POST
+  path: /inventory/new
+  read_only: false
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:post-inventory-new
+- name: get_inventory_search
+  description: Search inventory items
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/search
+  method: GET
+  path: /inventory/search
+  read_only: true
+  resource_family: Inventory
+  required_scopes:
+  - alto/route:get-inventory-search
+- name: get_leads
+  description: Gets a paginated list of Leads
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /leads
+  method: GET
+  path: /leads
+  read_only: true
+  resource_family: Leads
+  required_scopes:
+  - alto/read:leads
+  - alto/route:get-leads
+- name: create_leads
+  description: Create Lead
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /leads
+  method: POST
+  path: /leads
+  read_only: false
+  resource_family: Leads
+  required_scopes:
+  - alto/route:get-leads
+- name: get_by_id
+  description: Get Lead by Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /leads/{leadId}
+  method: GET
+  path: /leads/{leadId}
+  read_only: true
+  operation_id: GetById
+  resource_family: Leads
+  required_scopes:
+  - alto/route:get-leads-leadid
+- name: update_lead
+  description: Update Lead by Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /leads/{leadId}
+  method: PATCH
+  path: /leads/{leadId}
+  read_only: false
+  operation_id: UpdateLead
+  resource_family: Leads
+  required_scopes:
+  - alto/route:get-leads-leadid
+  - alto/update:leads
+- name: get_guarantor_ids
+  description: GET /guarantorIds
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /guarantorIds
+  method: GET
+  path: /guarantorIds
+  read_only: true
+  resource_family: LettingsProgression
+  required_scopes:
+  - alto/route:get-guarantorids
+- name: get_reference_checks
+  description: GET /ReferenceChecks
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /ReferenceChecks
+  method: GET
+  path: /ReferenceChecks
+  read_only: true
+  resource_family: ReferenceChecks
+  required_scopes:
+  - alto/route:get-referencechecks
+- name: update_reference_checks
+  description: PATCH /ReferenceChecks/{referenceCheckId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /ReferenceChecks/{referenceCheckId}
+  method: PATCH
+  path: /ReferenceChecks/{referenceCheckId}
+  read_only: false
+  resource_family: ReferenceChecks
+  required_scopes:
+  - alto/route:patch-referencechecks-referencecheckid
+- name: get_listing_filter
+  description: Filter property listings
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /listing/filter
+  method: GET
+  path: /listing/filter
+  read_only: true
+  resource_family: Listing
+  required_scopes:
+  - alto/route:get-listing-filter
+- name: get_listing_property
+  description: Get a property listing
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/{propertyId}
+  method: GET
+  path: /listing/property/{propertyId}
+  read_only: true
+  resource_family: Listing
+  required_scopes:
+  - alto/route:get-listing-property-propertyid
+- name: get_listing_property_images
+  description: Get property images metadata
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/{propertyId}/images
+  method: GET
+  path: /listing/property/{propertyId}/images
+  read_only: true
+  resource_family: Listing
+  required_scopes:
+  - alto/route:get-listing-property-propertyid-images
+- name: get_listing_property_images_2
+  description: Get a property listing image
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/{propertyId}/images/{imageId}
+  method: GET
+  path: /listing/property/{propertyId}/images/{imageId}
+  read_only: true
+  resource_family: Listing
+  required_scopes:
+  - alto/route:get-listing-property-propertyid-images-imageid
+- name: patch_listing_rooms
+  description: Partially update a property listing rooms
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /listing/property/{propertyId}/rooms
+  method: PATCH
+  path: /listing/property/{propertyId}/rooms
+  read_only: false
+  operation_id: PatchListingRooms
+  resource_family: Listing
+  required_scopes:
+  - alto/route:patch-listing-property-propertyid-rooms
+- name: patch_listing_summary
+  description: Partially update a property listing summary
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /listing/property/{propertyId}/summary
+  method: PATCH
+  path: /listing/property/{propertyId}/summary
+  read_only: false
+  operation_id: PatchListingSummary
+  resource_family: Listing
+  required_scopes:
+  - alto/route:patch-listing-property-propertyid-summary
+- name: get_listing_property_items
+  description: Get multiple property listings
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /listing/property/items
+  method: GET
+  path: /listing/property/items
+  read_only: true
+  resource_family: Listing
+  required_scopes:
+  - alto/route:get-listing-property-items
+- name: create_inventory_media_link
+  description: Create new link media item (VirtualTour or WebLink).
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/media-link
+  method: POST
+  path: /inventory/{inventoryId}/media-link
+  read_only: false
+  resource_family: Media
+  required_scopes:
+  - alto/route:post-inventory-inventoryid-media-link
+- name: create_media_item
+  description: Create new media item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /media-item
+  method: POST
+  path: /media-item
+  read_only: false
+  resource_family: Media
+  required_scopes:
+  - alto/route:post-media-item
+- name: delete_media_item
+  description: Delete a media item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#DELETE /media-item/{mediaItemId}
+  method: DELETE
+  path: /media-item/{mediaItemId}
+  read_only: false
+  resource_family: Media
+  required_scopes:
+  - alto/route:delete-media-item-mediaitemid
+- name: get_offers_sales_offer
+  description: Gets a sales offer by offerId
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /offers/sales-offer/{offerId}
+  method: GET
+  path: /offers/sales-offer/{offerId}
+  read_only: true
+  resource_family: Offers
+  required_scopes:
+  - alto/route:get-offers-sales-offer-offerid
+- name: get_referrals
+  description: GET /referrals/{referralId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /referrals/{referralId}
+  method: GET
+  path: /referrals/{referralId}
+  read_only: true
+  resource_family: Referrals
+  required_scopes:
+  - alto/route:get-referrals-referralid
+- name: update_referrals
+  description: Updates a referral using JSON Patch
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /referrals/{referralId}
+  method: PATCH
+  path: /referrals/{referralId}
+  read_only: false
+  resource_family: Referrals
+  required_scopes:
+  - alto/route:get-referrals-referralid
+- name: get_integration_opt_out_status
+  description: Get the integration opt-out status
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /opt-out-status/{linkedType}/{linkedId}
+  method: GET
+  path: /opt-out-status/{linkedType}/{linkedId}
+  read_only: true
+  operation_id: GetIntegrationOptOutStatus
+  resource_family: Partners
+  required_scopes:
+  - alto/route:get-opt-out-status-linkedtype-linkedid
+- name: get_partners_integration
+  description: Get the integration activation state
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /partners/integration
+  method: GET
+  path: /partners/integration
+  read_only: true
+  resource_family: Partners
+  required_scopes:
+  - alto/route:get-partners-integration
+- name: create_partners_integration_status
+  description: Update the integration activation state
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /partners/integration/status
+  method: POST
+  path: /partners/integration/status
+  read_only: false
+  resource_family: Partners
+  required_scopes:
+  - alto/route:post-partners-integration-status
+- name: get_inventory_landlords
+  description: GET /inventory/{inventoryId}/landlords
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/landlords
+  method: GET
+  path: /inventory/{inventoryId}/landlords
+  read_only: true
+  resource_family: Landlords
+  required_scopes:
+  - alto/route:get-inventory-inventoryid-landlords
+- name: get_inventory_management_events
+  description: Gets management events for a specific inventory item
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/management-events
+  method: GET
+  path: /inventory/{inventoryId}/management-events
+  read_only: true
+  resource_family: ManagementEvents
+  required_scopes:
+  - alto/route:get-inventory-inventoryid-management-events
+- name: get_inventory_suppliers
+  description: GET /inventory/{inventoryId}/suppliers
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/suppliers
+  method: GET
+  path: /inventory/{inventoryId}/suppliers
+  read_only: true
+  resource_family: Suppliers
+  required_scopes:
+  - alto/route:get-inventory-inventoryid-suppliers
+- name: get_inventory_tenancies
+  description: GET /inventory/{inventoryId}/tenancies
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/tenancies
+  method: GET
+  path: /inventory/{inventoryId}/tenancies
+  read_only: true
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:post-inventory-inventoryid-tenancies
+- name: create_inventory_tenancies
+  description: Create a tenancy
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{inventoryId}/tenancies
+  method: POST
+  path: /inventory/{inventoryId}/tenancies
+  read_only: false
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:post-inventory-inventoryid-tenancies
+- name: get_inventory_work_orders
+  description: Get Work Orders for a specific inventory item by Property Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /inventory/{inventoryId}/work-orders
+  method: GET
+  path: /inventory/{inventoryId}/work-orders
+  read_only: true
+  resource_family: WorkOrders
+  required_scopes:
+  - alto/route:get-inventory-inventoryid-work-orders
+- name: create_inventory_charges
+  description: POST /inventory/{propertyId}/charges
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /inventory/{propertyId}/charges
+  method: POST
+  path: /inventory/{propertyId}/charges
+  read_only: false
+  resource_family: Charges
+  required_scopes:
+  - alto/route:post-inventory-propertyid-charges
+- name: get_landlords
+  description: List Landlords
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /landlords
+  method: GET
+  path: /landlords
+  read_only: true
+  resource_family: Landlords
+  required_scopes:
+  - alto/route:get-landlords
+- name: get_management_events
+  description: Gets a list of management events
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /management-events
+  method: GET
+  path: /management-events
+  read_only: true
+  resource_family: ManagementEvents
+  required_scopes:
+  - alto/route:get-management-events
+- name: create_management_events
+  description: Creates a new management event
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /management-events
+  method: POST
+  path: /management-events
+  read_only: false
+  resource_family: ManagementEvents
+  required_scopes:
+  - alto/route:get-management-events
+- name: get_management_events_2
+  description: Gets a single management event by ID
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /management-events/{eventId}
+  method: GET
+  path: /management-events/{eventId}
+  read_only: true
+  resource_family: ManagementEvents
+  required_scopes:
+  - alto/route:get-management-events-eventid
+- name: update_management_events
+  description: PATCH /management-events/{eventId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /management-events/{eventId}
+  method: PATCH
+  path: /management-events/{eventId}
+  read_only: false
+  resource_family: ManagementEvents
+  required_scopes:
+  - alto/route:get-management-events-eventid
+- name: get_suppliers
+  description: GET /suppliers
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /suppliers
+  method: GET
+  path: /suppliers
+  read_only: true
+  resource_family: Suppliers
+  required_scopes:
+  - alto/route:get-suppliers
+- name: get_suppliers_2
+  description: GET /suppliers/{supplierId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /suppliers/{supplierId}
+  method: GET
+  path: /suppliers/{supplierId}
+  read_only: true
+  resource_family: Suppliers
+  required_scopes:
+  - alto/route:get-suppliers-supplierid
+- name: get_tenancies
+  description: List Tenancies
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies
+  method: GET
+  path: /tenancies
+  read_only: true
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:get-tenancies
+- name: get_tenancies_2
+  description: GET /tenancies/{tenancyId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies/{tenancyId}
+  method: GET
+  path: /tenancies/{tenancyId}
+  read_only: true
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:get-tenancies-tenancyid
+- name: update_tenancies
+  description: Updates a tenancy using JSON Patch
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /tenancies/{tenancyId}
+  method: PATCH
+  path: /tenancies/{tenancyId}
+  read_only: false
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:get-tenancies-tenancyid
+- name: create_tenancies_charges
+  description: POST /tenancies/{tenancyId}/charges
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /tenancies/{tenancyId}/charges
+  method: POST
+  path: /tenancies/{tenancyId}/charges
+  read_only: false
+  resource_family: Charges
+  required_scopes:
+  - alto/route:post-tenancies-tenancyid-charges
+- name: get_tenancies_meter_readings
+  description: Get Meter Readings by Tenancy Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies/{tenancyId}/meter-readings
+  method: GET
+  path: /tenancies/{tenancyId}/meter-readings
+  read_only: true
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:get-tenancies-tenancyid-meter-readings
+- name: create_tenancies_meter_readings
+  description: Post tenancy meter reading
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /tenancies/{tenancyId}/meter-readings
+  method: POST
+  path: /tenancies/{tenancyId}/meter-readings
+  read_only: false
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:get-tenancies-tenancyid-meter-readings
+- name: update_tenancies_meter_readings
+  description: Patch tenancy meter reading by type of utility.
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /tenancies/{tenancyId}/meter-readings/{utilityType}
+  method: PATCH
+  path: /tenancies/{tenancyId}/meter-readings/{utilityType}
+  read_only: false
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:patch-tenancies-tenancyid-meter-readings-utilitytype
+- name: get_tenancies_tenant_ids
+  description: GET /tenancies/{tenancyId}/tenantIds
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /tenancies/{tenancyId}/tenantIds
+  method: GET
+  path: /tenancies/{tenancyId}/tenantIds
+  read_only: true
+  resource_family: Tenancies
+  required_scopes:
+  - alto/route:get-tenancies-tenancyid-tenantids
+- name: create_work_orders
+  description: Post Work Order
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#POST /work-orders
+  method: POST
+  path: /work-orders
+  read_only: false
+  resource_family: WorkOrders
+  required_scopes:
+  - alto/route:post-work-orders
+- name: get_work_orders
+  description: Gets Work Order by Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /work-orders/{id}
+  method: GET
+  path: /work-orders/{id}
+  read_only: true
+  resource_family: WorkOrders
+  required_scopes:
+  - alto/route:get-work-orders-id
+- name: update_work_orders
+  description: Patch Work Order by Id
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /work-orders/{id}
+  method: PATCH
+  path: /work-orders/{id}
+  read_only: false
+  resource_family: WorkOrders
+  required_scopes:
+  - alto/route:get-work-orders-id
+- name: get_sales_progressions
+  description: GET /sales-progressions
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /sales-progressions
+  method: GET
+  path: /sales-progressions
+  read_only: true
+  resource_family: SalesProgression
+  required_scopes:
+  - alto/route:get-sales-progressions
+- name: get_sales_progressions_2
+  description: GET /sales-progressions/{offerId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#GET /sales-progressions/{offerId}
+  method: GET
+  path: /sales-progressions/{offerId}
+  read_only: true
+  resource_family: SalesProgression
+  required_scopes:
+  - alto/route:get-sales-progressions-offerid
+- name: update_voidswitching_referrals
+  description: PATCH /voidswitching/referrals/{referralId}
+  api: Alto API
+  source_operation: openapi/alto-api-openapi.json#PATCH /voidswitching/referrals/{referralId}
+  method: PATCH
+  path: /voidswitching/referrals/{referralId}
+  read_only: false
+  resource_family: Referral
+- name: get_applicant_leads
+  description: GET /applicant-leads
+  api: Zoopla Leads API
+  source_operation: openapi/zoopla-leads-api-openapi.json#GET /applicant-leads
+  method: GET
+  path: /applicant-leads
+  read_only: true
+  resource_family: REST Endpoints
+  required_scopes:
+  - leads/list:applicant-leads
+- name: get_appraisal_leads
+  description: GET /appraisal-leads
+  api: Zoopla Leads API
+  source_operation: openapi/zoopla-leads-api-openapi.json#GET /appraisal-leads
+  method: GET
+  path: /appraisal-leads
+  read_only: true
+  resource_family: REST Endpoints
+  required_scopes:
+  - leads/list:appraisal-leads
+- name: get_products_premium_listings
+  description: Returns listing for specific uuid
+  api: Zoopla Premium Listing Activations API
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#GET /products/premium-listings/{uuid}
+  method: GET
+  path: /products/premium-listings/{uuid}
+  read_only: true
+- name: update_products_premium_listings
+  description: Updates highlights for a specific uuid
+  api: Zoopla Premium Listing Activations API
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#PATCH /products/premium-listings/{uuid}
+  method: PATCH
+  path: /products/premium-listings/{uuid}
+  read_only: false
+- name: get_products_premium_listings_2
+  description: Returns all requested upgrades to premium listings that the caller has access to
+  api: Zoopla Premium Listing Activations API
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#GET /products/premium-listings
+  method: GET
+  path: /products/premium-listings
+  read_only: true
+- name: create_products_premium_listings
+  description: Create the new upgrade to premium listing
+  api: Zoopla Premium Listing Activations API
+  source_operation: openapi/zoopla-premium-listing-activations-openapi.json#POST /products/premium-listings
+  method: POST
+  path: /products/premium-listings
+  read_only: false
+- name: get_products_weekly_featured_properties
+  description: Returns a WFP activated listing for a specific uuid
+  api: Zoopla Weekly Featured Property (WFP) Activations API
+  source_operation: openapi/zoopla-weekly-featured-property-openapi.json#GET /products/weekly-featured-properties/{uuid}
+  method: GET
+  path: /products/weekly-featured-properties/{uuid}
+  read_only: true
+- name: get_products_weekly_featured_properties_2
+  description: Returns all requested upgrades to WFPs that the caller has access to
+  api: Zoopla Weekly Featured Property (WFP) Activations API
+  source_operation: openapi/zoopla-weekly-featured-property-openapi.json#GET /products/weekly-featured-properties
+  method: GET
+  path: /products/weekly-featured-properties
+  read_only: true
+- name: create_products_weekly_featured_properties
+  description: Activate a listing as a WFP
+  api: Zoopla Weekly Featured Property (WFP) Activations API
+  source_operation: openapi/zoopla-weekly-featured-property-openapi.json#POST /products/weekly-featured-properties
+  method: POST
+  path: /products/weekly-featured-properties
+  read_only: false

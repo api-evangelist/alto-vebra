@@ -1,0 +1,66 @@
+generated: '2026-07-26'
+method: generated
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json, developers.vebraalto.com guides
+note: >-
+  Alto and Zoopla publish no agent skills, no AGENTS.md and no MCP server. These six skills are
+  generated from the published OpenAPI documents and the developer guides. Every operationId
+  named in the frontmatter was verified verbatim against the spec; operations that the Alto
+  OpenAPI leaves without an operationId (77 of 112) are referenced by method and path.
+skills:
+- file: alto-vebra-authenticate-and-scope.md
+  name: Authenticate to Alto and scope a call to one agency
+  api: openapi/alto-api-openapi.json
+  operations:
+  - GetContactsById
+  prerequisite_for: all other Alto skills
+- file: alto-vebra-contact-and-applicant-intake.md
+  name: Register a contact and record what they are looking for
+  api: openapi/alto-api-openapi.json
+  operations:
+  - CreateContact
+  - GetContact
+  - UpdateContact
+  - GetPersons
+  - UpdatePerson
+  - GetPreferences
+  - CreateApplicantRequirement
+  - UpdateApplicantRequirement
+  - CreateContactRelationship
+- file: alto-vebra-property-to-listing.md
+  name: Take a property from inventory record to marketed listing
+  api: openapi/alto-api-openapi.json
+  operations:
+  - PatchListingSummary
+  - PatchListingRooms
+  - GetPropertyTypes
+  - GetOwners
+- file: alto-vebra-lead-to-viewing.md
+  name: Turn a lead into a booked viewing or valuation
+  api: openapi/alto-api-openapi.json
+  operations:
+  - GetById
+  - UpdateLead
+  - CreateAppraisal
+  - PatchAppraisal
+  - GetLeadSources
+  also_uses: openapi/zoopla-leads-api-openapi.json
+- file: alto-vebra-tenancy-and-work-orders.md
+  name: Run a tenancy and raise property management work orders
+  api: openapi/alto-api-openapi.json
+  operations:
+  - GetOwners
+  - CreateFileNote
+  note: The lettings and property-management operations carry no operationIds in the published
+    spec and are bound by method and path.
+- file: alto-vebra-zoopla-product-activation.md
+  name: Activate a Zoopla Premium Listing or Weekly Featured Property
+  api: openapi/zoopla-premium-listing-activations-openapi.json
+  also_uses: openapi/zoopla-weekly-featured-property-openapi.json
+  operations:
+  - POST /products/premium-listings
+  - GET /products/premium-listings/{uuid}
+  - PATCH /products/premium-listings/{uuid}
+  - POST /products/weekly-featured-properties
+  - GET /products/weekly-featured-properties/{uuid}
+  warning: billable — these operations spend the customer's money

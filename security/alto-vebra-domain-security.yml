@@ -1,0 +1,89 @@
+generated: '2026-07-26'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+note: >-
+  The website/portal hosts were probed mechanically by 0-working/probe-domain-security.py; the
+  four API/auth hosts and the two Zoopla domains below were probed by hand in the same round
+  because they are declared only in OpenAPI servers[] and docs prose. Finding of record: not one
+  API host in this estate sets HSTS, and both Alto API hosts still negotiate TLSv1.2 while every
+  Zoopla host negotiates TLSv1.3.
+hosts:
+- host: api.alto.zoopla.co.uk
+  role: Alto API production (OpenAPI servers[])
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Oct  6 23:59:59 2026 GMT
+  hsts: false
+- host: api.alto.zoopladev.co.uk
+  role: Alto API sandbox (OpenAPI servers[], documented token endpoint)
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Jan 16 23:59:59 2027 GMT
+  hsts: false
+- host: services.zoopla.co.uk
+  role: Zoopla product API host
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 14 23:59:59 2026 GMT
+  hsts: false
+- host: services-auth.services.zoopla.co.uk
+  role: Zoopla OAuth2 authorization server
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 18 23:59:59 2026 GMT
+  hsts: false
+- host: id.vebraalto.com
+  role: Alto Connect identity provider (Auth0)
+  https: true
+  tls_version: TLSv1.3
+  hsts: false
+- host: www.altosoftware.co.uk
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 12 19:28:33 2026 GMT
+  hsts: true
+- host: connect.vebraalto.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Jan 20 23:59:59 2027 GMT
+  hsts: false
+- host: developers.vebraalto.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Mar 10 23:59:59 2027 GMT
+  hsts: false
+domains:
+- domain: altosoftware.co.uk
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
+- domain: vebraalto.com
+  dnssec: false
+  caa:
+  - 0 issue "amazon.com"
+  - 0 issue "amazonaws.com"
+  - 0 issue "amazontrust.com"
+  - 0 issue "awstrust.com"
+  - 0 issue "godaddy.com"
+  - 0 issue "letsencrypt.org"
+  spf: false
+  dmarc: false
+- domain: zoopla.co.uk
+  dnssec: false
+  caa:
+  - 0 issue "pki.goog; cansignhttpexchanges=yes"
+  - 0 issue "amazon.com"
+  - 0 issue "letsencrypt.org"
+  - 0 issuewild "amazon.com"
+  - 0 issuewild "pki.goog; cansignhttpexchanges=yes"
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: zoopladev.co.uk
+  dnssec: false
+  caa: []
+  spf: false
+  dmarc: true
+  dmarc_policy: reject

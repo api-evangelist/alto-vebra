@@ -1,0 +1,445 @@
+generated: '2026-07-26'
+method: derived
+source: openapi/alto-api-openapi.json
+docs:
+- https://developers.vebraalto.com/guides/glossary/
+- https://developers.vebraalto.com/api
+summary: 'The Alto object graph derived from the published OpenAPI path structure and id-reference parameters. Two
+  entities are the spine of the whole model: Inventory (a property record — the noun almost everything hangs off)
+  and Contact (a party record that plays applicant, vendor, landlord, tenant and owner roles depending on relationship
+  rather than type). Listing is a separate projection of Inventory for portal marketing, which is exactly the Alto/Zoopla
+  seam. Identifiers are opaque agency-scoped integers with no type prefix and no global property identifier — the
+  UK has no MLS and no RESO Universal Property Identifier.'
+tenancy_boundary:
+  key: AgencyRef
+  note: Every identifier below is unique only within one agency. The same integer in two agencies is two different
+    records.
+core_entities:
+- Inventory
+- Contact
+- Listing
+- Tenancy
+- Lead
+- Offer
+- Appointment
+- WorkOrder
+entity_count: 36
+relationship_count: 34
+entities:
+- entity: Appointment
+  resource_family: Appointments
+  paths:
+  - /appointments/general
+  - /appointments/general/{appointmentId}
+  - /appointments/valuations
+  - /appointments/viewings
+  - /appointments/viewings/{appointmentId}
+  - /appointments/{appointmentId}/{instanceId}
+  identifier: instanceId
+- entity: Negotiator
+  resource_family: Appointments
+  paths:
+  - /appointments/negotiators
+  - /negotiators
+  - /negotiators/{negotiatorId}
+  identifier: negotiatorId
+- entity: ReferenceData
+  resource_family: Parameters
+  paths:
+  - /parameters/appointment-subtypes
+  - /parameters/client-disposal-statuses
+  - /parameters/client-intentions
+  - /parameters/client-positions
+  - /parameters/lead-sources
+  - /parameters/property-types
+  identifier: null
+- entity: Appraisal
+  resource_family: Appraisals
+  paths:
+  - /appraisals
+  identifier: null
+- entity: Inventory
+  resource_family: Appraisals
+  paths:
+  - /inventory
+  - /inventory/filter
+  - /inventory/items
+  - /inventory/new
+  - /inventory/search
+  - /inventory/{inventoryId}
+  - /inventory/{propertyId}/appraisal
+  identifier: propertyId
+- entity: Contact
+  resource_family: Clients
+  paths:
+  - /clients
+  - /contacts
+  - /contacts/all
+  - /contacts/search
+  - /contacts/{contactId}
+  identifier: contactId
+- entity: Branch
+  resource_family: Branches
+  paths:
+  - /branches
+  - /branches/{branchId}
+  identifier: branchId
+- entity: ApplicantRequirement
+  resource_family: Contacts
+  paths:
+  - /contacts/{contactId}/applicant-requirements
+  - /contacts/{contactId}/applicant-requirements/{requirementId}
+  identifier: contactId
+- entity: BankAccount
+  resource_family: Contacts
+  paths:
+  - /contacts/{contactId}/bank-accounts
+  identifier: contactId
+- entity: ForwardingAddress
+  resource_family: Contacts
+  paths:
+  - /contacts/{contactId}/forwarding-address
+  identifier: contactId
+- entity: Person
+  resource_family: Contacts
+  paths:
+  - /contacts/{contactId}/persons
+  - /contacts/{contactId}/persons/{personId}
+  identifier: contactId
+- entity: MarketingPreference
+  resource_family: Contacts
+  paths:
+  - /contacts/{contactId}/preferences
+  identifier: contactId
+- entity: ContactRelationship
+  resource_family: Contacts
+  paths:
+  - /contacts/{contactId}/relationship
+  - /contacts/{contactId}/relationship/{contactRelationshipId}
+  identifier: contactId
+- entity: Owner
+  resource_family: Owners
+  paths:
+  - /inventory/{inventoryId}/owner
+  - /owners
+  identifier: inventoryId
+- entity: Document
+  resource_family: Documents
+  paths:
+  - /documents
+  - /documents/post
+  - /documents/{documentId}/content
+  - /inventory/{inventoryId}/documents
+  - /work-orders/{workOrderId}/documents
+  identifier: documentId
+- entity: FileNote
+  resource_family: FileNotes
+  paths:
+  - /file-notes
+  - /file-notes/search
+  - /file-notes/{fileNoteId}
+  - /inventory/{propertyId}/file-notes
+  identifier: fileNoteId
+- entity: KeySet
+  resource_family: Inventory
+  paths:
+  - /inventory/{inventoryId}/keyset
+  - /inventory/{inventoryId}/keyset/{keySetId}
+  - /inventory/{inventoryId}/keysets
+  identifier: inventoryId
+- entity: Lead
+  resource_family: Leads
+  paths:
+  - /leads
+  - /leads/{leadId}
+  identifier: leadId
+- entity: Guarantor
+  resource_family: LettingsProgression
+  paths:
+  - /guarantorIds
+  identifier: null
+- entity: ReferenceCheck
+  resource_family: ReferenceChecks
+  paths:
+  - /ReferenceChecks
+  - /ReferenceChecks/{referenceCheckId}
+  identifier: referenceCheckId
+- entity: Listing
+  resource_family: Listing
+  paths:
+  - /listing/filter
+  - /listing/property/items
+  - /listing/property/{propertyId}
+  - /listing/property/{propertyId}/rooms
+  - /listing/property/{propertyId}/summary
+  identifier: propertyId
+- entity: ListingImage
+  resource_family: Listing
+  paths:
+  - /listing/property/{propertyId}/images
+  - /listing/property/{propertyId}/images/{imageId}
+  identifier: propertyId
+- entity: MediaItem
+  resource_family: Media
+  paths:
+  - /inventory/{inventoryId}/media-link
+  - /media-item
+  - /media-item/{mediaItemId}
+  identifier: inventoryId
+- entity: Offer
+  resource_family: Offers
+  paths:
+  - /offers/sales-offer/{offerId}
+  identifier: offerId
+- entity: Referral
+  resource_family: Referrals
+  paths:
+  - /referrals/{referralId}
+  - /voidswitching/referrals/{referralId}
+  identifier: referralId
+- entity: IntegrationOptOut
+  resource_family: Partners
+  paths:
+  - /opt-out-status/{linkedType}/{linkedId}
+  identifier: linkedId
+- entity: Integration
+  resource_family: Partners
+  paths:
+  - /partners/integration
+  - /partners/integration/status
+  identifier: null
+- entity: Landlord
+  resource_family: Landlords
+  paths:
+  - /inventory/{inventoryId}/landlords
+  - /landlords
+  identifier: inventoryId
+- entity: ManagementEvent
+  resource_family: ManagementEvents
+  paths:
+  - /inventory/{inventoryId}/management-events
+  - /management-events
+  - /management-events/{eventId}
+  identifier: inventoryId
+- entity: Supplier
+  resource_family: Suppliers
+  paths:
+  - /inventory/{inventoryId}/suppliers
+  - /suppliers
+  - /suppliers/{supplierId}
+  identifier: inventoryId
+- entity: Tenancy
+  resource_family: Tenancies
+  paths:
+  - /inventory/{inventoryId}/tenancies
+  - /tenancies
+  - /tenancies/{tenancyId}
+  identifier: inventoryId
+- entity: WorkOrder
+  resource_family: WorkOrders
+  paths:
+  - /inventory/{inventoryId}/work-orders
+  - /work-orders
+  - /work-orders/{id}
+  identifier: inventoryId
+- entity: Charge
+  resource_family: Charges
+  paths:
+  - /inventory/{propertyId}/charges
+  - /tenancies/{tenancyId}/charges
+  identifier: propertyId
+- entity: MeterReading
+  resource_family: Tenancies
+  paths:
+  - /tenancies/{tenancyId}/meter-readings
+  - /tenancies/{tenancyId}/meter-readings/{utilityType}
+  identifier: tenancyId
+- entity: Tenant
+  resource_family: Tenancies
+  paths:
+  - /tenancies/{tenancyId}/tenantIds
+  identifier: tenancyId
+- entity: SalesProgression
+  resource_family: SalesProgression
+  paths:
+  - /sales-progressions
+  - /sales-progressions/{offerId}
+  identifier: offerId
+relationships:
+- from: Inventory
+  type: has_many
+  to: Tenancy
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/tenancies
+- from: Inventory
+  type: has_many
+  to: WorkOrder
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/work-orders
+- from: Inventory
+  type: has_many
+  to: Document
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/documents
+- from: Inventory
+  type: has_many
+  to: FileNote
+  via: propertyId
+  evidence: GET /inventory/{propertyId}/file-notes
+- from: Inventory
+  type: has_many
+  to: KeySet
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/keysets
+- from: Inventory
+  type: has_many
+  to: Landlord
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/landlords
+- from: Inventory
+  type: has_many
+  to: Supplier
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/suppliers
+- from: Inventory
+  type: has_many
+  to: ManagementEvent
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/management-events
+- from: Inventory
+  type: has_many
+  to: Charge
+  via: propertyId
+  evidence: POST /inventory/{propertyId}/charges
+- from: Inventory
+  type: has_one
+  to: Owner
+  via: inventoryId
+  evidence: POST /inventory/{inventoryId}/owner
+- from: Inventory
+  type: has_one
+  to: Appraisal
+  via: propertyId
+  evidence: PATCH /inventory/{propertyId}/appraisal
+- from: Inventory
+  type: has_one
+  to: Listing
+  via: propertyId
+  evidence: GET /listing/property/{propertyId}
+- from: Listing
+  type: has_many
+  to: ListingImage
+  via: propertyId
+  evidence: GET /listing/property/{propertyId}/images
+- from: Inventory
+  type: has_many
+  to: MediaItem
+  via: inventoryId
+  evidence: POST /inventory/{inventoryId}/media-link
+- from: Contact
+  type: has_many
+  to: Person
+  via: contactId
+  evidence: GET /contacts/{contactId}/persons
+- from: Contact
+  type: has_many
+  to: ApplicantRequirement
+  via: contactId
+  evidence: POST /contacts/{contactId}/applicant-requirements
+- from: Contact
+  type: has_many
+  to: BankAccount
+  via: contactId
+  evidence: GET /contacts/{contactId}/bank-accounts
+- from: Contact
+  type: has_one
+  to: ForwardingAddress
+  via: contactId
+  evidence: POST /contacts/{contactId}/forwarding-address
+- from: Contact
+  type: has_one
+  to: MarketingPreference
+  via: contactId
+  evidence: GET /contacts/{contactId}/preferences
+- from: Contact
+  type: has_many
+  to: ContactRelationship
+  via: contactId
+  evidence: GET /contacts/{contactId}/relationship
+- from: ContactRelationship
+  type: belongs_to
+  to: Contact
+  via: contactRelationshipId
+  evidence: DELETE /contacts/{contactId}/relationship/{contactRelationshipId}
+- from: Tenancy
+  type: has_many
+  to: Charge
+  via: tenancyId
+  evidence: POST /tenancies/{tenancyId}/charges
+- from: Tenancy
+  type: has_many
+  to: MeterReading
+  via: tenancyId
+  evidence: GET /tenancies/{tenancyId}/meter-readings
+- from: Tenancy
+  type: has_many
+  to: Tenant
+  via: tenancyId
+  evidence: GET /tenancies/{tenancyId}/tenantIds
+- from: Tenancy
+  type: belongs_to
+  to: Inventory
+  via: inventoryId
+  evidence: POST /inventory/{inventoryId}/tenancies
+- from: WorkOrder
+  type: has_many
+  to: Document
+  via: workOrderId
+  evidence: GET /work-orders/{workOrderId}/documents
+- from: Offer
+  type: has_one
+  to: SalesProgression
+  via: offerId
+  evidence: GET /sales-progressions/{offerId}
+- from: Branch
+  type: has_many
+  to: Negotiator
+  evidence: GET /negotiators (branch-scoped agency structure)
+- from: Appointment
+  type: belongs_to
+  to: Negotiator
+  evidence: GET /appointments/negotiators
+- from: Lead
+  type: belongs_to
+  to: Contact
+  via: contact-id
+  evidence: GET /leads?contact-id=
+- from: Lead
+  type: belongs_to
+  to: Inventory
+  via: property-id
+  evidence: GET /leads?property-id=
+- from: Document
+  type: belongs_to
+  to: Inventory
+  via: inventoryId
+  evidence: GET /inventory/{inventoryId}/documents
+- from: ReferenceCheck
+  type: belongs_to
+  to: Tenancy
+  evidence: Lettings progression — GET /ReferenceChecks
+- from: Guarantor
+  type: belongs_to
+  to: Tenancy
+  evidence: GET /guarantorIds
+notes:
+- 'Contact is polymorphic by relationship, not by subtype: /owners, /landlords and the tenant identifier lists all
+  resolve to contacts. ContactRelationship is the join that carries the role.'
+- Inventory vs Listing is the most important distinction in the model. Inventory is the property as the agency holds
+  it; Listing is what is marketed, with its own filter, summary, rooms and images operations. Portal distribution
+  happens on the Listing side.
+- GET /clients is deprecated in favour of /contacts, so the Client entity is collapsing into Contact.
+- Charge attaches to both Inventory and Tenancy with the same shape but no shared read operation — there is no GET
+  /charges anywhere; charges can be created and never listed through the API.
+- The Zoopla product APIs address a listingId (or a customerListingId matched through the Listing Matching Service)
+  rather than an Alto inventoryId; nothing in either contract publishes the mapping between the two.

@@ -1,0 +1,175 @@
+generated: '2026-07-26'
+method: searched
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json
+docs:
+- https://developers.vebraalto.com/guides/authenticating-your-requests/
+- https://developers.vebraalto.com/guides/error-codes/
+- https://developers.vebraalto.com/guides/webhooks/
+- https://developers.vebraalto.com/guides/glossary/
+- https://developers.zoopla.co.uk/docs/authentication
+summary: >-
+  Two API estates under one owner with different conventions on almost every axis. Alto is a
+  .NET REST API with a bearer token, a mandatory tenancy header, cursor pagination and JSON
+  Patch on some updates. Zoopla's product APIs are async-activation APIs that answer 202 and
+  303 rather than returning the created resource. Neither publishes a request-idempotency key,
+  a rate-limit header, a request-id header, or a versioning scheme in the URL.
+authentication:
+  style: OAuth 2.0 client credentials -> Bearer JWT
+  header: 'Authorization: Bearer <token>'
+  tenancy_header: AgencyRef
+  tenancy_note: Required on 110 of the 112 Alto operations; a wrong value returns 403 while a
+    bad token returns 401.
+  artifact: authentication/alto-vebra-authentication.yml
+idempotency:
+  request_idempotency:
+    supported: false
+    evidence: >-
+      No Idempotency-Key header, no idempotency parameter and no request-replay contract appears
+      in any of the four specs or anywhere in the published guides. POST /contacts, POST /leads,
+      POST /appraisals, POST /work-orders and POST /media-item are all non-idempotent creates.
+    partial_substitute: >-
+      Alto detects duplicates server-side on a few resources and answers 409 Conflict with
+      Location response header(s) pointing at the existing resource — documented at
+      https://developers.vebraalto.com/guides/error-codes/. That is duplicate suppression after
+      the fact, not caller-supplied idempotency: the caller cannot assert "this is the same
+      request", only discover afterwards that one matched.
+    affected_resources:
+    - contacts (duplicate contacts found — check Location headers)
+    - contact relationships (duplicate relationships found — check Location headers)
+    - leads (409 when a lead already exists for the source identifier in the request)
+    - premium listings (409 / register code 1011003, 1011004, 1011044 — pending or activated
+      product already exists for listingId)
+  delivery_idempotency:
+    supported: true
+    direction: inbound webhooks (Alto -> partner)
+    docs: https://developers.vebraalto.com/guides/webhooks/
+    contract: >-
+      Alto retries a failed delivery up to 10 times for up to 6 hours. The CloudEvents `id`
+      field is stable across retries of the same notification and is the documented
+      de-duplication key. Alto explicitly instructs partners to make their receiving endpoint
+      idempotent and warns that delivery order is not guaranteed.
+    dedupe_key: id
+    retries: 10
+    retry_window: 6h
+pagination:
+  style: cursor
+  consistent: false
+  variants:
+  - params:
+      cursor: next-token
+      page_size: max-results
+    used_by: 13 operations (kebab-case generation)
+  - params:
+      cursor: nextToken
+      page_size: maxResults
+    used_by: 9 operations (camelCase generation)
+  - params:
+      cursor: NextToken
+      page_size: MaxResults
+    used_by: 2 operations (PascalCase generation)
+  note: >-
+    Three casings of the same two parameters coexist in one document. A generic client cannot
+    page the Alto API without a per-operation lookup. The Zoopla Leads API does not paginate at
+    all — it returns everything in the requested window (default last 24 hours, 30-day
+    retention).
+  zoopla_leads_window:
+    default: last 24 hours
+    retention: 30 days
+    params:
+    - from-time
+    - to-time
+filtering:
+  date_ranges:
+    variants:
+    - created-from / created-to / modified-from / modified-to (9 operations)
+    - createdFrom / createdTo / modifiedFrom / modifiedTo (2 operations)
+    format: ISO 8601 UTC, e.g. 2006-01-02T15:04:05Z
+  scoping:
+    alto: branchIds, property-id, contact-id, owner-id, status, archived, active, category,
+      recordType
+    zoopla_leads: group-id, company-id, brand-id, branch-id — Zoopla-internal identifiers, and
+      one of them becomes required as soon as a customer has more than one branch/brand/company/group.
+  search: Alto exposes dedicated /contacts/search, /inventory/search, /listing/filter,
+    /inventory/filter and /file-notes/search operations rather than filter params on the
+    collection.
+partial_update:
+  style: mixed
+  variants:
+  - method: PATCH with a resource-shaped body
+    used_by: most Alto PATCH operations (contacts, persons, listings, appointments, work orders)
+  - method: PATCH with JSON Patch (RFC 6902)
+    used_by: PATCH /tenancies/{tenancyId}, PATCH /referrals/{referralId} — both documented as
+      "Updates ... using JSON Patch"
+  note: Two update dialects on the same API; the JSON Patch operations are the exception, not
+    the rule.
+async_activation:
+  applies_to: Zoopla Premium Listing Activations API, Zoopla WFP Activations API
+  contract: >-
+    POST returns 202 Accepted (the activation is queued, not complete) or 303 See Other when an
+    equivalent activation already exists; PATCH returns 202. The caller must poll
+    GET /products/<product>/{uuid} for the terminal status. Errors surface later through the
+    Processor service codes (102xxxx) rather than on the original POST.
+  alto_equivalent: POST /inventory/{inventoryId}/tenancies returns 202 Accepted for the same
+    reason; PATCH /ReferenceChecks/{referenceCheckId} returns 202.
+metadata_and_expansion:
+  field_expansion: not supported — no expand/include/fields parameter anywhere
+  sparse_fieldsets: not supported
+  custom_metadata: not supported
+request_tracing:
+  request_id_header: none documented
+  correlation: >-
+    The only correlation identifier in the estate is the CloudEvents `id` on webhook
+    notifications, which is formatted as "<event-uuid>|<integrationId>".
+versioning:
+  scheme: none in the URL
+  alto:
+    spec_version: '1.0'
+    path_prefix: none — resources sit at the host root (/contacts, /inventory, /tenancies)
+    note: There is no /v1. A breaking change has nowhere to go except a new host or a new spec
+      revision.
+  zoopla:
+    leads: Swagger 2.0 document versioned 0.1
+    premium_listings: OpenAPI 3.0.0 document versioned 1.0.0
+    wfp: OpenAPI 3.0.0 document versioned 1.0.0
+  artifact: lifecycle/alto-vebra-lifecycle.yml
+error_envelope:
+  alto: RFC 7807-shaped ProblemDetails (type/title/status/detail/instance) served as
+    application/json, text/json and text/plain; a second {"errors":[{code,message}]} envelope is
+    used by the Material and PropertyManagement subsystems
+  zoopla: '{"errors":[{"code": <7-digit int>, "reason": "<text>"}]}'
+  problem_json: false
+  artifacts:
+  - errors/alto-vebra-problem-types.yml
+  - errors/alto-vebra-error-codes.yml
+rate_limiting:
+  published_limits: none
+  headers: none documented — no X-RateLimit-*, no RateLimit-*, no Retry-After
+  signal: >-
+    The Zoopla Leads API documents a 429 "service busy" response with no quota attached and the
+    published remediation is to wait, retry, and cache the access token for its full 3600s
+    expiry. The Alto API declares no 429 at all on any of its 112 operations.
+media_and_binary:
+  documents: GET /documents/{documentId}/content returns document bytes; POST /documents/post
+    uploads
+  images: GET /listing/property/{propertyId}/images returns metadata, GET
+    /listing/property/{propertyId}/images/{imageId} returns the image
+  media_links: POST /inventory/{inventoryId}/media-link creates VirtualTour or WebLink items
+  size_limit: Zoopla Premium Listings rejects custom details over 640kb with 413 (register code
+    1011009)
+identifiers:
+  style: opaque integers scoped by AgencyRef (propertyId, inventoryId, contactId, tenancyId,
+    leadId, branchId)
+  zoopla: UUIDs for product activations; Zoopla-internal integer ids for branch/brand/company/group
+  note: >-
+    There is no global property identifier. The UK has no MLS and no RESO Universal Property
+    Identifier; identity is agency-local. See review.yml resoPosture.
+  prefixes: none — ids carry no type discriminator
+conventions_gaps:
+- No caller-supplied idempotency key on any write operation.
+- Three casings of the same pagination parameters in one document.
+- No request-id / correlation header on the request path.
+- No rate-limit headers and no published quota.
+- No URL versioning, so there is no safe path for a breaking change.
+- Errors are RFC 7807-shaped but never served as application/problem+json and never carry a
+  resolvable `type`.

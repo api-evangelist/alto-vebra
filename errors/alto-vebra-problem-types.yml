@@ -1,0 +1,195 @@
+generated: '2026-07-26'
+method: searched
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json
+docs:
+- https://developers.vebraalto.com/guides/error-codes/
+- https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+- https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+format: rfc7807-shaped
+format_note: >-
+  Not RFC 9457. The Alto API returns the ASP.NET Core ProblemDetails object
+  (type/title/status/detail/instance) — the RFC 7807 shape — but serves it as application/json,
+  text/json and text/plain, never as application/problem+json. There is not a single
+  problem+json media type anywhere in the four specs, and no error `type` URI is ever populated
+  with a resolvable document. A second, incompatible envelope
+  ({"errors":[{"code","message"}]}) is used by the Material and PropertyManagement subsystems of
+  the same API. Agents must be prepared for both shapes on the same host.
+envelopes:
+- name: ProblemDetails
+  api: Alto API
+  schema: openapi/alto-api-openapi.json#/components/schemas/ProblemDetails
+  media_types:
+  - application/json
+  - text/json
+  - text/plain
+  fields:
+  - type
+  - title
+  - status
+  - detail
+  - instance
+  note: >-
+    Also present twice more under the aliases Microsoft.AspNetCore.Mvc.ProblemDetails and
+    Alto.PropertyManagement.Api.Models.Responses ProblemDetails — three identical duplicate
+    schemas of the same object in one document.
+  usage: the dominant 400/401/403 shape across the Alto API
+- name: ErrorsResponse
+  api: Alto API
+  schema: openapi/alto-api-openapi.json#/components/schemas/ErrorsResponse
+  media_types:
+  - application/json
+  fields:
+  - errors[].code
+  - errors[].message
+  note: Used by the Material and PropertyManagement subsystems (31 of the 93 Alto 400 responses).
+    Aliased as Alto.Api.Material.Models.Responses.ErrorsResponse and
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse.
+- name: Errors
+  api: Zoopla Premium Listing Activations API, Zoopla Weekly Featured Property (WFP) Activations
+    API
+  schema: openapi/zoopla-premium-listing-activations-openapi.json#/components/schemas/Errors
+  media_types:
+  - application/json
+  fields:
+  - errors[].code
+  - errors[].reason
+  note: >-
+    `code` is a 7-digit integer, not a string — service id (3) + severity (1) + custom code (3).
+    See errors/alto-vebra-error-codes.yml for the published register.
+- name: Error
+  api: Zoopla Leads API
+  schema: openapi/zoopla-leads-api-openapi.json#/definitions/Error
+  media_types:
+  - application/json
+  fields:
+  - errors[]
+problems:
+- status: 400
+  title: Bad Request
+  api: Alto API
+  occurrences: 93
+  envelope: ProblemDetails | ErrorsResponse
+  remediation: >-
+    Published guidance: check that the endpoint URL matches the documentation and that all
+    required query parameters are present. Spec descriptions add validation detail per operation
+    ("Invalid Priority", "invalid date range or missing branch level activation", "invalid
+    LeadId", "LinkedType must be set").
+  source: https://developers.vebraalto.com/guides/error-codes/
+- status: 401
+  title: Unauthorized
+  api: Alto API
+  occurrences: 45
+  envelope: ProblemDetails
+  meaning: When access has not been granted to the API, or the bearer token is missing/expired.
+  remediation: >-
+    Published guidance: confirm there is an Authorization header on the request and that the
+    bearer token has not expired. Re-request a token from the /token endpoint.
+  source: https://developers.vebraalto.com/guides/error-codes/
+- status: 403
+  title: Forbidden
+  api: Alto API
+  occurrences: 14
+  envelope: ProblemDetails
+  meaning: >-
+    "Invalid scope or AgencyRef for request." This is the tenancy failure, not the
+    authentication failure — the token is valid but is not scoped to the agency, branch or
+    property being addressed.
+  remediation: >-
+    Published guidance: confirm there is an AgencyRef header and that it is the correct agency
+    reference. If both are correct, the integration's permissions may not cover the endpoint —
+    email connectsupport@altosoftwaregroup.co.uk with the Integration Name so permissions can be
+    adjusted.
+  source: https://developers.vebraalto.com/guides/error-codes/
+- status: 404
+  title: Not Found
+  api: Alto API
+  occurrences: 56
+  envelope: ProblemDetails
+  remediation: Published guidance is the same as 400 — verify the URL against the documentation
+    and that required query parameters are present.
+  source: https://developers.vebraalto.com/guides/error-codes/
+- status: 409
+  title: Conflict
+  api: Alto API
+  occurrences: 5
+  envelope: ProblemDetails
+  meaning: >-
+    A matching resource already exists — duplicate contacts, duplicate contact relationships, or
+    a lead already present for the source identifier.
+  remediation: >-
+    Published guidance: the response includes Location response header(s) carrying the URI of
+    the duplicate resource(s). Follow them rather than retrying the create. This is Alto's only
+    duplicate-suppression mechanism; there is no idempotency key.
+  source: https://developers.vebraalto.com/guides/error-codes/
+  source_operations:
+  - openapi/alto-api-openapi.json#CreateContact
+  - openapi/alto-api-openapi.json#CreateContactRelationship
+- status: 422
+  title: Unprocessable Entity
+  api: Alto API
+  occurrences: 1
+  meaning: A lead could not be created for the specified branch.
+  source_operations:
+  - openapi/alto-api-openapi.json#POST /leads
+- status: 500
+  title: Internal Server Error
+  api: Alto API
+  occurrences: 16
+  envelope: ProblemDetails
+- status: 400
+  title: Bad Request
+  api: Zoopla Premium Listing Activations API, Zoopla WFP Activations API
+  occurrences: 5
+  envelope: Errors
+  meaning: Listing id malformed, invalid highlights, or a body that fails JSON-schema validation.
+  register: errors/alto-vebra-error-codes.yml
+- status: 403
+  title: Forbidden
+  api: Zoopla Premium Listing Activations API
+  occurrences: 1
+  envelope: Errors
+  meaning: No access to branch.
+- status: 404
+  title: Not Found
+  api: Zoopla Premium Listing Activations API, Zoopla WFP Activations API
+  occurrences: 3
+  envelope: Errors
+  meaning: The activation does not exist, or the client does not have access to it — the two
+    cases are deliberately indistinguishable.
+- status: 409
+  title: Conflict
+  api: Zoopla Premium Listing Activations API
+  occurrences: 1
+  envelope: Errors
+  meaning: An update is already pending for this listing (register code 1011044).
+- status: 413
+  title: Payload Too Large
+  api: Zoopla Premium Listing Activations API, Zoopla WFP Activations API
+  occurrences: 2
+  envelope: Errors
+  meaning: Listing custom details exceed 640kb (register code 1011009).
+- status: 429
+  title: Too Many Requests
+  api: Zoopla Leads API
+  occurrences: 2
+  envelope: none
+  meaning: >-
+    "There are times when you may receive a 429 error if the service is especially busy." Not a
+    published quota — a load-shed signal. No Retry-After, no X-RateLimit headers are documented.
+  remediation: >-
+    Published guidance: wait and retry, and cache the access token for its full expires_in
+    (3600s) instead of re-authenticating per call.
+  source: openapi/zoopla-leads-api-openapi.json (info.description)
+- status: 500
+  title: Internal Server Error
+  api: Zoopla Leads API, Zoopla Premium Listing Activations API, Zoopla WFP Activations API
+  occurrences: 9
+  envelope: Errors | Error
+gaps:
+- No error `type` URI is ever populated, so nothing dereferences to a documented problem type.
+- No application/problem+json media type anywhere; RFC 9457 conformance is false.
+- The Alto API publishes no numeric error-code register — only HTTP statuses plus prose. The
+  Zoopla product APIs do (see errors/alto-vebra-error-codes.yml).
+- 401 vs 403 is used consistently and meaningfully (token vs AgencyRef/scope), which is better
+  than most; the 403 message string is the only place the distinction is spelled out.

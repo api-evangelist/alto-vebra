@@ -1,0 +1,116 @@
+generated: '2026-07-26'
+method: searched
+source: openapi/alto-api-openapi.json + developers.vebraalto.com + developers.zoopla.co.uk +
+  live probes
+summary: >-
+  Alto and Zoopla publish good contracts and almost no lifecycle commitments. There is no
+  versioning scheme in any URL, no deprecation policy, no Sunset/Deprecation header support, no
+  SLA, and no status page on any host in the estate. The only lifecycle signals that exist are
+  one deprecated operation inside the Alto OpenAPI, a 6-hour/10-attempt webhook retry window,
+  and a 30-day lead retention limit.
+versioning:
+  scheme: none
+  alto:
+    spec_version: '1.0'
+    url_versioning: false
+    note: Alto resources sit at the host root (/contacts, /inventory, /tenancies). Environment
+      is selected by host — api.alto.zoopladev.co.uk (sandbox) vs api.alto.zoopla.co.uk
+      (production) — not by version.
+  zoopla:
+    leads:
+      spec_version: '0.1'
+      spec_format: Swagger 2.0
+    premium_listings:
+      spec_version: 1.0.0
+    weekly_featured_property:
+      spec_version: 1.0.0
+    url_versioning: false
+    note: All three Zoopla product APIs share the services.zoopla.co.uk host with product-named
+      path prefixes (/products/premium-listings, /products/weekly-featured-properties,
+      /applicant-leads).
+  legacy_generation:
+    note: >-
+      A separate, older "Vebra Alto API" generation (v12/v13, an XML property feed on
+      webservices.vebra.com / api.vebra.com) is still referenced by third-party CMS connectors.
+      Both hosts return 403 to anonymous probes and neither is documented on
+      developers.vebraalto.com. Recorded as observed context, not as a supported surface.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  notice_period: none published
+deprecated_operations:
+- operation: openapi/alto-api-openapi.json#GET /clients
+  deprecated: true
+  scope: alto/route:get-clients
+  notice: This endpoint is now obsolete. Use /contacts endpoint instead.
+  removal_date: not published
+  replacement: GET /contacts
+compatibility_promise:
+  webhooks: >-
+    "We may add fields to the payload over time. Ignore any fields you do not recognise rather
+    than failing." — https://developers.vebraalto.com/guides/webhooks/. The only forward-
+    compatibility commitment published anywhere in the estate.
+  api: none published
+sla:
+  url: null
+  uptime_target: not published
+  note: The API Terms of Use (https://developers.vebraalto.com/api-terms-of-use) bind API use to
+    an existing contract with Vebra Solutions; any availability commitment lives in that private
+    contract, not on the public surface.
+status_page:
+  exists: false
+  probed:
+  - url: https://status.altosoftware.co.uk
+    result: redirects to the id.vebraalto.com Auth0 login — this is the Alto application login,
+      not a status page
+  - url: https://status.zoopla.co.uk
+    result: resolves to www.zoopla.co.uk behind a Cloudflare interstitial (403)
+  - url: https://status.vebraalto.com
+    result: NXDOMAIN
+  - url: https://altosoftware.statuspage.io
+    result: redirects to atlassian.com/software/statuspage — unclaimed
+  - url: https://zoopla.statuspage.io
+    result: redirects to atlassian.com/software/statuspage — unclaimed
+  - url: https://status.houseful.co.uk
+    result: NXDOMAIN
+retention_and_windows:
+  zoopla_leads:
+    retention: 30 days
+    default_query_window: last 24 hours
+    push_retry_window: 24 hours, then leads are retained a further 29 days with no automatic
+      replay mechanism
+    source: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  alto_webhooks:
+    retry_attempts: 10
+    retry_window: 6 hours
+    after_window: the notification is never retried again
+    source: https://developers.vebraalto.com/guides/webhooks/
+release_notes:
+  api: none
+  product: https://files.vebraalto.com/alto/downloads/ (unindexed PDFs)
+  artifact: changelog/alto-vebra-changelog.yml
+onboarding_lifecycle:
+  stages:
+  - Register an integration in Alto Connect (https://connect.vebraalto.com/connect) under an
+    existing Vebra Solutions contract.
+  - Receive sandbox credentials and an Alto test environment login by email.
+  - An individual agency activates the integration; Alto emails the partner the AgencyRef.
+  - Webhook subscriptions are configured manually by Alto on request to
+    connectsupport@altosoftwaregroup.co.uk.
+  source: https://developers.vebraalto.com/guides/activation-request-emails/
+  api_operations:
+  - GET /partners/integration — read the integration activation state
+  - POST /partners/integration/status — update the integration activation state
+  - GET /opt-out-status/{linkedType}/{linkedId} — read a subject's integration opt-out status
+  note: Activation and deactivation are also emitted as webhook events (Integration.Enabled,
+    Integration.Disabled, Integration.Activated, Integration.Deactivated), which makes the
+    partner lifecycle the one part of this estate that IS machine-observable.
+gaps:
+- No status page anywhere in the estate — a 6,000-agency CRM with no public availability signal.
+- No deprecation policy, no Sunset/Deprecation headers, no removal date on the one deprecated
+  operation.
+- No URL versioning, so a breaking change has no compatible landing place.
+- No published SLA on the anonymous surface.

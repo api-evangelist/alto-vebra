@@ -1,0 +1,93 @@
+generated: '2026-07-26'
+method: searched
+source: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/, https://developers.vebraalto.com/guides/authenticating-your-requests/,
+  openapi/alto-api-openapi.json
+summary: >-
+  Alto runs a real, separately-hosted sandbox — an entire second Alto tenancy with both an API
+  and a UI, not a mock. It is gated: sandbox credentials arrive by email when a partner creates
+  their first integration in the Developer Portal, and the sandbox UI password must be
+  requested from partner support. No public test credentials, magic identifiers or fixture data
+  are published, so nothing verbatim can be captured here. The Zoopla product APIs publish no
+  sandbox at all.
+alto:
+  exists: true
+  separation: by host, not by key prefix
+  environments:
+  - name: Sandbox
+    api_base: https://api.alto.zoopladev.co.uk
+    token_endpoint: https://api.alto.zoopladev.co.uk/token
+    ui: https://sandbox.altotest.co.uk/
+    declared_in: openapi/alto-api-openapi.json servers[0]
+    note: >-
+      Every published curl example in the authentication guide targets the SANDBOX host, which
+      is effectively the documented default. The sandbox UI answered a probe with a redirect
+      loop to a login, consistent with a gated tenant.
+  - name: Production
+    api_base: https://api.alto.zoopla.co.uk
+    declared_in: openapi/alto-api-openapi.json servers[1]
+    note: The production /token path returns 404 anonymously; the guides never publish a
+      production token URL.
+  key_prefixes: none — credentials are opaque clientId/clientSecret pairs with no environment
+    marker
+  ui_access:
+    url: https://sandbox.altotest.co.uk/
+    username: the same email address used to log in to the Developer Portal
+    password: requested from connectsupport@altosoftwaregroup.co.uk
+    docs: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+    quote: >-
+      "You can have full access to your sandbox via the APIs and also if necessary the Alto UI."
+  credentials:
+    self_serve: false
+    delivery: >-
+      "When you create your first integration, you will receive a login for an Alto test
+      environment and authentication instructions. These will be sent directly to the email you
+      created your Developer Portal account with."
+    docs: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  test_data:
+    published_values: none
+    magic_identifiers: none published
+    fixtures: none published
+    note: >-
+      The sandbox is a working Alto tenancy the partner populates through the UI or the API,
+      not a fixture set. The tenancy is still scoped by an AgencyRef issued for the test agency.
+  reference_data_instead:
+    note: >-
+      What Alto publishes in place of test values is a set of enumerated reference-data pages —
+      the closest thing to a canonical fixture list on the anonymous surface — plus live
+      /parameters/* operations that return the same vocabularies at runtime.
+    pages:
+    - https://developers.vebraalto.com/alto-data/appraisal-types/
+    - https://developers.vebraalto.com/alto-data/phone-number-types/
+    - https://developers.vebraalto.com/alto-data/property-statuses/
+    - https://developers.vebraalto.com/alto-data/property-types/
+    - https://developers.vebraalto.com/alto-data/rental-frequencies/
+    - https://developers.vebraalto.com/alto-data/rental-price-qualifiers/
+    - https://developers.vebraalto.com/alto-data/returning-tenancies-and-tenants/
+    - https://developers.vebraalto.com/alto-data/sequencing-order/
+    - https://developers.vebraalto.com/alto-data/tenancy-duration/
+    - https://developers.vebraalto.com/alto-data/tenancy-statuses/
+    operations:
+    - GET /parameters/appointment-subtypes
+    - GET /parameters/client-disposal-statuses
+    - GET /parameters/client-intentions
+    - GET /parameters/client-positions
+    - GET /parameters/lead-sources
+    - GET /parameters/property-types
+  webhook_testing:
+    self_serve: false
+    note: >-
+      There is no webhook simulator, no test-event trigger and no replay tool. Subscriptions are
+      configured manually by Alto on email request, so exercising an event means causing the
+      real change in the sandbox tenancy.
+zoopla:
+  exists: false
+  note: >-
+    The Leads, Premium Listings and WFP documentation describes only production hosts
+    (services.zoopla.co.uk, services-auth.services.zoopla.co.uk). No sandbox host, test client,
+    or test listing id is published; onboarding runs through support.zoopla.co.uk and
+    members@zoopla.co.uk.
+gaps:
+- No published test credentials, magic identifiers or seeded fixtures — a partner cannot write
+  an integration test against anything until Alto issues a tenancy.
+- No webhook test-trigger or replay tooling.
+- No sandbox at all on the Zoopla product APIs.

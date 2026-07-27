@@ -1,0 +1,143 @@
+generated: '2026-07-26'
+method: searched
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json
+docs:
+- https://developers.vebraalto.com/guides/authenticating-your-requests/
+- https://developers.zoopla.co.uk/docs/authentication
+- https://developers.zoopla.co.uk/leads/docs/push-service
+- https://developers.vebraalto.com/guides/webhooks/
+summary:
+  types:
+  - apiKey
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - clientCredentials
+  model: >-
+    Two independent OAuth 2.0 client-credentials estates behind one company. Alto issues a Bearer
+    JWT from a /token endpoint on the API host itself; Zoopla issues one from a separate
+    authorization server at services-auth.services.zoopla.co.uk. Neither is self-serve: Alto
+    credentials require an integration registered in Alto Connect under an existing Vebra
+    Solutions contract, and Zoopla ships the client_secret PGP-encrypted to a public key the
+    partner supplies out of band. Alto adds a second, non-OAuth authorization dimension — the
+    AgencyRef header — which is the real multi-tenant boundary and is issued per activating
+    agency by email.
+  credential_delivery: out-of-band (email); the Zoopla client_secret is PGP-encrypted to a key
+    the partner exports and hands over
+  self_serve: false
+schemes:
+- name: Bearer
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: >-
+    Declared in the Alto OpenAPI as an apiKey-in-header scheme with the description "Please
+    enter JWT with Bearer into field" — an OpenAPI modelling shortcut. The real mechanism is an
+    OAuth 2.0 client-credentials Bearer JWT (see the alto-token scheme below); the spec does not
+    model the token endpoint.
+  applied: global security requirement on the Alto API
+  sources:
+  - openapi/alto-api-openapi.json
+- name: alto-token
+  type: oauth2
+  documented_only: true
+  description: >-
+    Not declared in the OpenAPI; documented in prose at
+    https://developers.vebraalto.com/guides/authenticating-your-requests/. Base64-encode
+    "clientId:clientSecret", send it as an HTTP Basic Authorization header to the token endpoint
+    with Content-Type application/x-www-form-urlencoded and body grant_type=client_credentials.
+    The returned token is presented as "Authorization: Bearer <token>".
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.alto.zoopladev.co.uk/token
+    client_authentication: client_secret_basic
+    scopes: 101
+    scopes_artifact: scopes/alto-vebra-scopes.yml
+    note: >-
+      The documented token endpoint is on the SANDBOX host. The production equivalent
+      (https://api.alto.zoopla.co.uk/token) returns 404 to an anonymous probe. Scopes are
+      published in operation description prose, not in a securitySchemes flow object.
+  sources:
+  - https://developers.vebraalto.com/guides/authenticating-your-requests/
+- name: AgencyRef
+  type: apiKey
+  in: header
+  parameter: AgencyRef
+  role: tenancy
+  description: >-
+    Per-agency tenant selector required on every Alto call alongside the Bearer token. Issued to
+    the partner by email when an individual agency activates the integration
+    (https://developers.vebraalto.com/guides/activation-request-emails/). A missing or incorrect
+    AgencyRef yields 403, not 401 — see errors/alto-vebra-problem-types.yml.
+  applied: declared as a header parameter on 110 of the 112 Alto operations
+  sources:
+  - openapi/alto-api-openapi.json
+  - https://developers.vebraalto.com/guides/error-codes/
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://services-auth.services.zoopla.co.uk/oauth2/token
+    client_authentication: client_secret_basic
+    scopes: 2
+    audience: https://services.zoopla.co.uk
+    note: The Leads spec documents an additional `audience` form parameter on the token request.
+  sources:
+  - openapi/zoopla-leads-api-openapi.json
+- name: oAuthSample
+  type: oauth2
+  description: This API uses OAuth 2 with the client credentials grant flow.
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://services-auth.services.zoopla.co.uk/oauth2/token
+    client_authentication: client_secret_basic
+    scopes: 1
+  sources:
+  - openapi/zoopla-premium-listing-activations-openapi.json
+  - openapi/zoopla-weekly-featured-property-openapi.json
+identity_provider:
+  host: https://id.vebraalto.com
+  vendor: Auth0
+  role: Alto Connect / Developer Portal human login (NOT the API token issuer)
+  discovery: well-known/alto-vebra-openid-configuration.json
+  grant_types_supported:
+  - client_credentials
+  - authorization_code
+  - refresh_token
+  - urn:ietf:params:oauth:grant-type:device_code
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+  dpop_supported: true
+inbound_callback_auth:
+  description: >-
+    Alto authenticates ITSELF to the partner when delivering webhooks; the partner chooses the
+    method during onboarding. Documented at https://developers.vebraalto.com/guides/webhooks/.
+  methods:
+  - type: apiKey
+    header: x-signature
+    description: Shared secret presented by Alto on each callback.
+  - type: http
+    scheme: basic
+    description: HTTP Basic username/password issued to Alto during onboarding.
+  - type: oauth2
+    flow: clientCredentials
+    description: Alto obtains a bearer token from the partner's own authorization server.
+  zoopla_push:
+    docs: https://developers.zoopla.co.uk/leads/docs/push-service
+    methods:
+    - type: oauth2
+      flow: clientCredentials
+      description: Zoopla calls a token endpoint the partner supplies, then sends Authorization
+        Bearer.
+    - type: apiKey
+      header: Authorization
+      description: Key used verbatim as the Authorization header value.
+gaps:
+- No mutualTLS, no openIdConnect scheme and no PKCE anywhere on the API surface — every path is
+  machine-to-machine client credentials.
+- Neither the Alto nor the Zoopla token endpoint publishes RFC 8414 metadata; the only discovery
+  document in the estate belongs to the human-login Auth0 tenant.
+- The Alto OpenAPI models the Bearer JWT as an apiKey scheme, so generated clients will not know
+  a token endpoint exists.

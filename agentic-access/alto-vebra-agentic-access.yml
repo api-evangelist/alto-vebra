@@ -1,0 +1,1683 @@
+generated: '2026-07-26'
+method: generated
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 121
+  by_action_class:
+    connected: 73
+    acting: 48
+  by_consequence:
+    read: 73
+    write: 42
+    physical: 6
+  human_in_the_loop_required: 0
+operations:
+- path: /appointments/{appointmentId}/{instanceId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-appointments-appointmentid-instanceid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /appointments/general
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-appointments-general
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /appointments/general/{appointmentId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-appointments-general-appointmentid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /appointments/negotiators
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-appointments-negotiators
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /appointments/valuations
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-appointments-valuations
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /appointments/viewings
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-appointments-viewings
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /appointments/viewings/{appointmentId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-appointments-viewings-appointmentid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /parameters/appointment-subtypes
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-parameters-appointment-subtypes
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /appraisals
+  method: post
+  operationId: CreateAppraisal
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-appraisals
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{propertyId}/appraisal
+  method: patch
+  operationId: PatchAppraisal
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-inventory-propertyid-appraisal
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /clients
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-clients
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /branches
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-branches
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /branches/{branchId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-branches-branchid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /negotiators
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-negotiators
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /negotiators/{negotiatorId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-negotiators-negotiatorid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts
+  method: get
+  operationId: GetContactsById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-contacts
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts
+  method: post
+  operationId: CreateContact
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-contacts
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}
+  method: get
+  operationId: GetContact
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-contacts-contactid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/{contactId}
+  method: patch
+  operationId: UpdateContact
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-contacts-contactid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/applicant-requirements
+  method: post
+  operationId: CreateApplicantRequirement
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-contacts-contactid-applicant-requirements
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/applicant-requirements/{requirementId}
+  method: patch
+  operationId: UpdateApplicantRequirement
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-contacts-contactid-applicant-requirements-requirementid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/bank-accounts
+  method: get
+  operationId: ListBankAccounts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/read:contact_bank_accounts
+    - alto/route:get-contacts-contactid-bank-accounts
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/{contactId}/forwarding-address
+  method: post
+  operationId: CreateForwardingAddress
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-contacts-contactid-forwarding-address
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/persons
+  method: get
+  operationId: GetPersons
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-contacts-contactid-persons
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/{contactId}/persons/{personId}
+  method: patch
+  operationId: UpdatePerson
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-contacts-contactid-persons-personid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/persons/{personId}
+  method: get
+  operationId: GetPerson
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:patch-contacts-contactid-persons-personid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/{contactId}/preferences
+  method: get
+  operationId: GetPreferences
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:post-contacts-contactid-preferences
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/{contactId}/preferences
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-contacts-contactid-preferences
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/relationship
+  method: get
+  operationId: GetContactRelationship
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-contacts-contactid-relationship
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/{contactId}/relationship
+  method: post
+  operationId: CreateContactRelationship
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - alto/route:get-contacts-contactid-relationship
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/{contactId}/relationship/{contactRelationshipId}
+  method: delete
+  operationId: DeleteContactRelationship
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - alto/route:delete-contacts-contactid-relationship-contactrelationshipid
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /contacts/all
+  method: get
+  operationId: GetAllContacts
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-contacts-all
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /contacts/search
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-contacts-search
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /owners
+  method: get
+  operationId: GetOwners
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-owners
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /parameters/client-disposal-statuses
+  method: get
+  operationId: GetClientDisposalStatuses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-parameters-client-disposal-statuses
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /parameters/client-intentions
+  method: get
+  operationId: GetIntentions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-parameters-client-intentions
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /parameters/client-positions
+  method: get
+  operationId: GetPositions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-parameters-client-positions
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /parameters/lead-sources
+  method: get
+  operationId: GetLeadSources
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-parameters-lead-sources
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /parameters/property-types
+  method: get
+  operationId: GetPropertyTypes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-parameters-property-types
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /documents
+  method: get
+  operationId: GetDocumentsByType
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-documents
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /documents/{documentId}/content
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-documents-documentid-content
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /documents/post
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-documents-post
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/documents
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid-documents
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /work-orders/{workOrderId}/documents
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-work-orders-workorderid-documents
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /file-notes
+  method: post
+  operationId: CreateFileNote
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-file-notes
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /file-notes/{fileNoteId}
+  method: get
+  operationId: GetFileNote
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-file-notes-filenoteid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /file-notes/{fileNoteId}
+  method: patch
+  operationId: PatchFileNote
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-file-notes-filenoteid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /file-notes/search
+  method: get
+  operationId: SearchFileNotes
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-file-notes-search
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{propertyId}/file-notes
+  method: get
+  operationId: GetFileNotesByProperty
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-propertyid-file-notes
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-inventory-inventoryid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/keyset
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-inventory-inventoryid-keyset
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/keyset/{keySetId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:delete-inventory-inventoryid-keyset-keysetid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/keyset/{keySetId}
+  method: delete
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:delete-inventory-inventoryid-keyset-keysetid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/keysets
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid-keysets
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}/owner
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-inventory-inventoryid-owner
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/filter
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-filter
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/items
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-items
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/new
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-inventory-new
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/search
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-search
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /leads
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-leads
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /leads
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-leads
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /leads/{leadId}
+  method: get
+  operationId: GetById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-leads-leadid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /leads/{leadId}
+  method: patch
+  operationId: UpdateLead
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-leads-leadid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /guarantorIds
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-guarantorids
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /ReferenceChecks
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-referencechecks
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /ReferenceChecks/{referenceCheckId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-referencechecks-referencecheckid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /listing/filter
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-listing-filter
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /listing/property/{propertyId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-listing-property-propertyid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /listing/property/{propertyId}/images
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-listing-property-propertyid-images
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /listing/property/{propertyId}/images/{imageId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-listing-property-propertyid-images-imageid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /listing/property/{propertyId}/rooms
+  method: patch
+  operationId: PatchListingRooms
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-listing-property-propertyid-rooms
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /listing/property/{propertyId}/summary
+  method: patch
+  operationId: PatchListingSummary
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-listing-property-propertyid-summary
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /listing/property/items
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-listing-property-items
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}/media-link
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-inventory-inventoryid-media-link
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /media-item
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-media-item
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /media-item/{mediaItemId}
+  method: delete
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:delete-media-item-mediaitemid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /offers/sales-offer/{offerId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-offers-sales-offer-offerid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /referrals/{referralId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-referrals-referralid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /referrals/{referralId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-referrals-referralid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /opt-out-status/{linkedType}/{linkedId}
+  method: get
+  operationId: GetIntegrationOptOutStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-opt-out-status-linkedtype-linkedid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /partners/integration
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-partners-integration
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /partners/integration/status
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-partners-integration-status
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/landlords
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid-landlords
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}/management-events
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid-management-events
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}/suppliers
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid-suppliers
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}/tenancies
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:post-inventory-inventoryid-tenancies
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{inventoryId}/tenancies
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:post-inventory-inventoryid-tenancies
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /inventory/{inventoryId}/work-orders
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-inventory-inventoryid-work-orders
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /inventory/{propertyId}/charges
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - alto/route:post-inventory-propertyid-charges
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /landlords
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-landlords
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /management-events
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-management-events
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /management-events
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-management-events
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /management-events/{eventId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-management-events-eventid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /management-events/{eventId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-management-events-eventid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /suppliers
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-suppliers
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /suppliers/{supplierId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-suppliers-supplierid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tenancies
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-tenancies
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tenancies/{tenancyId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-tenancies-tenancyid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tenancies/{tenancyId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-tenancies-tenancyid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tenancies/{tenancyId}/charges
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - alto/route:post-tenancies-tenancyid-charges
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tenancies/{tenancyId}/meter-readings
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-tenancies-tenancyid-meter-readings
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /tenancies/{tenancyId}/meter-readings
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:get-tenancies-tenancyid-meter-readings
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tenancies/{tenancyId}/meter-readings/{utilityType}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - alto/route:patch-tenancies-tenancyid-meter-readings-utilitytype
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /tenancies/{tenancyId}/tenantIds
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-tenancies-tenancyid-tenantids
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /work-orders
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - alto/route:post-work-orders
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /work-orders/{id}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-work-orders-id
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /work-orders/{id}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - alto/route:get-work-orders-id
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /sales-progressions
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-sales-progressions
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /sales-progressions/{offerId}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - alto/route:get-sales-progressions-offerid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /voidswitching/referrals/{referralId}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /applicant-leads
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - leads/list:applicant-leads
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /appraisal-leads
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - leads/list:appraisal-leads
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /products/premium-listings/{uuid}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - api/api_access
+- path: /products/premium-listings/{uuid}
+  method: patch
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - api/api_access
+- path: /products/premium-listings
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - api/api_access
+- path: /products/premium-listings
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - api/api_access
+- path: /products/weekly-featured-properties/{uuid}
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - api/api_access
+- path: /products/weekly-featured-properties
+  method: get
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    scope:
+    - api/api_access
+- path: /products/weekly-featured-properties
+  method: post
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+    scope:
+    - api/api_access

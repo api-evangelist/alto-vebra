@@ -1,0 +1,72 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Alto API
+  version: 1.0.0
+extends: openapi/alto-api-openapi.json
+x-apievangelist:
+  generated: '2026-07-26'
+  method: generated
+  source: derived from the harvested spec plus the searched artifacts in this repo
+  note: Additive only. Records what API Evangelist established about this contract; the harvested spec is never
+    mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: alto-vebra
+    x-apievangelist-generated: '2026-07-26'
+    x-apievangelist-artifacts:
+      authentication: authentication/alto-vebra-authentication.yml
+      scopes: scopes/alto-vebra-scopes.yml
+      conventions: conventions/alto-vebra-conventions.yml
+      errors: errors/alto-vebra-problem-types.yml
+      lifecycle: lifecycle/alto-vebra-lifecycle.yml
+      conformance: conformance/alto-vebra-conformance.yml
+      sandbox: sandbox/alto-vebra-sandbox.yml
+      data_model: data-model/alto-vebra-data-model.yml
+    x-apievangelist-access:
+      gate: partner-only
+      self_serve_signup: false
+      note: The contract is anonymous and public; credentials require a Vebra Solutions contract, an integration
+        registered in Alto Connect and per-agency activation.
+    x-apievangelist-tenancy:
+      header: AgencyRef
+      required_on: 110 of 112 operations
+      failure_status: 403
+    x-apievangelist-auth:
+      model: oauth2 client credentials -> Bearer JWT
+      token_endpoint: https://api.alto.zoopladev.co.uk/token
+      note: The spec models the credential as an apiKey-in-header scheme named Bearer; the token endpoint is documented
+        in prose only.
+    x-apievangelist-scopes:
+      count: 101
+      declared_in: operation description prose, not securitySchemes
+      artifact: scopes/alto-vebra-scopes.yml
+    x-apievangelist-pagination:
+      style: cursor
+      casings:
+      - next-token/max-results
+      - nextToken/maxResults
+      - NextToken/MaxResults
+      note: Three casings of the same two parameters in one document.
+    x-apievangelist-idempotency:
+      request_keys: false
+      duplicate_handling: 409 Conflict with Location header(s) on contacts, contact relationships and leads
+    x-apievangelist-events:
+      asyncapi: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+      event_types: 26
+      envelope: CloudEvents 1.0
+- target: $.paths./clients.get
+  update:
+    x-apievangelist-deprecation:
+      deprecated: true
+      replacement: GET /contacts
+      removal_date: null
+      note: Marked obsolete in the summary and deprecated:true in the spec; no sunset date is published.
+- target: $.paths./contacts/{contactId}/bank-accounts.get
+  update:
+    x-apievangelist-sensitivity:
+      level: high
+      data: landlord and tenant bank account details
+      scope: alto/read:contact_bank_accounts
+      note: One of only six semantic scopes in the API — Alto singled this data out deliberately. Exclude from general-purpose
+        agent surfaces.

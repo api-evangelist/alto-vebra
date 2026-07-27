@@ -1,0 +1,130 @@
+generated: '2026-07-26'
+method: searched
+source: live probes of every apis.yml baseURL host, every OpenAPI servers[] host, the docs hosts
+  and the registrable parent domains
+summary: >-
+  Neither the Alto API host (api.alto.zoopla.co.uk / api.alto.zoopladev.co.uk) nor the Zoopla
+  service hosts (services.zoopla.co.uk, services-auth.services.zoopla.co.uk) serve any
+  /.well-known/ discovery document — every probe returned 404. Two real hits exist elsewhere in
+  the estate. The Alto Connect / Developer Portal identity provider at id.vebraalto.com is an
+  Auth0 tenant and serves full OpenID Connect discovery (RFC 8414 + OIDC Discovery 1.0) plus a
+  JWKS. The Zoopla portal registrable domain (zoopla.co.uk), which the Zoopla product APIs sit
+  under, serves an RFC 9116 security.txt pointing at a vulnerability-disclosure page. Note the
+  Alto API's own OAuth2 token endpoint (/token on the API host) is NOT the Auth0 tenant and
+  publishes no metadata of its own.
+hosts:
+- host: https://id.vebraalto.com
+  role: Alto Connect / Developer Portal identity provider (Auth0 tenant)
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: alto-vebra-openid-configuration.json
+    note: OpenID Connect Discovery 1.0 metadata; issuer https://id.vebraalto.com/
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: alto-vebra-oauth-authorization-server.json
+    note: RFC 8414 authorization server metadata (identical body to the OIDC document)
+  - path: /.well-known/jwks.json
+    status: 200
+    note: JWKS referenced by jwks_uri; not stored (rotating key material)
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://www.zoopla.co.uk
+  role: Zoopla portal, registrable domain of the Zoopla product API hosts
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: alto-vebra-security.txt
+    note: RFC 9116; Expires field is 2026-02-04T02:00:00Z and is therefore stale as fetched
+  - path: /.well-known/openid-configuration
+    status: 403
+    note: Cloudflare interstitial on this host
+- host: https://api.alto.zoopla.co.uk
+  role: Alto API production
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.alto.zoopladev.co.uk
+  role: Alto API sandbox (documented token endpoint host)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://services.zoopla.co.uk
+  role: Zoopla product API host (Leads, Premium Listings, WFP)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://services-auth.services.zoopla.co.uk
+  role: Zoopla OAuth2 authorization server (AWS Cognito-backed per the published token example)
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: 'Body: {"error":"This URL doesn''t exist on the authorization server"} — the server
+      answers but publishes no metadata document'
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://developers.vebraalto.com
+  role: Alto developer portal (Astro/Starlight)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://developers.zoopla.co.uk
+  role: Zoopla developer docs (docsify)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://www.altosoftware.co.uk
+  role: Alto marketing site
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api-docs.vebraalto.com
+  role: Static host serving the merged Alto OpenAPI
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    note: S3 AccessDenied — bucket serves merged.json only

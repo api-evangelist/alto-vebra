@@ -1,0 +1,657 @@
+asyncapi: 3.0.0
+id: urn:apievangelist:alto-vebra:webhooks
+info:
+  title: Alto Webhooks
+  version: 1.0.0
+  description: 'Event notifications Alto delivers to a partner-hosted HTTPS endpoint when data changes
+    in an Alto agency tenancy. Faithfully transcribed by API Evangelist from the webhook catalogue Alto
+    publishes at https://developers.vebraalto.com/guides/webhooks/ — Alto itself publishes no AsyncAPI
+    document. Notifications are deliberately thin: each one names WHAT changed and WHERE to fetch it,
+    and the receiver is expected to call the Alto REST API to read current state. Subscriptions are not
+    self-serve; a partner emails connectsupport@altosoftwaregroup.co.uk with the integration name, the
+    receiving endpoint URL, the event types wanted and the preferred authentication method, and Alto configures
+    the subscription manually.'
+  contact:
+    name: Alto Connect Support
+    email: connectsupport@altosoftwaregroup.co.uk
+    url: https://developers.vebraalto.com/guides/webhooks/
+  externalDocs:
+    url: https://developers.vebraalto.com/guides/webhooks/
+    description: Alto webhooks guide
+defaultContentType: application/json
+servers:
+  partnerEndpoint:
+    host: '{partnerHost}'
+    pathname: /{partnerPath}
+    protocol: https
+    description: The HTTPS endpoint the partner hosts and supplies to Alto during onboarding. Alto is
+      the client on this channel; the partner is the server.
+    variables:
+      partnerHost:
+        description: Partner-controlled host, reachable from the public internet.
+        default: example.partner.com
+      partnerPath:
+        description: Partner-controlled path that receives the POST.
+        default: alto/webhooks
+    security:
+    - $ref: '#/components/securitySchemes/xSignature'
+    - $ref: '#/components/securitySchemes/basicAuth'
+    - $ref: '#/components/securitySchemes/oauth2ClientCredentials'
+channels:
+  altoNotifications:
+    address: /
+    title: Alto notifications
+    description: A single partner endpoint receives every subscribed event type. Alto sends one HTTP POST
+      per notification with Content-Type application/json. The partner routes on the CloudEvents `type`
+      field and, where one endpoint serves several integrations, on data.integrationId.
+    servers:
+    - $ref: '#/servers/partnerEndpoint'
+    messages:
+      ContactCreated:
+        $ref: '#/components/messages/ContactCreated'
+      ContactModified:
+        $ref: '#/components/messages/ContactModified'
+      PropertyCreated:
+        $ref: '#/components/messages/PropertyCreated'
+      PropertyModified:
+        $ref: '#/components/messages/PropertyModified'
+      PropertyMarketingInformationSent:
+        $ref: '#/components/messages/PropertyMarketingInformationSent'
+      BranchModified:
+        $ref: '#/components/messages/BranchModified'
+      AppointmentCreated:
+        $ref: '#/components/messages/AppointmentCreated'
+      AppointmentModified:
+        $ref: '#/components/messages/AppointmentModified'
+      TenancyCreated:
+        $ref: '#/components/messages/TenancyCreated'
+      TenancyModified:
+        $ref: '#/components/messages/TenancyModified'
+      TenancyReferencingPassed:
+        $ref: '#/components/messages/TenancyReferencingPassed'
+      TenancyRenewed:
+        $ref: '#/components/messages/TenancyRenewed'
+      TenancyVacated:
+        $ref: '#/components/messages/TenancyVacated'
+      OfferCreated:
+        $ref: '#/components/messages/OfferCreated'
+      OfferModified:
+        $ref: '#/components/messages/OfferModified'
+      OfferAccepted:
+        $ref: '#/components/messages/OfferAccepted'
+      OfferWithdrawn:
+        $ref: '#/components/messages/OfferWithdrawn'
+      SalesProgressionExchanged:
+        $ref: '#/components/messages/SalesProgressionExchanged'
+      SalesProgressionMilestoneCompleted:
+        $ref: '#/components/messages/SalesProgressionMilestoneCompleted'
+      LeadReceived:
+        $ref: '#/components/messages/LeadReceived'
+      LeadAccepted:
+        $ref: '#/components/messages/LeadAccepted'
+      LeadModified:
+        $ref: '#/components/messages/LeadModified'
+      IntegrationEnabled:
+        $ref: '#/components/messages/IntegrationEnabled'
+      IntegrationDisabled:
+        $ref: '#/components/messages/IntegrationDisabled'
+      IntegrationActivated:
+        $ref: '#/components/messages/IntegrationActivated'
+      IntegrationDeactivated:
+        $ref: '#/components/messages/IntegrationDeactivated'
+operations:
+  receiveAltoNotification:
+    action: receive
+    channel:
+      $ref: '#/channels/altoNotifications'
+    title: Receive an Alto change notification
+    summary: Alto POSTs a CloudEvents 1.0 notification to the partner endpoint.
+    description: 'The endpoint must answer 2xx to acknowledge. Alto retries a non-2xx, unreachable or
+      timed-out delivery up to 10 times for up to 6 hours from when the change occurred, after which the
+      notification is dropped. Delivery order is NOT guaranteed and duplicates are expected: the `id`
+      field is stable across retries of the same notification and is the documented de-duplication key.
+      Acknowledge fast and process asynchronously. Treat the notification as a signal, then re-fetch the
+      resource named by `subject` from the Alto REST API using data.agencyRef as the AgencyRef header.'
+    messages:
+    - $ref: '#/channels/altoNotifications/messages/ContactCreated'
+    - $ref: '#/channels/altoNotifications/messages/ContactModified'
+    - $ref: '#/channels/altoNotifications/messages/PropertyCreated'
+    - $ref: '#/channels/altoNotifications/messages/PropertyModified'
+    - $ref: '#/channels/altoNotifications/messages/PropertyMarketingInformationSent'
+    - $ref: '#/channels/altoNotifications/messages/BranchModified'
+    - $ref: '#/channels/altoNotifications/messages/AppointmentCreated'
+    - $ref: '#/channels/altoNotifications/messages/AppointmentModified'
+    - $ref: '#/channels/altoNotifications/messages/TenancyCreated'
+    - $ref: '#/channels/altoNotifications/messages/TenancyModified'
+    - $ref: '#/channels/altoNotifications/messages/TenancyReferencingPassed'
+    - $ref: '#/channels/altoNotifications/messages/TenancyRenewed'
+    - $ref: '#/channels/altoNotifications/messages/TenancyVacated'
+    - $ref: '#/channels/altoNotifications/messages/OfferCreated'
+    - $ref: '#/channels/altoNotifications/messages/OfferModified'
+    - $ref: '#/channels/altoNotifications/messages/OfferAccepted'
+    - $ref: '#/channels/altoNotifications/messages/OfferWithdrawn'
+    - $ref: '#/channels/altoNotifications/messages/SalesProgressionExchanged'
+    - $ref: '#/channels/altoNotifications/messages/SalesProgressionMilestoneCompleted'
+    - $ref: '#/channels/altoNotifications/messages/LeadReceived'
+    - $ref: '#/channels/altoNotifications/messages/LeadAccepted'
+    - $ref: '#/channels/altoNotifications/messages/LeadModified'
+    - $ref: '#/channels/altoNotifications/messages/IntegrationEnabled'
+    - $ref: '#/channels/altoNotifications/messages/IntegrationDisabled'
+    - $ref: '#/channels/altoNotifications/messages/IntegrationActivated'
+    - $ref: '#/channels/altoNotifications/messages/IntegrationDeactivated'
+    bindings:
+      http:
+        method: POST
+components:
+  securitySchemes:
+    xSignature:
+      type: httpApiKey
+      name: x-signature
+      in: header
+      description: Shared secret agreed during onboarding and presented by Alto on every callback. The
+        partner rejects any request that does not present the expected value.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: HTTP Basic credentials issued to Alto during onboarding.
+    oauth2ClientCredentials:
+      type: oauth2
+      description: Alto obtains a bearer token from the partner's own authorization server using the client-credentials
+        grant and presents it on each request.
+      flows:
+        clientCredentials:
+          tokenUrl: https://partner.example.com/oauth2/token
+          availableScopes: {}
+      scopes: []
+  messages:
+    ContactCreated:
+      name: Contact.Created
+      title: Contact.Created
+      summary: A contact is created
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Contact.Created
+      x-subject-resource: Contact
+      x-fetch-resource: /contacts/{contactId}
+      x-fetch-operation-id: GetContact
+    ContactModified:
+      name: Contact.Modified
+      title: Contact.Modified
+      summary: A contact is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Contact.Modified
+      x-subject-resource: Contact
+      x-fetch-resource: /contacts/{contactId}
+      x-fetch-operation-id: GetContact
+    PropertyCreated:
+      name: Property.Created
+      title: Property.Created
+      summary: A property is created
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Property.Created
+      x-subject-resource: Property
+      x-fetch-resource: /inventory/{inventoryId}
+    PropertyModified:
+      name: Property.Modified
+      title: Property.Modified
+      summary: A property is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Property.Modified
+      x-subject-resource: Property
+      x-fetch-resource: /inventory/{inventoryId}
+    PropertyMarketingInformationSent:
+      name: Property.MarketingInformationSent
+      title: Property.MarketingInformationSent
+      summary: Marketing information is sent for a property
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Property.MarketingInformationSent
+      x-subject-resource: Property
+      x-fetch-resource: /inventory/{inventoryId}
+    BranchModified:
+      name: Branch.Modified
+      title: Branch.Modified
+      summary: A branch is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Branch.Modified
+      x-subject-resource: Branch
+      x-fetch-resource: /branches/{branchId}
+    AppointmentCreated:
+      name: Appointment.Created
+      title: Appointment.Created
+      summary: An appointment is created
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Appointment.Created
+      x-subject-resource: Appointment
+      x-fetch-resource: /appointments/{appointmentId}/{instanceId}
+    AppointmentModified:
+      name: Appointment.Modified
+      title: Appointment.Modified
+      summary: An appointment is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Appointment.Modified
+      x-subject-resource: Appointment
+      x-fetch-resource: /appointments/{appointmentId}/{instanceId}
+    TenancyCreated:
+      name: Tenancy.Created
+      title: Tenancy.Created
+      summary: A tenancy is created
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Tenancy.Created
+      x-subject-resource: Tenancy
+      x-fetch-resource: /tenancies/{tenancyId}
+    TenancyModified:
+      name: Tenancy.Modified
+      title: Tenancy.Modified
+      summary: A tenancy is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Tenancy.Modified
+      x-subject-resource: Tenancy
+      x-fetch-resource: /tenancies/{tenancyId}
+    TenancyReferencingPassed:
+      name: Tenancy.ReferencingPassed
+      title: Tenancy.ReferencingPassed
+      summary: A tenancy passes referencing
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Tenancy.ReferencingPassed
+      x-subject-resource: Tenancy
+      x-fetch-resource: /tenancies/{tenancyId}
+    TenancyRenewed:
+      name: Tenancy.Renewed
+      title: Tenancy.Renewed
+      summary: A tenancy is renewed
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Tenancy.Renewed
+      x-subject-resource: Tenancy
+      x-fetch-resource: /tenancies/{tenancyId}
+    TenancyVacated:
+      name: Tenancy.Vacated
+      title: Tenancy.Vacated
+      summary: A tenancy is vacated
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Tenancy.Vacated
+      x-subject-resource: Tenancy
+      x-fetch-resource: /tenancies/{tenancyId}
+    OfferCreated:
+      name: Offer.Created
+      title: Offer.Created
+      summary: An offer is created
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Offer.Created
+      x-subject-resource: Offer / Sales Progression
+      x-fetch-resource: /offers/sales-offer/{offerId}
+    OfferModified:
+      name: Offer.Modified
+      title: Offer.Modified
+      summary: An offer is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Offer.Modified
+      x-subject-resource: Offer / Sales Progression
+      x-fetch-resource: /offers/sales-offer/{offerId}
+    OfferAccepted:
+      name: Offer.Accepted
+      title: Offer.Accepted
+      summary: An offer is accepted
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Offer.Accepted
+      x-subject-resource: Sales Progression
+      x-fetch-resource: /sales-progressions/{offerId}
+    OfferWithdrawn:
+      name: Offer.Withdrawn
+      title: Offer.Withdrawn
+      summary: An offer is withdrawn
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Offer.Withdrawn
+      x-subject-resource: Offer / Sales Progression
+      x-fetch-resource: /offers/sales-offer/{offerId}
+    SalesProgressionExchanged:
+      name: SalesProgression.Exchanged
+      title: SalesProgression.Exchanged
+      summary: A sale reaches exchange
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: SalesProgression.Exchanged
+      x-subject-resource: Sales Progression
+      x-fetch-resource: /sales-progressions/{offerId}
+    SalesProgressionMilestoneCompleted:
+      name: SalesProgression.Milestone.Completed
+      title: SalesProgression.Milestone.Completed
+      summary: A sales progression milestone is completed
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: SalesProgression.Milestone.Completed
+      x-subject-resource: Sales Progression
+      x-fetch-resource: /sales-progressions/{offerId}
+    LeadReceived:
+      name: Lead.Received
+      title: Lead.Received
+      summary: A lead is received
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Lead.Received
+      x-subject-resource: Lead
+      x-fetch-resource: /leads/{leadId}
+      x-fetch-operation-id: GetById
+    LeadAccepted:
+      name: Lead.Accepted
+      title: Lead.Accepted
+      summary: A lead is accepted
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Lead.Accepted
+      x-subject-resource: Lead
+      x-fetch-resource: /leads/{leadId}
+      x-fetch-operation-id: GetById
+    LeadModified:
+      name: Lead.Modified
+      title: Lead.Modified
+      summary: A lead is modified
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Lead.Modified
+      x-subject-resource: Lead
+      x-fetch-resource: /leads/{leadId}
+      x-fetch-operation-id: GetById
+    IntegrationEnabled:
+      name: Integration.Enabled
+      title: Integration.Enabled
+      summary: Your integration is enabled for a group
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Integration.Enabled
+      x-subject-resource: Integration
+      x-fetch-resource: /partners/integration
+    IntegrationDisabled:
+      name: Integration.Disabled
+      title: Integration.Disabled
+      summary: Your integration is disabled for a group
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Integration.Disabled
+      x-subject-resource: Integration
+      x-fetch-resource: /partners/integration
+    IntegrationActivated:
+      name: Integration.Activated
+      title: Integration.Activated
+      summary: Your integration is activated for a branch
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Integration.Activated
+      x-subject-resource: Integration
+      x-fetch-resource: /partners/integration
+    IntegrationDeactivated:
+      name: Integration.Deactivated
+      title: Integration.Deactivated
+      summary: Your integration is deactivated for a branch
+      contentType: application/json
+      payload:
+        allOf:
+        - $ref: '#/components/schemas/CloudEvent'
+        - type: object
+          properties:
+            type:
+              type: string
+              const: Integration.Deactivated
+      x-subject-resource: Integration
+      x-fetch-resource: /partners/integration
+  schemas:
+    CloudEvent:
+      type: object
+      description: CloudEvents 1.0 JSON envelope as published in the Alto webhooks guide.
+      required:
+      - specversion
+      - id
+      - type
+      - source
+      - subject
+      - time
+      - datacontenttype
+      - data
+      properties:
+        specversion:
+          type: string
+          const: '1.0'
+          description: The CloudEvents specification version. Always 1.0.
+        id:
+          type: string
+          description: Unique identifier for this notification, formatted "<event-uuid>|<integrationId>".
+            Stable across retries of the same notification — use it to de-duplicate.
+          examples:
+          - b1e9b0f0-1c2d-4e3f-9a8b-7c6d5e4f3a2b|11111111-2222-3333-4444-555555555555
+        type:
+          type: string
+          description: The event type that was raised.
+        source:
+          type: string
+          const: alto
+          description: The system that produced the event. Always "alto".
+        subject:
+          type: string
+          description: Relative URI identifying the resource that changed. Combine with the Alto API base
+            URL to re-fetch it.
+          examples:
+          - /inventory/123456
+        time:
+          type: string
+          format: date-time
+          description: The time the originating change occurred, in UTC (ISO 8601).
+        datacontenttype:
+          type: string
+          const: application/json
+        data:
+          $ref: '#/components/schemas/EventData'
+    EventData:
+      type: object
+      description: Details needed to identify and retrieve the changed resource.
+      required:
+      - integrationId
+      - agencyRef
+      - subjectId
+      properties:
+        integrationId:
+          type: string
+          description: Identifier of the receiving integration. Use it to route when one endpoint serves
+            more than one integration.
+        agencyRef:
+          type: string
+          description: The agency reference associated with the change. Use it as the AgencyRef header
+            when calling the Alto REST API.
+        branchId:
+          type: string
+          description: Identifier of the branch the resource belongs to, where applicable.
+        subjectId:
+          type: string
+          description: Identifier of the resource that changed; also the final segment of `subject`.
+        relatedSubjects:
+          type: array
+          description: Related resources, each with its own subjectUri and subjectId. May be empty.
+          items:
+            type: object
+            properties:
+              subjectUri:
+                type: string
+              subjectId:
+                type: string
+      examples:
+      - integrationId: 11111111-2222-3333-4444-555555555555
+        agencyRef: YOUR_AGENCY_REF
+        branchId: '2681'
+        subjectId: '123456'
+        relatedSubjects: []
+x-apievangelist:
+  generated: '2026-07-26'
+  method: generated
+  source: https://developers.vebraalto.com/guides/webhooks/
+  note: Alto publishes no AsyncAPI document. This file is a faithful AsyncAPI 3.0.0 rendering of the webhook
+    catalogue, envelope, field table, retry policy and callback security options Alto documents in prose.
+    Every event type, field description and constraint here is transcribed from that page; nothing was
+    invented. Message payload schemas beyond the CloudEvents envelope are NOT published by Alto — by design,
+    the notification carries no resource snapshot.
+  event_count: 26
+  subscription: manual — email connectsupport@altosoftwaregroup.co.uk
+  related_rest_api: openapi/alto-api-openapi.json

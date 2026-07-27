@@ -1,0 +1,1268 @@
+generated: '2026-07-26'
+method: searched
+source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
+  openapi/zoopla-weekly-featured-property-openapi.json
+docs:
+- https://developers.vebraalto.com/api
+- https://developers.vebraalto.com/guides/authenticating-your-requests/
+- https://developers.zoopla.co.uk/docs/authentication
+summary:
+  total: 104
+  alto: 101
+  zoopla: 3
+  declaration_style: 'Alto scopes are published in prose inside each operation description ("Required
+    scope: alto/read:contacts"), NOT in an OpenAPI securitySchemes flow object — a generated client will
+    not see them. Zoopla scopes are declared properly in securityDefinitions/securitySchemes.'
+  naming_generations:
+  - pattern: alto/<verb>:<resource>
+    example: alto/read:contacts
+    count: 6
+    note: Semantic, human-readable, groups several operations under one grant.
+  - pattern: alto/route:<method>-<path-with-dashes>
+    example: alto/route:get-inventory-inventoryid-tenancies
+    count: 95
+    note: Mechanical one-scope-per-route generation. Least-privilege by construction but unreadable, unstable
+      against any URL change, and effectively a permission per endpoint.
+  coverage: 111 of the 112 Alto operations carry at least one published scope string in their description.
+  observation: Two naming generations coexist in the same live contract. Six semantic scopes cover appointments,
+    contacts, leads and contact bank accounts; every other operation is gated by its own generated route
+    scope. The Zoopla product APIs sit at the opposite extreme — one coarse api/api_access scope authorises
+    both read and write across Premium Listings and WFP.
+schemes:
+- name: alto-token
+  source: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.alto.zoopladev.co.uk/token
+  description: Documented in prose only; the Alto OpenAPI declares the credential as an apiKey-in-header
+    scheme named Bearer and models no OAuth flow.
+- name: OAuth2
+  source: openapi/zoopla-leads-api-openapi.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://services-auth.services.zoopla.co.uk/oauth2/token
+- name: oAuthSample
+  source: openapi/zoopla-premium-listing-activations-openapi.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://services-auth.services.zoopla.co.uk/oauth2/token
+  description: This API uses OAuth 2 with the client credentials grant flow.
+- name: oAuthSample
+  source: openapi/zoopla-weekly-featured-property-openapi.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://services-auth.services.zoopla.co.uk/oauth2/token
+  description: This API uses OAuth 2 with the client credentials grant flow.
+tenancy_note: Scope is not the whole authorization story on Alto. Every call also carries an AgencyRef
+  header that scopes the token to one activating agency; a valid token with the right scope and the wrong
+  AgencyRef returns 403. See authentication/alto-vebra-authentication.yml.
+scopes:
+- scope: leads/list:applicant-leads
+  api: Zoopla Leads API
+  kind: semantic
+  description: Grants read access to applicant lead lists
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zoopla-leads-api-openapi.json
+  operations:
+  - operation: GET /applicant-leads
+- scope: leads/list:appraisal-leads
+  api: Zoopla Leads API
+  kind: semantic
+  description: Grants read access to appraisal lead lists
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zoopla-leads-api-openapi.json
+  operations:
+  - operation: GET /appraisal-leads
+- scope: api/api_access
+  api: Zoopla Premium Listing Activations API, Zoopla Weekly Featured Property (WFP) Activations API
+  kind: coarse
+  description: access to the API — a single undifferentiated scope covering every Premium Listing and
+    WFP operation, read and write alike
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/zoopla-premium-listing-activations-openapi.json
+  - openapi/zoopla-weekly-featured-property-openapi.json
+  operations:
+  - operation: GET /products/premium-listings
+  - operation: POST /products/premium-listings
+  - operation: GET /products/premium-listings/{uuid}
+  - operation: PATCH /products/premium-listings/{uuid}
+  - operation: GET /products/weekly-featured-properties
+  - operation: POST /products/weekly-featured-properties
+  - operation: GET /products/weekly-featured-properties/{uuid}
+- scope: alto/read:appointments
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  - Parameters
+  operations:
+  - operation: GET /appointments/{appointmentId}/{instanceId}
+  - operation: GET /appointments/negotiators
+  - operation: GET /parameters/appointment-subtypes
+- scope: alto/read:contact_bank_accounts
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/{contactId}/bank-accounts
+    operationId: ListBankAccounts
+- scope: alto/read:contacts
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Owners
+  operations:
+  - operation: GET /owners
+    operationId: GetOwners
+- scope: alto/read:leads
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Leads
+  operations:
+  - operation: GET /leads
+- scope: alto/route:delete-contacts-contactid-relationship-contactrelationshipid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: DELETE /contacts/{contactId}/relationship/{contactRelationshipId}
+    operationId: DeleteContactRelationship
+- scope: alto/route:delete-inventory-inventoryid-keyset-keysetid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: PATCH /inventory/{inventoryId}/keyset/{keySetId}
+  - operation: DELETE /inventory/{inventoryId}/keyset/{keySetId}
+- scope: alto/route:delete-media-item-mediaitemid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Media
+  operations:
+  - operation: DELETE /media-item/{mediaItemId}
+- scope: alto/route:get-appointments-appointmentid-instanceid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: GET /appointments/{appointmentId}/{instanceId}
+- scope: alto/route:get-appointments-negotiators
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: GET /appointments/negotiators
+- scope: alto/route:get-appointments-valuations
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: GET /appointments/valuations
+- scope: alto/route:get-branches
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Branches
+  operations:
+  - operation: GET /branches
+- scope: alto/route:get-branches-branchid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Branches
+  operations:
+  - operation: GET /branches/{branchId}
+- scope: alto/route:get-clients
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Clients
+  operations:
+  - operation: GET /clients
+- scope: alto/route:get-contacts
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts
+    operationId: GetContactsById
+  - operation: POST /contacts
+    operationId: CreateContact
+- scope: alto/route:get-contacts-all
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/all
+    operationId: GetAllContacts
+- scope: alto/route:get-contacts-contactid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/{contactId}
+    operationId: GetContact
+  - operation: PATCH /contacts/{contactId}
+    operationId: UpdateContact
+- scope: alto/route:get-contacts-contactid-bank-accounts
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/{contactId}/bank-accounts
+    operationId: ListBankAccounts
+- scope: alto/route:get-contacts-contactid-persons
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/{contactId}/persons
+    operationId: GetPersons
+- scope: alto/route:get-contacts-contactid-relationship
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/{contactId}/relationship
+    operationId: GetContactRelationship
+  - operation: POST /contacts/{contactId}/relationship
+    operationId: CreateContactRelationship
+- scope: alto/route:get-contacts-search
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/search
+- scope: alto/route:get-documents
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Documents
+  operations:
+  - operation: GET /documents
+    operationId: GetDocumentsByType
+- scope: alto/route:get-documents-documentid-content
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Documents
+  operations:
+  - operation: GET /documents/{documentId}/content
+- scope: alto/route:get-file-notes-filenoteid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - FileNotes
+  operations:
+  - operation: GET /file-notes/{fileNoteId}
+    operationId: GetFileNote
+  - operation: PATCH /file-notes/{fileNoteId}
+    operationId: PatchFileNote
+- scope: alto/route:get-file-notes-search
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - FileNotes
+  operations:
+  - operation: GET /file-notes/search
+    operationId: SearchFileNotes
+- scope: alto/route:get-guarantorids
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - LettingsProgression
+  operations:
+  - operation: GET /guarantorIds
+- scope: alto/route:get-inventory
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: GET /inventory
+- scope: alto/route:get-inventory-filter
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: GET /inventory/filter
+- scope: alto/route:get-inventory-inventoryid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: GET /inventory/{inventoryId}
+  - operation: PATCH /inventory/{inventoryId}
+- scope: alto/route:get-inventory-inventoryid-documents
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Documents
+  operations:
+  - operation: GET /inventory/{inventoryId}/documents
+- scope: alto/route:get-inventory-inventoryid-keysets
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: GET /inventory/{inventoryId}/keysets
+- scope: alto/route:get-inventory-inventoryid-landlords
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Landlords
+  operations:
+  - operation: GET /inventory/{inventoryId}/landlords
+- scope: alto/route:get-inventory-inventoryid-management-events
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - ManagementEvents
+  operations:
+  - operation: GET /inventory/{inventoryId}/management-events
+- scope: alto/route:get-inventory-inventoryid-suppliers
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Suppliers
+  operations:
+  - operation: GET /inventory/{inventoryId}/suppliers
+- scope: alto/route:get-inventory-inventoryid-work-orders
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - WorkOrders
+  operations:
+  - operation: GET /inventory/{inventoryId}/work-orders
+- scope: alto/route:get-inventory-items
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: GET /inventory/items
+- scope: alto/route:get-inventory-propertyid-file-notes
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - FileNotes
+  operations:
+  - operation: GET /inventory/{propertyId}/file-notes
+    operationId: GetFileNotesByProperty
+- scope: alto/route:get-inventory-search
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: GET /inventory/search
+- scope: alto/route:get-landlords
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Landlords
+  operations:
+  - operation: GET /landlords
+- scope: alto/route:get-leads
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Leads
+  operations:
+  - operation: GET /leads
+  - operation: POST /leads
+- scope: alto/route:get-leads-leadid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Leads
+  operations:
+  - operation: GET /leads/{leadId}
+    operationId: GetById
+  - operation: PATCH /leads/{leadId}
+    operationId: UpdateLead
+- scope: alto/route:get-listing-filter
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: GET /listing/filter
+- scope: alto/route:get-listing-property-items
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: GET /listing/property/items
+- scope: alto/route:get-listing-property-propertyid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: GET /listing/property/{propertyId}
+- scope: alto/route:get-listing-property-propertyid-images
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: GET /listing/property/{propertyId}/images
+- scope: alto/route:get-listing-property-propertyid-images-imageid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: GET /listing/property/{propertyId}/images/{imageId}
+- scope: alto/route:get-management-events
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - ManagementEvents
+  operations:
+  - operation: GET /management-events
+  - operation: POST /management-events
+- scope: alto/route:get-management-events-eventid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - ManagementEvents
+  operations:
+  - operation: GET /management-events/{eventId}
+  - operation: PATCH /management-events/{eventId}
+- scope: alto/route:get-negotiators
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Negotiators
+  operations:
+  - operation: GET /negotiators
+- scope: alto/route:get-negotiators-negotiatorid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Negotiators
+  operations:
+  - operation: GET /negotiators/{negotiatorId}
+- scope: alto/route:get-offers-sales-offer-offerid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Offers
+  operations:
+  - operation: GET /offers/sales-offer/{offerId}
+- scope: alto/route:get-opt-out-status-linkedtype-linkedid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Partners
+  operations:
+  - operation: GET /opt-out-status/{linkedType}/{linkedId}
+    operationId: GetIntegrationOptOutStatus
+- scope: alto/route:get-owners
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Owners
+  operations:
+  - operation: GET /owners
+    operationId: GetOwners
+- scope: alto/route:get-parameters-appointment-subtypes
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Parameters
+  operations:
+  - operation: GET /parameters/appointment-subtypes
+- scope: alto/route:get-parameters-client-disposal-statuses
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Parameters
+  operations:
+  - operation: GET /parameters/client-disposal-statuses
+    operationId: GetClientDisposalStatuses
+- scope: alto/route:get-parameters-client-intentions
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Parameters
+  operations:
+  - operation: GET /parameters/client-intentions
+    operationId: GetIntentions
+- scope: alto/route:get-parameters-client-positions
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Parameters
+  operations:
+  - operation: GET /parameters/client-positions
+    operationId: GetPositions
+- scope: alto/route:get-parameters-lead-sources
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Parameters
+  operations:
+  - operation: GET /parameters/lead-sources
+    operationId: GetLeadSources
+- scope: alto/route:get-parameters-property-types
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Parameters
+  operations:
+  - operation: GET /parameters/property-types
+    operationId: GetPropertyTypes
+- scope: alto/route:get-partners-integration
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Partners
+  operations:
+  - operation: GET /partners/integration
+- scope: alto/route:get-referencechecks
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - ReferenceChecks
+  operations:
+  - operation: GET /ReferenceChecks
+- scope: alto/route:get-referrals-referralid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Referrals
+  operations:
+  - operation: GET /referrals/{referralId}
+  - operation: PATCH /referrals/{referralId}
+- scope: alto/route:get-sales-progressions
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - SalesProgression
+  operations:
+  - operation: GET /sales-progressions
+- scope: alto/route:get-sales-progressions-offerid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - SalesProgression
+  operations:
+  - operation: GET /sales-progressions/{offerId}
+- scope: alto/route:get-suppliers
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Suppliers
+  operations:
+  - operation: GET /suppliers
+- scope: alto/route:get-suppliers-supplierid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Suppliers
+  operations:
+  - operation: GET /suppliers/{supplierId}
+- scope: alto/route:get-tenancies
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Tenancies
+  operations:
+  - operation: GET /tenancies
+- scope: alto/route:get-tenancies-tenancyid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Tenancies
+  operations:
+  - operation: GET /tenancies/{tenancyId}
+  - operation: PATCH /tenancies/{tenancyId}
+- scope: alto/route:get-tenancies-tenancyid-meter-readings
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Tenancies
+  operations:
+  - operation: GET /tenancies/{tenancyId}/meter-readings
+  - operation: POST /tenancies/{tenancyId}/meter-readings
+- scope: alto/route:get-tenancies-tenancyid-tenantids
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Tenancies
+  operations:
+  - operation: GET /tenancies/{tenancyId}/tenantIds
+- scope: alto/route:get-work-orders-id
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - WorkOrders
+  operations:
+  - operation: GET /work-orders/{id}
+  - operation: PATCH /work-orders/{id}
+- scope: alto/route:get-work-orders-workorderid-documents
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Documents
+  operations:
+  - operation: GET /work-orders/{workOrderId}/documents
+- scope: alto/route:patch-appointments-general-appointmentid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: PATCH /appointments/general/{appointmentId}
+- scope: alto/route:patch-appointments-viewings-appointmentid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: PATCH /appointments/viewings/{appointmentId}
+- scope: alto/route:patch-contacts-contactid-applicant-requirements-requirementid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: PATCH /contacts/{contactId}/applicant-requirements/{requirementId}
+    operationId: UpdateApplicantRequirement
+- scope: alto/route:patch-contacts-contactid-persons-personid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: PATCH /contacts/{contactId}/persons/{personId}
+    operationId: UpdatePerson
+  - operation: GET /contacts/{contactId}/persons/{personId}
+    operationId: GetPerson
+- scope: alto/route:patch-inventory-propertyid-appraisal
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appraisals
+  operations:
+  - operation: PATCH /inventory/{propertyId}/appraisal
+    operationId: PatchAppraisal
+- scope: alto/route:patch-listing-property-propertyid-rooms
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: PATCH /listing/property/{propertyId}/rooms
+    operationId: PatchListingRooms
+- scope: alto/route:patch-listing-property-propertyid-summary
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Listing
+  operations:
+  - operation: PATCH /listing/property/{propertyId}/summary
+    operationId: PatchListingSummary
+- scope: alto/route:patch-referencechecks-referencecheckid
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - ReferenceChecks
+  operations:
+  - operation: PATCH /ReferenceChecks/{referenceCheckId}
+- scope: alto/route:patch-tenancies-tenancyid-meter-readings-utilitytype
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Tenancies
+  operations:
+  - operation: PATCH /tenancies/{tenancyId}/meter-readings/{utilityType}
+- scope: alto/route:post-appointments-general
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: POST /appointments/general
+- scope: alto/route:post-appointments-viewings
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: POST /appointments/viewings
+- scope: alto/route:post-appraisals
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appraisals
+  operations:
+  - operation: POST /appraisals
+    operationId: CreateAppraisal
+- scope: alto/route:post-contacts-contactid-applicant-requirements
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: POST /contacts/{contactId}/applicant-requirements
+    operationId: CreateApplicantRequirement
+- scope: alto/route:post-contacts-contactid-forwarding-address
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: POST /contacts/{contactId}/forwarding-address
+    operationId: CreateForwardingAddress
+- scope: alto/route:post-contacts-contactid-preferences
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Contacts
+  operations:
+  - operation: GET /contacts/{contactId}/preferences
+    operationId: GetPreferences
+  - operation: POST /contacts/{contactId}/preferences
+- scope: alto/route:post-documents-post
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Documents
+  operations:
+  - operation: POST /documents/post
+- scope: alto/route:post-file-notes
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - FileNotes
+  operations:
+  - operation: POST /file-notes
+    operationId: CreateFileNote
+- scope: alto/route:post-inventory-inventoryid-keyset
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: POST /inventory/{inventoryId}/keyset
+- scope: alto/route:post-inventory-inventoryid-media-link
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Media
+  operations:
+  - operation: POST /inventory/{inventoryId}/media-link
+- scope: alto/route:post-inventory-inventoryid-owner
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: POST /inventory/{inventoryId}/owner
+- scope: alto/route:post-inventory-inventoryid-tenancies
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Tenancies
+  operations:
+  - operation: GET /inventory/{inventoryId}/tenancies
+  - operation: POST /inventory/{inventoryId}/tenancies
+- scope: alto/route:post-inventory-new
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Inventory
+  operations:
+  - operation: POST /inventory/new
+- scope: alto/route:post-inventory-propertyid-charges
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Charges
+  operations:
+  - operation: POST /inventory/{propertyId}/charges
+- scope: alto/route:post-media-item
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Media
+  operations:
+  - operation: POST /media-item
+- scope: alto/route:post-partners-integration-status
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Partners
+  operations:
+  - operation: POST /partners/integration/status
+- scope: alto/route:post-tenancies-tenancyid-charges
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Charges
+  operations:
+  - operation: POST /tenancies/{tenancyId}/charges
+- scope: alto/route:post-work-orders
+  api: Alto API
+  kind: route
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - WorkOrders
+  operations:
+  - operation: POST /work-orders
+- scope: alto/update:leads
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Leads
+  operations:
+  - operation: PATCH /leads/{leadId}
+    operationId: UpdateLead
+- scope: alto/write:appointments_general
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: POST /appointments/general
+  - operation: PATCH /appointments/general/{appointmentId}
+- scope: alto/write:appointments_viewings
+  api: Alto API
+  kind: semantic
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/alto-api-openapi.json
+  resource_families:
+  - Appointments
+  operations:
+  - operation: POST /appointments/viewings
+  - operation: PATCH /appointments/viewings/{appointmentId}
