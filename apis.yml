@@ -41,7 +41,7 @@ tags:
 - Real Estate Software
 created: '2026-07-26'
 modified: '2026-07-26'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: alto-vebra:alto-api
   name: Alto API
