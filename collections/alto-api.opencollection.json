@@ -1,0 +1,4128 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Alto API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Appointments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieves an appointment by their unique identifier and numeric instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/:appointmentId/:instanceId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "appointmentId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the appointment"
+              },
+              {
+                "name": "instanceId",
+                "value": "",
+                "type": "path",
+                "description": "The numeric instance of an appointment; this value is only greater than zero for general appointment types that are marked as recurring and represents the xth instance of a given appointment in a recurring series."
+              }
+            ]
+          },
+          "docs": "Retrieves an appointment by their unique identifier and numeric instance.\n            \nRequired scope: alto/read:appointments"
+        },
+        {
+          "info": {
+            "name": "Create a general appointment.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/general",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an appointment with the requested contacts and properties for the given negotiators.\nRequired scope: alto/write:appointments_general"
+        },
+        {
+          "info": {
+            "name": "Updates an existing general appointment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/general/:appointmentId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "appointmentId",
+                "value": "",
+                "type": "path",
+                "description": "The appointment's unique identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a general appointment with any of the following fields supported for update:\n- /startDate ie. The start date and time in ISO 8601 format to update against the requested general appointment\n- /endDate ie. The end date and time in ISO 8601 format to update against the requested general appointment\n- /negotiatorIds ie. An array of all negotiators' unique identifiers to be associated against the requested general appointment\n            \nRequired scope: alto/write:appointments_general"
+        },
+        {
+          "info": {
+            "name": "Get negotiator's appointments within a selected time range.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/negotiators",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "start-date",
+                "value": "2023-01-01T00:00:00.0000000+00:00",
+                "type": "query",
+                "description": "Required: The start date and time in ISO 8601 format for filtering negotiator's appointments.\nInterpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset\nis converted to UK local time (Europe/London); a plain local value with no offset is taken as-is."
+              },
+              {
+                "name": "end-date",
+                "value": "2023-01-01T00:00:00.0000000+00:00",
+                "type": "query",
+                "description": "Required: The end date and time in ISO 8601 format for filtering negotiator's appointments.\nInterpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset\nis converted to UK local time (Europe/London); a plain local value with no offset is taken as-is."
+              },
+              {
+                "name": "type-id",
+                "value": "General",
+                "type": "query",
+                "description": "Optional: The appointment type for filtering negotiator appointments;\nNOTE: If not set, this will return all appointment types"
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "50",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250."
+              },
+              {
+                "name": "negotiator-id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of the requested negotiator's appointments within the selected time range, grouped by negotiator.\nRequired scope: alto/read:appointments"
+        },
+        {
+          "info": {
+            "name": "Get valuations within a selected time range.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/valuations",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "created-from",
+                "value": "2023-01-01T00:00:00.0000000+00:00",
+                "type": "query",
+                "description": "Required: The lower limit for created date and time in ISO 8601 format for filtering appointments"
+              },
+              {
+                "name": "created-to",
+                "value": "2023-01-01T00:00:00.0000000+00:00",
+                "type": "query",
+                "description": "Required: The upper limit for created date and time in ISO 8601 format for filtering appointments"
+              },
+              {
+                "name": "negotiator-ids",
+                "value": "",
+                "type": "query",
+                "description": "Optional: A comma-separated list of negotiator ids for filtering appointments\nNOTE: If not set, this will default to all negotiators in the searched branches"
+              },
+              {
+                "name": "branch-ids",
+                "value": "",
+                "type": "query",
+                "description": "Optional: A comma-separated list of branch ids for filtering appointments\nNOTE: If not set, this will default to all branches"
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "50",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250."
+              }
+            ]
+          },
+          "docs": "Retrieves a paged collection of valuations per the search criteria, which must include at least a Created Date range."
+        },
+        {
+          "info": {
+            "name": "Create a viewing appointment.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/viewings",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a viewing appointment with the requested applicant and property in a negotiator's calender.\nRequired scope: alto/write:appointments_viewings"
+        },
+        {
+          "info": {
+            "name": "Updates an existing viewing",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/appointments/viewings/:appointmentId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "appointmentId",
+                "value": "",
+                "type": "path",
+                "description": "The appointment's unique identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a viewing with any of the following fields supported for update:\n- /startDate ie. The start date and time in ISO 8601 format to update against the requested viewing\n- /endDate ie. The end date and time in ISO 8601 format to update against the requested viewing\n- /negotiatorId ie. The unique identifier of the negotiator to be associated with the requested viewing\n- /status ie. When cancelling, the status the requested viewing should be set to\n- /notes ie. The notes to be associated with t"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Parameters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get general appointment sub-types.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/parameters/appointment-subtypes",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Retrieves a list of all the general appointment sub-types supported by the group.\nRequired scope: alto/read:appointments"
+        },
+        {
+          "info": {
+            "name": "Get Client Disposal Statuses",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/parameters/client-disposal-statuses",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Parameter</a>."
+        },
+        {
+          "info": {
+            "name": "Get Client Intentions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/parameters/client-intentions",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Parameter</a>."
+        },
+        {
+          "info": {
+            "name": "Get Client Positions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/parameters/client-positions",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Parameter</a>."
+        },
+        {
+          "info": {
+            "name": "Get Lead Sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/parameters/lead-sources",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Parameter</a>."
+        },
+        {
+          "info": {
+            "name": "Get Property Types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/parameters/property-types",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Returns the property types available to the caller's group. Use the returned `code`s when specifying\nan applicant requirement's property types. Property types are defined per Group, so the list is scoped\nto the group context of the request."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Appraisals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an appraisal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/appraisals",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an appraisal associated to the requested property"
+        },
+        {
+          "info": {
+            "name": "Update an appraisal",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:propertyId/appraisal",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the appraisal associated with the requested property"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Clients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "This endpoint is now obsolete. Use /contacts endpoint instead.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/clients",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "This endpoint is now obsolete. Use /contacts endpoint instead."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Branches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Branches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/branches",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250."
+              },
+              {
+                "name": "activeOnly",
+                "value": "",
+                "type": "query",
+                "description": "Set whether active branches only are returned."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of branches"
+        },
+        {
+          "info": {
+            "name": "Get Branch By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/branches/:branchId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "branchId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the branch."
+              }
+            ]
+          },
+          "docs": "Get Branch By Id"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Negotiators",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Negotiators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/negotiators",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of negotiators"
+        },
+        {
+          "info": {
+            "name": "Get Negotiator By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/negotiators/:negotiatorId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "negotiatorId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the negotiator"
+              }
+            ]
+          },
+          "docs": "Get Negotiator By Id"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Contacts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Contact(s) by Id(s)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "The IDs for the Contacts being requested."
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#person\">Person</a> and <a href=\"https://developers.zoopla.co.uk/docs/glossary#contact\">Contact</a>."
+        },
+        {
+          "info": {
+            "name": "Create Contact",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/contacts",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Contact"
+        },
+        {
+          "info": {
+            "name": "Get Person(s) by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#person\">Person</a> and <a href=\"https://developers.zoopla.co.uk/docs/glossary#contact\">Contact</a>."
+        },
+        {
+          "info": {
+            "name": "Update Contact by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#contact\">Contact</a>."
+        },
+        {
+          "info": {
+            "name": "Create Applicant Requirement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/applicant-requirements",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Applicant Requirement"
+        },
+        {
+          "info": {
+            "name": "Update Applicant Requirement by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/applicant-requirements/:requirementId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              },
+              {
+                "name": "requirementId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Applicant Requirement."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Applicant Requirement by Id"
+        },
+        {
+          "info": {
+            "name": "Get Bank Accounts by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/bank-accounts",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ]
+          },
+          "docs": "Get Bank Accounts by Contact Id"
+        },
+        {
+          "info": {
+            "name": "Create Contact Forwarding Address",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/forwarding-address",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Contact Forwarding Address"
+        },
+        {
+          "info": {
+            "name": "Get Person(s) by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/persons",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#person\">Person</a> and <a href=\"https://developers.zoopla.co.uk/docs/glossary#contact\">Contact</a>."
+        },
+        {
+          "info": {
+            "name": "Get Person by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/persons/:personId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "The Person identifier within the Contact."
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#person\">Person</a>."
+        },
+        {
+          "info": {
+            "name": "Update Person by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/persons/:personId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              },
+              {
+                "name": "personId",
+                "value": "",
+                "type": "path",
+                "description": "The Person identifier within the Contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#person\">Person</a>."
+        },
+        {
+          "info": {
+            "name": "Get Marketing Preferences by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/preferences",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ]
+          },
+          "docs": "See glossary for definition of <a href=\"https://developers.zoopla.co.uk/docs/glossary#person\">Person</a> and <a href=\"https://developers.zoopla.co.uk/docs/glossary#contact\">Contact</a>."
+        },
+        {
+          "info": {
+            "name": "Update Contact Marketing Preferences",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/preferences",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Contact."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update contact marketing preferences, changing the opt-in status for each preference type and optionally setting notes."
+        },
+        {
+          "info": {
+            "name": "Get Relationships by Contact Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/relationship",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "relationshipType",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get all relationships for a contact, such as guarantors and forwarding addresses."
+        },
+        {
+          "info": {
+            "name": "Create Contact Relationship",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/relationship",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a relationship between a contact and a non-marketable relationship contact, such as a guarantor."
+        },
+        {
+          "info": {
+            "name": "Delete Contact Relationship",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/:contactId/relationship/:contactRelationshipId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contactId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "contactRelationshipId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a relationship between a contact and a non-marketable relationship contact, such as a guarantor."
+        },
+        {
+          "info": {
+            "name": "Get All Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/all",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "active",
+                "value": "true",
+                "type": "query",
+                "description": "Filter only active or non-active contacts."
+              },
+              {
+                "name": "category",
+                "value": "Client",
+                "type": "query",
+                "description": "Filters contacts by the category of the contact."
+              },
+              {
+                "name": "persona",
+                "value": "",
+                "type": "query",
+                "description": "Filters contacts by persona within the Contact category of Client.\nA contact is included in the response if they match any of the specified personas."
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250"
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for by modified date."
+              }
+            ]
+          },
+          "docs": "Get All Contacts"
+        },
+        {
+          "info": {
+            "name": "Search All Contacts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/contacts/search",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "query",
+                "value": "07700 900000",
+                "type": "query",
+                "description": "The query term to search for contacts. This can match on names, addresses, email addresses, phone numbers,\nunique identifiers, reference codes, and company names where applicable."
+              },
+              {
+                "name": "archived",
+                "value": "false",
+                "type": "query",
+                "description": "Optional filter to only show or exclude archived contacts."
+              },
+              {
+                "name": "contact-type",
+                "value": "Client",
+                "type": "query",
+                "description": "Optional filter to only search a single contact type."
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250"
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for by modified date."
+              }
+            ]
+          },
+          "docs": "Search for all matching contacts and return a paginated list of results."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Owners",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Owners",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/owners",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "active",
+                "value": "",
+                "type": "query",
+                "description": "Filter only active or non-active owners."
+              },
+              {
+                "name": "property-id",
+                "value": "",
+                "type": "query",
+                "description": "Only return owners where the propertyId matches one of the values provided"
+              },
+              {
+                "name": "contact-id",
+                "value": "",
+                "type": "query",
+                "description": "Only return owners where the contactId matches one of the values provided"
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The default value is 50, and the maximum value is 250"
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for by modified date."
+              }
+            ]
+          },
+          "docs": "Required scope: alto/read:contacts. \nSee glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Owner</a>."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get documents by document type.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/documents",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "linkedType",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "linkedId",
+                "value": "",
+                "type": "query",
+                "description": "Id of the document association e.g. PropertyId, ContactId, TenancyId, WorkOrderId, HistoryEventId (or FileNoteId)"
+              },
+              {
+                "name": "mediaType",
+                "value": "",
+                "type": "query",
+                "description": "Type of document e.g. File, Image"
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token to get next set of results"
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Number of maximum items to be returned"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of documents that match the given parameters"
+        },
+        {
+          "info": {
+            "name": "Get document content by DocumentId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/documents/:documentId/content",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "The documentId to download document contents"
+              }
+            ]
+          },
+          "docs": "Get the contents of a document with the given id"
+        },
+        {
+          "info": {
+            "name": "Upload a new document",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/documents/post",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "fileToUpload",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "linkedType",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "linkedId",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Upload documents for Property, Contact, Tenancy or Works Order. A Maximum of 30MB file size is supported\nThe images posted are not for Listing/Marketing purposes. Images are posted to the document section In Alto as below:\n    Property > Media > Other Files\n    Contact > Documents\n    Tenancy > Documents\n    Works Order > Documents"
+        },
+        {
+          "info": {
+            "name": "Get documents by PropertyId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/documents",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The PropertyId to filter documents"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Type of file to filter the results by. E.g. File, Image"
+              },
+              {
+                "name": "fileType",
+                "value": "",
+                "type": "query",
+                "description": "Filter results for a specific file type. E.g. PDF, JPG"
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token to get next set of results"
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Number of maximum items to be returned"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of documents for the given PropertyId"
+        },
+        {
+          "info": {
+            "name": "Get documents by WorkOrderId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/work-orders/:workOrderId/documents",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "workOrderId",
+                "value": "",
+                "type": "path",
+                "description": "The WorkOrderId to filter documents"
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token to get next set of results"
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Number of maximum items to be returned"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of documents for the given WorkOrderId"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "FileNotes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a file note",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/file-notes",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a file note associated to the requested property, owners/contacts.\nAs a minimum a file note must be associated to either a property or a contact(s)."
+        },
+        {
+          "info": {
+            "name": "Get a file note",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/file-notes/:fileNoteId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fileNoteId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the File Note"
+              }
+            ]
+          },
+          "docs": "Get a file note by file note id"
+        },
+        {
+          "info": {
+            "name": "Patch a file note",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/file-notes/:fileNoteId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "fileNoteId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch a file note by ID, updating the title or notes text."
+        },
+        {
+          "info": {
+            "name": "Retrieves file notes by criteria",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/file-notes/search",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "contact-id",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the contact"
+              }
+            ]
+          },
+          "docs": "Retrieves file notes matching the search criteria"
+        },
+        {
+          "info": {
+            "name": "Get file notes by property ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:propertyId/file-notes",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the property"
+              }
+            ]
+          },
+          "docs": "Get all file notes relating to the specified property ID"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Inventory",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /inventory",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "address",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "recordType",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "archived",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "Get an inventory item",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the inventory item"
+              }
+            ]
+          },
+          "docs": "Get an inventory item by id"
+        },
+        {
+          "info": {
+            "name": "PATCH /inventory/{inventoryId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "Create a key set for an inventory item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/keyset",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the inventory"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a key set for an inventory item"
+        },
+        {
+          "info": {
+            "name": "Update a key set for an inventory item",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/keyset/:keySetId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the inventory"
+              },
+              {
+                "name": "keySetId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the key set"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a key set for an inventory item"
+        },
+        {
+          "info": {
+            "name": "Delete a key set for an inventory item",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/keyset/:keySetId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the inventory"
+              },
+              {
+                "name": "keySetId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the key set"
+              }
+            ]
+          },
+          "docs": "Delete a key set for an inventory item"
+        },
+        {
+          "info": {
+            "name": "Get key sets by inventoryId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/keysets",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the inventory"
+              }
+            ]
+          },
+          "docs": "Get key sets by inventoryId"
+        },
+        {
+          "info": {
+            "name": "Associates a Contact with an Inventory item as its Owner",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/owner",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Associates a Contact with an Inventory item as its Owner"
+        },
+        {
+          "info": {
+            "name": "Filter inventory items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/filter",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "categoryType",
+                "value": "",
+                "type": "query",
+                "description": "The category type to filter inventory items.\n\n[Note] If you use a value of \"Unspecified\" this field will be ignored."
+              },
+              {
+                "name": "recordType",
+                "value": "",
+                "type": "query",
+                "description": "The record type to filter inventory items.\n\n[Note] If you use a value of \"Unspecified\" or omit this field then both lettings and sales properties will be returned, unless you specify values for management type and / or maintenance type in which case only lettings properties will be returned."
+              },
+              {
+                "name": "managementType",
+                "value": "",
+                "type": "query",
+                "description": "The rental management type to filter inventory items.\n\n[Note] If you use a record type value of \"Sale\" this field will be ignored."
+              },
+              {
+                "name": "maintenance-type",
+                "value": "",
+                "type": "query",
+                "description": "The rental maintenance type to filter inventory items.\n\n[Note] If you use a record type value of \"Sale\" this field will be ignored."
+              },
+              {
+                "name": "archived",
+                "value": "",
+                "type": "query",
+                "description": "The archived status to filter inventory items."
+              },
+              {
+                "name": "inventory-status",
+                "value": "",
+                "type": "query",
+                "description": "The status to filter inventory items.\n\n[Note] If you use a value of \"Unspecified\" this field will be ignored."
+              },
+              {
+                "name": "instruction-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering inventory items by instruction date."
+              },
+              {
+                "name": "instruction-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering inventory items by instruction date."
+              },
+              {
+                "name": "owner-id",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the property owner to filter inventory items."
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The maximum number of results to return. The default value is 50, and the maximum value is 250."
+              },
+              {
+                "name": "branchIds",
+                "value": "",
+                "type": "query",
+                "description": "The list of branch unique identifiers for filtering inventory items."
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering inventory items by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering inventory items by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering inventory items by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering inventory items by modified date."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of filtered inventory items, which can contain properties for lettings, sales, or both depending on the query parameters used."
+        },
+        {
+          "info": {
+            "name": "Get multiple inventory items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/items",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventory-id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get inventory items for multiple inventory ids"
+        },
+        {
+          "info": {
+            "name": "Creates an inventory item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/new",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an inventory item"
+        },
+        {
+          "info": {
+            "name": "Search inventory items",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/search",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "The query term to filter inventory items. Based on specific fields such as address, postcode, contact name, etc."
+              },
+              {
+                "name": "archived",
+                "value": "",
+                "type": "query",
+                "description": "The archived status to search inventory items."
+              },
+              {
+                "name": "recordType",
+                "value": "",
+                "type": "query",
+                "description": "The record type to search inventory items."
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "The token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of results to return. The maximum number of results to return. The default value is 50, and the maximum value is 250."
+              },
+              {
+                "name": "branchIds",
+                "value": "",
+                "type": "query",
+                "description": "The list of branch unique identifiers for filtering inventory items."
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering inventory items by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering inventory items by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering inventory items by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering inventory items by modified date."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of inventory items by searching property"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Leads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets a paginated list of Leads",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/leads",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "modified-from",
+                "value": "2023-01-01T00:00:00.0000000+00:00",
+                "type": "query",
+                "description": "Required: The modified date and time in ISO 8601 format from which Leads should be retrieved from."
+              },
+              {
+                "name": "modified-to",
+                "value": "2023-12-31T23:59:59.0000000+00:00",
+                "type": "query",
+                "description": "Required: The modified date and time in ISO 8601 format from which Leads should be retrieved up until."
+              },
+              {
+                "name": "lead-status",
+                "value": "Accepted",
+                "type": "query",
+                "description": "Optional: The LeadStatus type for filtering leads. Permitted values are:\n- Unspecified: Leads that have not been able to be processed after import\n- Unprocessed: Leads that are queued up for processing after import\n- Processed: Leads that are ready for triage\n- Rejected: Leads that have been triaged and rejected by the agent or party acting on behalf of the agent\n- Accepted: Leads that have been triaged and accepted by the agent or party acting on behalf of the agent\n            \nNOTE: If not set, this will default to Accepted"
+              },
+              {
+                "name": "enquiry-from",
+                "value": "2023-01-01T00:00:00.0000000+00:00",
+                "type": "query",
+                "description": "Required: The enquiry date and time in ISO 8601 format from which Leads should be retrieved from."
+              },
+              {
+                "name": "enquiry-to",
+                "value": "2023-12-31T23:59:59.0000000+00:00",
+                "type": "query",
+                "description": "Required: The enquiry date and time in ISO 8601 format from which Leads should be retrieved up until."
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "Sets the token for the next page of resultss."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "Sets the maximum number of results to return. The maximum number of results to return. The default value is 50, and the maximum value is 250"
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of leads in the requested state of processing for a given AgencyRef and all permissible branches.\nRequired scope: alto/read:leads"
+        },
+        {
+          "info": {
+            "name": "Create Lead",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/leads",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new lead within Alto"
+        },
+        {
+          "info": {
+            "name": "Get Lead by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/leads/:leadId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "leadId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the lead"
+              }
+            ]
+          },
+          "docs": "Get a lead item by id"
+        },
+        {
+          "info": {
+            "name": "Update Lead by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/leads/:leadId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "leadId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Lead."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a lead by leadId with any of the following fields supported for update:\n- /contactId ie. The id of the contact associated with the lead\n- /leadStatus ie. Set the new status of a Processed lead to either Accepted/Rejected. Only leads with a status of Processed can be updated\n            \nRequired scope: alto/update:leads"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "LettingsProgression",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /guarantorIds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/guarantorIds",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenantId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "ReferenceChecks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /ReferenceChecks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/ReferenceChecks",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "NextToken",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "MaxResults",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "CreatedFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "CreatedTo",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "PATCH /ReferenceChecks/{referenceCheckId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/ReferenceChecks/:referenceCheckId",
+            "headers": [
+              {
+                "name": "ClientId",
+                "value": ""
+              },
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "referenceCheckId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Listing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Filter property listings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/listing/filter",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] Set the status to filter results."
+              },
+              {
+                "name": "auction",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] Set whether to include auction listings or not."
+              },
+              {
+                "name": "auction-closing-date-from",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The date from which you wish to consider the results to return. Compliments the auction-closing-date-to filter. If both fields are empty, no consideration of the auction date is applied."
+              },
+              {
+                "name": "auction-closing-date-to",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The date to which you wish to consider the results to return. Compliments the auction-closing-date-from filter. If both fields are empty, no consideration of the auction date is applied."
+              },
+              {
+                "name": "owner-id",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The UserId of the owner/negotiator for the property."
+              },
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] Set the token for the next page of results."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] Set the maximum number of results to return. The default value is 50, and the maximum value is 250."
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The date from which you wish to consider the results to return. Compliments the created-to filter. If both fields are empty, no consideration of the created date is applied."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The date to which you wish to consider the results to return. Compliments the created-from filter. If both fields are empty, no consideration of the created date is applied."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The date from which you wish to consider the results to return. Compliments the modified-to filter. If both fields are empty, no consideration of the modified date is applied."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The date to which you wish to consider the results to return. Compliments the modified-from filter. If both fields are empty, no consideration of the modified date is applied."
+              },
+              {
+                "name": "sort-by",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The field to order the results by. Complements sort-order. Default is to order by modified then by id in a descending manner."
+              },
+              {
+                "name": "sort-order",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] The ordering regime of the results returned. Complements sort-by. Default is Descending."
+              },
+              {
+                "name": "branch-id",
+                "value": "",
+                "type": "query",
+                "description": "[Optional] A list of branch ids to restrict the filter by. An empty list will return all results in all branches."
+              }
+            ]
+          },
+          "docs": "Get a paginated list of filtered property listings"
+        },
+        {
+          "info": {
+            "name": "Get a property listing",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/listing/property/:propertyId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Property"
+              }
+            ]
+          },
+          "docs": "Get a property listing by property id"
+        },
+        {
+          "info": {
+            "name": "Get property images metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/listing/property/:propertyId/images",
+            "headers": [
+              {
+                "name": "x-Image-Client",
+                "value": ""
+              },
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Property"
+              }
+            ]
+          },
+          "docs": "Get image metadata for a property listing"
+        },
+        {
+          "info": {
+            "name": "Get a property listing image",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/listing/property/:propertyId/images/:imageId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Property"
+              },
+              {
+                "name": "imageId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Image"
+              },
+              {
+                "name": "image-size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "imageSize",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a property listing image by property id and image id"
+        },
+        {
+          "info": {
+            "name": "Partially update a property listing rooms",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/listing/property/:propertyId/rooms",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Property"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Apply JSON Patch operations to update lead-in text, lead-out text, and rooms for a property."
+        },
+        {
+          "info": {
+            "name": "Partially update a property listing summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/listing/property/:propertyId/summary",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the Property"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Apply JSON Patch operations to update the listing summary and bullets for a property."
+        },
+        {
+          "info": {
+            "name": "Get multiple property listings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/listing/property/items",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "property-id",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get property listings for multiple property ids"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Media",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create new link media item (VirtualTour or WebLink).",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/media-link",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "request",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Create new link media item (VirtualTour or WebLink)."
+        },
+        {
+          "info": {
+            "name": "Create new media item",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/media-item",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "form-urlencoded",
+              "data": [
+                {
+                  "name": "request",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Create new media item"
+        },
+        {
+          "info": {
+            "name": "Delete a media item",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.alto.zoopladev.co.uk/media-item/:mediaItemId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "mediaItemId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the media item"
+              }
+            ]
+          },
+          "docs": "Delete a media item"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Offers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets a sales offer by offerId",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/offers/sales-offer/:offerId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "offerId",
+                "value": "",
+                "type": "path",
+                "description": "OfferId to retrieve sales offer for"
+              }
+            ]
+          },
+          "docs": "Gets a sales offer by offerId"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Referrals",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /referrals/{referralId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/referrals/:referralId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "referralId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "Updates a referral using JSON Patch",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/referrals/:referralId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "referralId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a referral using JSON Patch"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Partners",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the integration opt-out status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/opt-out-status/:linkedType/:linkedId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "linkedType",
+                "value": "",
+                "type": "path",
+                "description": "The type of the linked entity (e.g. Property)"
+              },
+              {
+                "name": "linkedId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the linked entity"
+              }
+            ]
+          },
+          "docs": "Returns the opt-out status for a linked entity. The linked entity is identified by its type and id. Currently only Property entities are supported."
+        },
+        {
+          "info": {
+            "name": "Get the integration activation state",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/partners/integration",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get the current integration activation state for the authenticated partner and agency."
+        },
+        {
+          "info": {
+            "name": "Update the integration activation state",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/partners/integration/status",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the provider status for the calling partner's integrated services on the requested branches."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Landlords",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /inventory/{inventoryId}/landlords",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/landlords",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "List Landlords",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/landlords",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering landlords by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering landlords by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering landlords by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering landlords by modified date."
+              },
+              {
+                "name": "active-status",
+                "value": "",
+                "type": "query",
+                "description": "Optionally filter landlords by their active status. By default only active landlords will be returned."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of landlord contacts with optional filtering."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "ManagementEvents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Gets management events for a specific inventory item",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/management-events",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the inventory item"
+              },
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering management events by created date."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering management events by created date."
+              },
+              {
+                "name": "modifiedFrom",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering management events by modified date."
+              },
+              {
+                "name": "modifiedTo",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering management events by modified date."
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              },
+              {
+                "name": "upcoming",
+                "value": "",
+                "type": "query",
+                "description": "When true, filters events to show only those that are either overdue or due within the period defined by their reminderDays field from today's date"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "List of event statuses to filter by. If not provided, events of all statuses will be returned."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of management events for a specific inventory item for a given AgencyRef and all permissible branches."
+        },
+        {
+          "info": {
+            "name": "Gets a list of management events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/management-events",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering management events by created date."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering management events by created date."
+              },
+              {
+                "name": "modifiedFrom",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering management events by modified date."
+              },
+              {
+                "name": "modifiedTo",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering management events by modified date."
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              },
+              {
+                "name": "upcoming",
+                "value": "",
+                "type": "query",
+                "description": "When true, filters events to show only those that are either overdue or due within the period defined by their reminderDays field from today's date"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "List of event statuses to filter by. If not provided, events of all statuses will be returned."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of management events for a given AgencyRef and all permissible branches."
+        },
+        {
+          "info": {
+            "name": "Creates a new management event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/management-events",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new management event for the specified entity."
+        },
+        {
+          "info": {
+            "name": "Gets a single management event by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/management-events/:eventId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the management event"
+              }
+            ]
+          },
+          "docs": "Retrieves a specific management event by its ID for a given AgencyRef and all permissible branches."
+        },
+        {
+          "info": {
+            "name": "PATCH /management-events/{eventId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/management-events/:eventId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "eventId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Suppliers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /inventory/{inventoryId}/suppliers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/suppliers",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "GET /suppliers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/suppliers",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "GET /suppliers/{supplierId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/suppliers/:supplierId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "supplierId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tenancies",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /inventory/{inventoryId}/tenancies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/tenancies",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "nextToken",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "maxResults",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "Create a tenancy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/tenancies",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The property Id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously creates a proposed tenancy. Use the returned TenancyId to poll /tenancies/{tenancyId} to check if the tenancy is created."
+        },
+        {
+          "info": {
+            "name": "List Tenancies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "next-token",
+                "value": "",
+                "type": "query",
+                "description": "Token used to retrieve the next page of results. This is returned in the response of the previous page."
+              },
+              {
+                "name": "max-results",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Defaults to 100 if not specified."
+              },
+              {
+                "name": "created-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by created date."
+              },
+              {
+                "name": "created-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by created date."
+              },
+              {
+                "name": "modified-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by modified date."
+              },
+              {
+                "name": "modified-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by modified date."
+              },
+              {
+                "name": "start-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by start date."
+              },
+              {
+                "name": "start-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by start date."
+              },
+              {
+                "name": "target-vacate-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by target vacate date."
+              },
+              {
+                "name": "target-vacate-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by target vacate date."
+              },
+              {
+                "name": "first-full-rent-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by first full rent date."
+              },
+              {
+                "name": "first-full-rent-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by first full rent date."
+              },
+              {
+                "name": "notice-to-quit-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by notice to quit date."
+              },
+              {
+                "name": "notice-to-quit-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by notice to quit date."
+              },
+              {
+                "name": "end-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by end date."
+              },
+              {
+                "name": "end-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by end date."
+              },
+              {
+                "name": "renewal-date-from",
+                "value": "",
+                "type": "query",
+                "description": "The start date for filtering tenancies by renewal date."
+              },
+              {
+                "name": "renewal-date-to",
+                "value": "",
+                "type": "query",
+                "description": "The end date for filtering tenancies by renewal date."
+              },
+              {
+                "name": "include-tenants",
+                "value": "",
+                "type": "query",
+                "description": "Controls whether tenants should be included in the response for each tenancy result. By default tenants will not be included."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of tenancies, with optional filtering and inclusion of tenant data."
+        },
+        {
+          "info": {
+            "name": "GET /tenancies/{tenancyId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "Updates a tenancy using JSON Patch",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a tenancy using JSON Patch"
+        },
+        {
+          "info": {
+            "name": "Get Meter Readings by Tenancy Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId/meter-readings",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get Meter Readings by Tenancy Id"
+        },
+        {
+          "info": {
+            "name": "Post tenancy meter reading",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId/meter-readings",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Post tenancy meter reading"
+        },
+        {
+          "info": {
+            "name": "Patch tenancy meter reading by type of utility.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId/meter-readings/:utilityType",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the tenancy whose meter reading is being set."
+              },
+              {
+                "name": "utilityType",
+                "value": "",
+                "type": "path",
+                "description": "One of the types provided by the UtilityType on a retrieved meter reading or returned in the response when POSTing a new value."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch tenancy meter reading by type of utility."
+        },
+        {
+          "info": {
+            "name": "GET /tenancies/{tenancyId}/tenantIds",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId/tenantIds",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "WorkOrders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Work Orders for a specific inventory item by Property Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:inventoryId/work-orders",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "inventoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identity for the property"
+              }
+            ]
+          },
+          "docs": "Retrieves a Work Order by Id for a given AgencyRef and all permissable branches."
+        },
+        {
+          "info": {
+            "name": "Post Work Order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/work-orders",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new Work Order in Alto"
+        },
+        {
+          "info": {
+            "name": "Gets Work Order by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/work-orders/:id",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Work Order"
+              }
+            ]
+          },
+          "docs": "Retrieves a Work Order by id for a given AgencyRef and all permissable branches."
+        },
+        {
+          "info": {
+            "name": "Patch Work Order by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/work-orders/:id",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the Work Order"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update selected fields in the Work Order with the given id"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Charges",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "POST /inventory/{propertyId}/charges",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/inventory/:propertyId/charges",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "propertyId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "chargeType",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "supplierId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "invoiceReference",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "totalNet",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "totalVat",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "vatRateType",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "workOrderId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "invoiceDocument",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "description",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "raiseImmediately",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "chargeDate",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "POST /tenancies/{tenancyId}/charges",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.alto.zoopladev.co.uk/tenancies/:tenancyId/charges",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "tenancyId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "tenantId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "excludeFromArrears",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "showInArrearsAfterDays",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "sendDocs",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "paymentMethod",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "paymentReference",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "raiseInAdvanceDays",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "raiseEndDate",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "chargeType",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "supplierId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "invoiceReference",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "totalNet",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "totalVat",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "vatRateType",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "workOrderId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "invoiceDocument",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "description",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "raiseImmediately",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "chargeDate",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "SalesProgression",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GET /sales-progressions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/sales-progressions",
+            "params": [
+              {
+                "name": "PropertyId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "BranchId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "ConveyancerId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "NegotiatorId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "Sort",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "StatusId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "FTSQuery",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "NextToken",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "MaxResults",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "GET /sales-progressions/{offerId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.alto.zoopladev.co.uk/sales-progressions/:offerId",
+            "params": [
+              {
+                "name": "offerId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Referral",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "PATCH /voidswitching/referrals/{referralId}",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.alto.zoopladev.co.uk/voidswitching/referrals/:referralId",
+            "headers": [
+              {
+                "name": "AgencyRef",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "referralId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

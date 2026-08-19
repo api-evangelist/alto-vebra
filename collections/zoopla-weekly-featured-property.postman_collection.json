@@ -1,0 +1,770 @@
+{
+  "item": [
+    {
+      "id": "6931e1fb-5110-49f9-bbec-67145155e5ca",
+      "name": "Returns a WFP activated listing for a specific uuid",
+      "request": {
+        "name": "Returns a WFP activated listing for a specific uuid",
+        "description": {
+          "content": "if the uuid exists will return a WFP listing, if it does not or it is an invalid UUID will return an error\n",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "products",
+            "weekly-featured-properties",
+            ":uuid"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<string>",
+              "key": "uuid",
+              "description": "(Required) returns the WFP for a given uuid"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": null
+      },
+      "response": [
+        {
+          "id": "d619d22e-557e-4336-83f1-7e7aa4eafcaa",
+          "name": "OK. Request body contains the WFP for the given UUID",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties",
+                ":uuid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) returns the WFP for a given uuid"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"expiryAt\": \"2007-09-09T19:26:58.368Z\",\n  \"startAt\": \"1956-08-23T07:47:10.426Z\",\n  \"listingId\": 1234,\n  \"id\": \"cc0ae3d9-04c3-e504-6541-b55c37028fee\",\n  \"createdAt\": \"2018-11-26T05:03:06.781Z\",\n  \"updatedAt\": \"1994-10-07T12:45:44.989Z\",\n  \"createdBy\": \"string\",\n  \"isRenewable\": false,\n  \"status\": {\n    \"result\": \"ERROR\",\n    \"errors\": {\n      \"errors\": [\n        {\n          \"reason\": \"JSON schema requirements not met\",\n          \"code\": 2011003\n        },\n        {\n          \"reason\": \"JSON schema requirements not met\",\n          \"code\": 2011003\n        }\n      ]\n    }\n  },\n  \"customDetails\": {}\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "df75bbde-c926-4ed1-9ce4-ef86b5ef93f0",
+          "name": "Not found. WFP doesn't exist or client doesn't have access to it",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties",
+                ":uuid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) returns the WFP for a given uuid"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "c115853d-2581-455e-a611-f4f209edbdf6",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties",
+                ":uuid"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "uuid",
+                  "description": "(Required) returns the WFP for a given uuid"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "17d8aa03-20a0-44d9-bea4-e2cb73a1093e",
+      "name": "Returns all requested upgrades to WFPs that the caller has access to",
+      "request": {
+        "name": "Returns all requested upgrades to WFPs that the caller has access to",
+        "description": {
+          "content": "If no parameters are given, the response will return all WFPs for the caller. If the response is an **empty** array it means that there are no WFPs for the caller, activated or not. If the caller needs to filter WFPs, we provide the below query parameters.\n",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "products",
+            "weekly-featured-properties"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [
+            {
+              "disabled": false,
+              "key": "listingId",
+              "value": "<string>",
+              "description": "The Zoopla internal listingId to return activation requests for. If listingId and customerListingId are provided together it will return an `error`. If no listingId is given it will return all WFP activations.\n"
+            },
+            {
+              "disabled": false,
+              "key": "customerListingId",
+              "value": "<string>",
+              "description": "An optional parameter which is a customer identifier of a listingId which Zoopla can match to an internal listingId. If the customerListingId cannot be matched to a listingId it will return an `error`. If customerListingId and listingId are provided together it will return an `error`.\n"
+            },
+            {
+              "disabled": false,
+              "key": "date_from",
+              "value": "<string>",
+              "description": "And optional parameter to filter response by created date starting from date provided. An date only format (YYYY-MM-DD) is required. E.g 2022-02-11\n"
+            }
+          ],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": null
+      },
+      "response": [
+        {
+          "id": "726843ea-fdc3-45dc-a4dd-32f75d70ae70",
+          "name": "OK. Request body contains the list of requested upgrades to WFP.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "listingId",
+                  "value": "<string>"
+                },
+                {
+                  "key": "customerListingId",
+                  "value": "<string>"
+                },
+                {
+                  "key": "date_from",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"expiryAt\": \"2015-07-26T10:29:02.734Z\",\n    \"startAt\": \"1978-07-13T03:35:41.620Z\",\n    \"listingId\": 1234,\n    \"id\": \"25f29a3c-dcb9-70b0-556e-236f75c9a121\",\n    \"createdAt\": \"2023-10-27T18:55:31.163Z\",\n    \"updatedAt\": \"1960-10-12T05:22:37.826Z\",\n    \"createdBy\": \"string\",\n    \"isRenewable\": false,\n    \"status\": {\n      \"result\": \"ERROR\",\n      \"errors\": {\n        \"errors\": [\n          {\n            \"reason\": \"JSON schema requirements not met\",\n            \"code\": 2011003\n          },\n          {\n            \"reason\": \"JSON schema requirements not met\",\n            \"code\": 2011003\n          }\n        ]\n      }\n    },\n    \"customDetails\": {}\n  },\n  {\n    \"expiryAt\": \"1977-12-10T23:45:33.002Z\",\n    \"startAt\": \"1961-01-23T15:37:31.500Z\",\n    \"listingId\": 1234,\n    \"id\": \"a5a84380-f4db-4dd0-8dc6-d036eff3fb52\",\n    \"createdAt\": \"1979-11-28T13:50:07.417Z\",\n    \"updatedAt\": \"1971-06-29T01:04:12.410Z\",\n    \"createdBy\": \"string\",\n    \"isRenewable\": true,\n    \"status\": {\n      \"result\": \"ERROR\",\n      \"errors\": {\n        \"errors\": [\n          {\n            \"reason\": \"JSON schema requirements not met\",\n            \"code\": 2011003\n          },\n          {\n            \"reason\": \"JSON schema requirements not met\",\n            \"code\": 2011003\n          }\n        ]\n      }\n    },\n    \"customDetails\": {}\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "423e9a56-9ef4-42b8-b56f-caed0c4782c1",
+          "name": "Bad request. There was something wrong with the request, for example both listingId and customerListingId provided together",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "listingId",
+                  "value": "<string>"
+                },
+                {
+                  "key": "customerListingId",
+                  "value": "<string>"
+                },
+                {
+                  "key": "date_from",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "1f4db17f-d544-4001-9b64-3b47abc7275f",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "listingId",
+                  "value": "<string>"
+                },
+                {
+                  "key": "customerListingId",
+                  "value": "<string>"
+                },
+                {
+                  "key": "date_from",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "47c703d8-f3aa-47dc-8f27-f238466801e6",
+      "name": "Activate a listing as a WFP",
+      "request": {
+        "name": "Activate a listing as a WFP",
+        "description": {},
+        "url": {
+          "path": [
+            "products",
+            "weekly-featured-properties"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "auth": null,
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"listingId\": \"<number>\",\n  \"customerListingId\": \"<string>\",\n  \"customDetails\": \"<object>\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "id": "978887b0-9e8c-4d4d-a97b-876600ba8bf7",
+          "name": "Accepted. We are processing your request to make your listing a WFP. Please check the result soon.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listingId\": 1234,\n  \"customerListingId\": \"100219_CHS108334\",\n  \"customDetails\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Accepted",
+          "code": 202,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Location",
+              "value": "https://{server}/weekly-featured-properties/{uuid}",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"expiryAt\": \"2016-07-14T19:10:22.588Z\",\n  \"startAt\": \"1964-01-24T21:32:15.544Z\",\n  \"listingId\": 1234,\n  \"id\": \"bc4c06ee-2577-7776-9e3f-6ccf4c4b1605\",\n  \"createdAt\": \"1946-09-14T15:28:30.046Z\",\n  \"updatedAt\": \"1956-01-19T05:32:44.952Z\",\n  \"createdBy\": \"string\",\n  \"isRenewable\": true,\n  \"status\": {\n    \"result\": \"ERROR\",\n    \"errors\": {\n      \"errors\": [\n        {\n          \"reason\": \"JSON schema requirements not met\",\n          \"code\": 2011003\n        },\n        {\n          \"reason\": \"JSON schema requirements not met\",\n          \"code\": 2011003\n        }\n      ]\n    }\n  },\n  \"customDetails\": {}\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "8c77b319-c598-4384-87dc-e59ea28a3907",
+          "name": "See other. A WFP listing for this listingId already exists and is either pending or already activated. See location of existing activation.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listingId\": 1234,\n  \"customerListingId\": \"100219_CHS108334\",\n  \"customDetails\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "See Other",
+          "code": 303,
+          "header": [
+            {
+              "disabled": false,
+              "key": "Location",
+              "value": "https://{server}/weekly-featured-properties/{uuid}",
+              "description": ""
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"errors\": [\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    },\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    }\n  ]\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "d9da4744-92b1-4a7a-8770-c20d1a4f32d9",
+          "name": "Bad request. The was something wrong with the request, for example listingId not provided.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listingId\": 1234,\n  \"customerListingId\": \"100219_CHS108334\",\n  \"customDetails\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"errors\": [\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    },\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    }\n  ]\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "d1ec892a-fb7a-43cd-a525-3867e6dc04be",
+          "name": "Payload too large. There was something wrong with the request for example, customDetails data exceeds max memory limit.",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listingId\": 1234,\n  \"customerListingId\": \"100219_CHS108334\",\n  \"customDetails\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Request Entity Too Large",
+          "code": 413,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"errors\": [\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    },\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    }\n  ]\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "c326b591-eaa0-46cc-9a5b-5159afb31080",
+          "name": "Internal Server Error",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "products",
+                "weekly-featured-properties"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: oauth2",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "<token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"listingId\": 1234,\n  \"customerListingId\": \"100219_CHS108334\",\n  \"customDetails\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"errors\": [\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    },\n    {\n      \"reason\": \"JSON schema requirements not met\",\n      \"code\": 2011003\n    }\n  ]\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://services.zoopla.co.uk",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "scope",
+        "value": "api/api_access"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "https://services-auth.services.zoopla.co.uk/oauth2/token"
+      },
+      {
+        "key": "grant_type",
+        "value": "client_credentials"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ea7141df-46be-4a46-9bc0-5272ef9207da",
+    "name": "Weekly Featured Property (WFP) Activations",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API is responsible for the activation of a WFP product. It allows the user to:\n* Get the history of all activations they have access to\n* Get the history of all activations for given listingId\n* Check if the given listingId is configured as a WFP at the moment of time when the call has been made\n* Activate a listing as a WFP for the given listingId\n\nThis API is asynchronous, eventually consistent and the requests are processed in a queue.\n\n\nContact Support:\n Name: Zoopla Pro P&A Team\n Email: purchaseandactivationteam@zoopla.co.uk",
+      "type": "text/plain"
+    }
+  }
+}

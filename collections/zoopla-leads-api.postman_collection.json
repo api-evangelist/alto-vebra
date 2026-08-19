@@ -1,0 +1,1012 @@
+{
+  "item": [
+    {
+      "id": "8e2c7d8c-e84a-497f-91c2-60fc9fdf01c6",
+      "name": "Service",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [],
+      "event": []
+    },
+    {
+      "id": "82eea245-abb4-4060-afe5-af2b7d5bfdbd",
+      "name": "REST Endpoints",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "544f3919-e498-4564-b12f-3594ae57f0b2",
+          "name": "/applicant-leads",
+          "request": {
+            "name": "/applicant-leads",
+            "description": {},
+            "url": {
+              "path": [
+                "applicant-leads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from-time",
+                  "value": "<dateTime>",
+                  "description": "Restricts the returned leads to only include those on or after the specified date time. In the format `2006-01-02T15:04:05Z`"
+                },
+                {
+                  "disabled": false,
+                  "key": "to-time",
+                  "value": "<dateTime>",
+                  "description": "Restricts the returned leads to only include those on or before the specified date time. In the format `2006-01-02T15:04:05Z`"
+                },
+                {
+                  "disabled": false,
+                  "key": "group-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla group id"
+                },
+                {
+                  "disabled": false,
+                  "key": "company-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla company id"
+                },
+                {
+                  "disabled": false,
+                  "key": "brand-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla brand id"
+                },
+                {
+                  "disabled": false,
+                  "key": "branch-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla branch id"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "leads/list:applicant-leads leads/list:appraisal-leads"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://services-auth.services.zoopla.co.uk/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "566a0aed-59a6-46a3-94c1-d608dfc4310b",
+              "name": "Successful operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applicant-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"applicants\": [\n    {\n      \"consumerPostcode\": \"string\",\n      \"consumerSituation\": \"CONSUMER_SITUATION_OTHER\",\n      \"contact\": {\n        \"email\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"phoneNumber\": \"string\",\n        \"preferences\": {\n          \"method\": \"string\",\n          \"time\": \"string\"\n        }\n      },\n      \"createdAt\": \"1994-08-24T16:45:12.041Z\",\n      \"enquiryType\": \"ENQUIRY_TYPE_LETTINGS\",\n      \"id\": \"string\",\n      \"intent\": {},\n      \"isOverseas\": true,\n      \"leadSource\": \"string\",\n      \"listingDetails\": {\n        \"address\": {\n          \"countryCode\": \"string\",\n          \"locality\": \"string\",\n          \"postcode\": \"string\",\n          \"propertyNumberOrName\": \"string\",\n          \"streetName\": \"string\",\n          \"townOrCity\": \"string\"\n        },\n        \"bathrooms\": 1381,\n        \"bedrooms\": 4531,\n        \"branchId\": 2401,\n        \"estimate\": {\n          \"confidence\": 5396,\n          \"confidenceBand\": \"string\",\n          \"lowerRange\": 8253,\n          \"upperRange\": 6513,\n          \"value\": 6563\n        },\n        \"id\": \"string\",\n        \"images\": [\n          {\n            \"cdnUrl\": \"string\",\n            \"filename\": \"string\",\n            \"original\": \"string\"\n          },\n          {\n            \"cdnUrl\": \"string\",\n            \"filename\": \"string\",\n            \"original\": \"string\"\n          }\n        ],\n        \"lifeCycleStatus\": \"string\",\n        \"pricing\": {\n          \"currencyCode\": \"string\",\n          \"price\": 3196.106076846491,\n          \"rentFrequency\": \"string\",\n          \"transactionType\": \"string\"\n        },\n        \"propertyId\": 7755,\n        \"propertyType\": \"PROPERTY_TYPE_LIGHT_INDUSTRIAL\",\n        \"receptions\": 680,\n        \"sourceId\": \"string\",\n        \"uprn\": 3637,\n        \"url\": \"string\"\n      },\n      \"message\": \"string\",\n      \"organiseViewing\": false,\n      \"portalBranchId\": \"string\",\n      \"portalCompanyId\": \"string\",\n      \"portalGroupId\": \"string\",\n      \"portalLeadId\": \"string\",\n      \"portalSource\": {},\n      \"propertyUse\": \"PROPERTY_USE_RESIDENTIAL\",\n      \"recipientEmail\": \"string\",\n      \"requestPropertyDetails\": false,\n      \"searchCriteria\": {\n        \"location\": {\n          \"alias\": \"string\",\n          \"area\": \"string\",\n          \"areaStreet\": \"string\",\n          \"country\": \"string\",\n          \"countryCode\": \"string\",\n          \"countyArea\": \"string\",\n          \"district\": \"string\",\n          \"incode\": \"string\",\n          \"outcode\": \"string\",\n          \"postTown\": \"string\",\n          \"postalArea\": \"string\",\n          \"region\": \"string\"\n        },\n        \"maximumBedrooms\": 4348,\n        \"maximumPrice\": 5738.2823093473235,\n        \"minimumBedrooms\": 1553,\n        \"minimumPrice\": 9018.67784733155,\n        \"priceFrequency\": \"string\",\n        \"propertySubType\": \"string\",\n        \"propertyType\": \"PROPERTY_TYPE_FARMHOUSE\",\n        \"radius\": 238.30305714947153\n      },\n      \"sourceBranchId\": \"string\",\n      \"viewingTimes\": [\n        {\n          \"earliest\": \"1950-02-03T21:50:21.764Z\",\n          \"latest\": \"1968-12-11T06:22:44.273Z\"\n        },\n        {\n          \"earliest\": \"1949-09-15T14:37:02.408Z\",\n          \"latest\": \"1949-03-25T21:01:17.824Z\"\n        }\n      ]\n    },\n    {\n      \"consumerPostcode\": \"string\",\n      \"consumerSituation\": \"CONSUMER_SITUATION_RECENTLY_SOLD\",\n      \"contact\": {\n        \"email\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"phoneNumber\": \"string\",\n        \"preferences\": {\n          \"method\": \"string\",\n          \"time\": \"string\"\n        }\n      },\n      \"createdAt\": \"1966-08-19T05:31:36.193Z\",\n      \"enquiryType\": \"ENQUIRY_TYPE_LETTINGS\",\n      \"id\": \"string\",\n      \"intent\": {},\n      \"isOverseas\": true,\n      \"leadSource\": \"string\",\n      \"listingDetails\": {\n        \"address\": {\n          \"countryCode\": \"string\",\n          \"locality\": \"string\",\n          \"postcode\": \"string\",\n          \"propertyNumberOrName\": \"string\",\n          \"streetName\": \"string\",\n          \"townOrCity\": \"string\"\n        },\n        \"bathrooms\": 7004,\n        \"bedrooms\": 8033,\n        \"branchId\": 8994,\n        \"estimate\": {\n          \"confidence\": 8885,\n          \"confidenceBand\": \"string\",\n          \"lowerRange\": 3334,\n          \"upperRange\": 5865,\n          \"value\": 7251\n        },\n        \"id\": \"string\",\n        \"images\": [\n          {\n            \"cdnUrl\": \"string\",\n            \"filename\": \"string\",\n            \"original\": \"string\"\n          },\n          {\n            \"cdnUrl\": \"string\",\n            \"filename\": \"string\",\n            \"original\": \"string\"\n          }\n        ],\n        \"lifeCycleStatus\": \"string\",\n        \"pricing\": {\n          \"currencyCode\": \"string\",\n          \"price\": 3711.3660965378194,\n          \"rentFrequency\": \"string\",\n          \"transactionType\": \"string\"\n        },\n        \"propertyId\": 6116,\n        \"propertyType\": \"PROPERTY_TYPE_BARN_CONVERSION\",\n        \"receptions\": 6705,\n        \"sourceId\": \"string\",\n        \"uprn\": 4683,\n        \"url\": \"string\"\n      },\n      \"message\": \"string\",\n      \"organiseViewing\": true,\n      \"portalBranchId\": \"string\",\n      \"portalCompanyId\": \"string\",\n      \"portalGroupId\": \"string\",\n      \"portalLeadId\": \"string\",\n      \"portalSource\": {},\n      \"propertyUse\": \"PROPERTY_USE_RESIDENTIAL\",\n      \"recipientEmail\": \"string\",\n      \"requestPropertyDetails\": true,\n      \"searchCriteria\": {\n        \"location\": {\n          \"alias\": \"string\",\n          \"area\": \"string\",\n          \"areaStreet\": \"string\",\n          \"country\": \"string\",\n          \"countryCode\": \"string\",\n          \"countyArea\": \"string\",\n          \"district\": \"string\",\n          \"incode\": \"string\",\n          \"outcode\": \"string\",\n          \"postTown\": \"string\",\n          \"postalArea\": \"string\",\n          \"region\": \"string\"\n        },\n        \"maximumBedrooms\": 8729,\n        \"maximumPrice\": 9837.871635962065,\n        \"minimumBedrooms\": 7156,\n        \"minimumPrice\": 3393.6005648110813,\n        \"priceFrequency\": \"string\",\n        \"propertySubType\": \"string\",\n        \"propertyType\": \"PROPERTY_TYPE_RETAIL\",\n        \"radius\": 5892.087694491494\n      },\n      \"sourceBranchId\": \"string\",\n      \"viewingTimes\": [\n        {\n          \"earliest\": \"1971-07-23T07:56:16.007Z\",\n          \"latest\": \"2003-11-11T10:55:06.122Z\"\n        },\n        {\n          \"earliest\": \"1983-06-22T03:47:18.755Z\",\n          \"latest\": \"1994-07-25T18:02:07.859Z\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cd9f794-2223-4bc5-85cf-c0061d99c80c",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applicant-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": 3710,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    },\n    {\n      \"code\": 2888,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "adb374e5-349c-49af-9d74-e77ced3deff4",
+              "name": "Unauthorised request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applicant-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": 9885,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    },\n    {\n      \"code\": 5593,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "954950cb-0c47-4623-96a0-396081e16778",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applicant-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "73a4cddd-6454-475a-be19-e0fa08d79a43",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applicant-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6fa58c55-573f-4da5-8e14-6ec57b5d17dd",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "applicant-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": 9885,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    },\n    {\n      \"code\": 5593,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2fd9f9b-9a10-4ea7-8bfa-7d91f8aef30d",
+          "name": "/appraisal-leads",
+          "request": {
+            "name": "/appraisal-leads",
+            "description": {},
+            "url": {
+              "path": [
+                "appraisal-leads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from-time",
+                  "value": "<dateTime>",
+                  "description": "Restricts the returned leads to only include those on or after the specified date time. In the format `2006-01-02T15:04:05Z`"
+                },
+                {
+                  "disabled": false,
+                  "key": "to-time",
+                  "value": "<dateTime>",
+                  "description": "Restricts the returned leads to only include those on or before the specified date time. In the format `2006-01-02T15:04:05Z`"
+                },
+                {
+                  "disabled": false,
+                  "key": "group-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla group id"
+                },
+                {
+                  "disabled": false,
+                  "key": "company-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla company id"
+                },
+                {
+                  "disabled": false,
+                  "key": "brand-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla brand id"
+                },
+                {
+                  "disabled": false,
+                  "key": "branch-id",
+                  "value": "<string>",
+                  "description": "Restricts the returned leads to only include those with this specified internal Zoopla branch id"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "oauth2",
+              "oauth2": [
+                {
+                  "key": "scope",
+                  "value": "leads/list:applicant-leads leads/list:appraisal-leads"
+                },
+                {
+                  "key": "accessTokenUrl",
+                  "value": "https://services-auth.services.zoopla.co.uk/oauth2/token"
+                },
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cade3167-5c0d-4340-baec-a1e3919b08c8",
+              "name": "Successful operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "appraisal-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"appraisals\": [\n    {\n      \"contact\": {\n        \"email\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"phoneNumber\": \"string\",\n        \"preferences\": {\n          \"method\": \"string\",\n          \"time\": \"string\"\n        }\n      },\n      \"createdAt\": \"1951-05-16T22:51:34.934Z\",\n      \"enquiryType\": \"ENQUIRY_TYPE_SALES\",\n      \"id\": \"string\",\n      \"intent\": {},\n      \"isOverseas\": false,\n      \"justCurious\": false,\n      \"leadSource\": \"string\",\n      \"message\": \"string\",\n      \"portalBranchId\": \"string\",\n      \"portalCompanyId\": \"string\",\n      \"portalGroupId\": \"string\",\n      \"portalLeadId\": \"string\",\n      \"portalSource\": {},\n      \"propertyDetails\": {\n        \"address\": {\n          \"county\": \"string\",\n          \"line1\": \"string\",\n          \"line2\": \"string\",\n          \"line3\": \"string\",\n          \"postcode\": \"string\",\n          \"town\": \"string\"\n        },\n        \"bathrooms\": 9735,\n        \"bedrooms\": 42,\n        \"energy\": {\n          \"efficiency\": 5241,\n          \"rating\": \"string\"\n        },\n        \"estimate\": {\n          \"confidence\": 4691,\n          \"confidenceBand\": \"string\",\n          \"lowerRange\": 8056,\n          \"upperRange\": 9876,\n          \"value\": 5206\n        },\n        \"floorArea\": 2084,\n        \"lastSalePrice\": 7518.494723842163,\n        \"latitude\": 5543.844851438446,\n        \"longitude\": 2481.791308561846,\n        \"propertyId\": \"string\",\n        \"propertyType\": \"PROPERTY_TYPE_FARM_BARN\",\n        \"receptions\": 6765,\n        \"tenure\": \"string\",\n        \"uprn\": 4608\n      },\n      \"propertyUse\": \"PROPERTY_USE_COMMERCIAL\",\n      \"recipientEmail\": \"string\",\n      \"sourceBranchId\": \"string\",\n      \"urgency\": \"string\"\n    },\n    {\n      \"contact\": {\n        \"email\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"phoneNumber\": \"string\",\n        \"preferences\": {\n          \"method\": \"string\",\n          \"time\": \"string\"\n        }\n      },\n      \"createdAt\": \"2008-01-12T01:12:24.469Z\",\n      \"enquiryType\": \"ENQUIRY_TYPE_SALES\",\n      \"id\": \"string\",\n      \"intent\": {},\n      \"isOverseas\": true,\n      \"justCurious\": true,\n      \"leadSource\": \"string\",\n      \"message\": \"string\",\n      \"portalBranchId\": \"string\",\n      \"portalCompanyId\": \"string\",\n      \"portalGroupId\": \"string\",\n      \"portalLeadId\": \"string\",\n      \"portalSource\": {},\n      \"propertyDetails\": {\n        \"address\": {\n          \"county\": \"string\",\n          \"line1\": \"string\",\n          \"line2\": \"string\",\n          \"line3\": \"string\",\n          \"postcode\": \"string\",\n          \"town\": \"string\"\n        },\n        \"bathrooms\": 6131,\n        \"bedrooms\": 7558,\n        \"energy\": {\n          \"efficiency\": 8359,\n          \"rating\": \"string\"\n        },\n        \"estimate\": {\n          \"confidence\": 848,\n          \"confidenceBand\": \"string\",\n          \"lowerRange\": 9269,\n          \"upperRange\": 1382,\n          \"value\": 4768\n        },\n        \"floorArea\": 9455,\n        \"lastSalePrice\": 9906.505655456429,\n        \"latitude\": 5294.552468084569,\n        \"longitude\": 6594.933357252654,\n        \"propertyId\": \"string\",\n        \"propertyType\": \"PROPERTY_TYPE_FARM\",\n        \"receptions\": 6091,\n        \"tenure\": \"string\",\n        \"uprn\": 7739\n      },\n      \"propertyUse\": \"PROPERTY_USE_UNSPECIFIED\",\n      \"recipientEmail\": \"string\",\n      \"sourceBranchId\": \"string\",\n      \"urgency\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40abb5d0-3819-42d4-9ef3-ed896d562ce2",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "appraisal-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": 9885,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    },\n    {\n      \"code\": 5593,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "13d85fa0-8fc7-482d-8663-b1d003a049dd",
+              "name": "Unauthorised request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "appraisal-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": 9885,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    },\n    {\n      \"code\": 5593,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2890a920-1a1f-43f9-b6e1-fa3ba216bf41",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "appraisal-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "60ae6490-9010-4324-803f-d77e93079d4e",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "appraisal-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3b8311f-93af-4c00-9152-69a1cd04e2a9",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "appraisal-leads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "to-time",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "group-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "company-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "brand-id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "branch-id",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: oauth2",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"code\": 9885,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    },\n    {\n      \"code\": 5593,\n      \"links\": [\n        \"string\",\n        \"string\"\n      ],\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://services.zoopla.co.uk",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "305e50b2-d03d-4102-a113-734fcc7ae9c8",
+    "name": "Leads API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Introduction\nThis API is used by agents to retrieve leads. Applicant and Appraisal leads are available via different endpoints and return data in separate structures.\n### Integration URLs:\n- Production URL: services.zoopla.co.uk\n## Authentication\nThe REST API uses OAuth2 authentication and at this time alternatives are not available. The authentication endpoint is https://services-auth.services.zoopla.co.uk - please see example request below:\n```\n  curl --request POST \\\n    --url https://services-auth.services.zoopla.co.uk/oauth2/token \\\n    --header ‘Content-Type: application/x-www-form-urlencoded’ \\\n    --data grant_type=client_credentials \\\n    --data client_id=123 \\\n    --data client_secret=456 \\\n    --data audience=https://services.zoopla.co.uk\n```\nYour `client_id` and `client_secret` will be provided to you by us. The `audience` will be the relevant integration URL, as specified above, and `grant_type` will always be `client_credentials`. A successful response will provide a token which can then be added under an `Authorization` header in requests to the data endpoint. The fields above are all form encoded URL data and are no longer provided via the JSON body.\n### Service busy\nThere are times when you may receive a 429 error if the service is especially busy. In this instance, the best thing to do is to wait and retry.\nTo try and mitigate this error, the best practice is to ensure that you're using your access tokens correctly. When the access token is returned it has an expiry time, try to ensure that you are caching this token for the length of its expiry time and only requesting a new one when the old has expired. This will reduce the number of calls required and free up the services\n## Poll Requests\nBy default, the API will return all leads submitted in the last 24 hours, however we retain leads for 30 days. Query parameters can be added to the request URL in order to only retrieve leads from a specific time period, please refer to either the [appraisal-leads](/reference/get_appraisal-leads) or [applicant-leads](/reference/get_applicant-leads) specs for more information.\n### Filters\nAs mentioned above, if you have more than one branch, brand, company, or group configured for your setup then the API will require you to filter based on a singular branch, brand, company, or group id. These IDs are specifically Zoopla internal IDs so we are able to retrieve the correct leads for your request.\n## Response Objects\nIf you are unsure about any of the fields that appear in the 200 response, we have an exhaustive list of the available fields, and their definitions in the [Field Definitions](../docs/field-definitions). The success response can also be seen in the [Push Service](../docs/push-service) section as they share a payload.\nAn example error response would be the following: \n```\n  {\n    \"errors\": [\n      {\n        \"message\": \"product not one of available enum values\",\n        \"code\": \"invalid_valuation_lead_product\",\n        \"links\": []\n      }\n    ]\n  }\n```\n## Contact\nFor any enquiries please contact the [Zoopla Leads Team](mailto:z-software-leads-team@zpg.co.uk?subject=[ReadMe]%20Request)\n",
+      "type": "text/plain"
+    }
+  }
+}

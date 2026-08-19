@@ -3,20 +3,22 @@ method: derived
 status: candidate
 source: openapi/alto-api-openapi.json, openapi/zoopla-leads-api-openapi.json, openapi/zoopla-premium-listing-activations-openapi.json,
   openapi/zoopla-weekly-featured-property-openapi.json
-summary: 'Alto and Zoopla publish NO MCP server. Searched the developer portals, both GitHub organisations, npm
-  (@modelcontextprotocol and vendor namespaces) and the public MCP registries on 2026-07-26 — nothing first-party
-  or third-party exists for this estate. This file is a DERIVED candidate manifest: one tool per published OpenAPI
-  operation, with the real input contract inherited from that operation''s parameters and requestBody in the spec.
-  It is a design input, not a deployed server, and nothing here is claimed to be running.'
+summary: 'Alto and Zoopla publish NO MCP server. Searched the developer portals, both GitHub organisations,
+  npm (@modelcontextprotocol and vendor namespaces) and the public MCP registries on 2026-07-26 — nothing
+  first-party or third-party exists for this estate. This file is a DERIVED candidate manifest: one tool
+  per published OpenAPI operation, with the real input contract inherited from that operation''s parameters
+  and requestBody in the spec. It is a design input, not a deployed server, and nothing here is claimed
+  to be running.'
 server:
   name: alto-vebra
   status: candidate
   transport: http
   url: null
   published_by_provider: false
-  note: 'A real server would need two credentials per session, not one: the OAuth2 client-credentials bearer token
-    AND the per-agency AgencyRef header that scopes every call. AgencyRef belongs in server configuration or per-session
-    context, not in a tool argument, or an agent will silently address the wrong agency.'
+  note: 'A real server would need two credentials per session, not one: the OAuth2 client-credentials
+    bearer token AND the per-agency AgencyRef header that scopes every call. AgencyRef belongs in server
+    configuration or per-session context, not in a tool argument, or an agent will silently address the
+    wrong agency.'
 searched:
 - source: https://developers.vebraalto.com/
   result: no MCP, agent or AI integration page
@@ -29,14 +31,14 @@ searched:
 - source: npm registry search (vebra, vebraalto, alto-api, zoopla)
   result: no first-party MCP package
 safety_notes:
-- Write tools mutate a live estate agency CRM of record — contacts, offers, tenancies and work orders are legally
-  significant records. Treat every non-GET tool as requiring confirmation.
-- create_lead, create_contact, create_appraisal, create_work_order and create_media_item have no idempotency key;
-  a retried call creates a duplicate. Alto answers 409 with a Location header on some resources only.
-- The Zoopla activation tools spend money — Premium Listing and WFP activations are billable products under the
-  customer contract.
-- GET /contacts/{contactId}/bank-accounts returns landlord/tenant bank details and is gated behind its own semantic
-  scope (alto/read:contact_bank_accounts). Exclude it from any general-purpose agent surface.
+- Write tools mutate a live estate agency CRM of record — contacts, offers, tenancies and work orders
+  are legally significant records. Treat every non-GET tool as requiring confirmation.
+- create_lead, create_contact, create_appraisal, create_work_order and create_media_item have no idempotency
+  key; a retried call creates a duplicate. Alto answers 409 with a Location header on some resources only.
+- The Zoopla activation tools spend money — Premium Listing and WFP activations are billable products
+  under the customer contract.
+- GET /contacts/{contactId}/bank-accounts returns landlord/tenant bank details and is gated behind its
+  own semantic scope (alto/read:contact_bank_accounts). Exclude it from any general-purpose agent surface.
 coverage:
   tools: 121
   apis: 4
@@ -1277,3 +1279,9 @@ tools:
   method: POST
   path: /products/weekly-featured-properties
   read_only: false
+deployment:
+  mode: none
+  verified: derived
+  tools: 121
+  checked: '2026-08-12'
+  source: catalog MCP census
