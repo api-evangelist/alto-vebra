@@ -23,6 +23,23 @@ description: 'Alto — formerly Vebra Alto, and still trading through vebra.com 
   sits with HM Land Registry and Ordnance Survey, not with the private CRM duopoly feeders.'
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
 tags:
+- Real-Estate
+- United Kingdom
+- PropTech
+- Property Listings
+- CRM
+- Property Management
+- Rentals
+- Conveyancing
+- Estate Agency
+- Tenancy
+- Webhook
+- Event
+- Lettings
+- Sales Progression
+- Property Data
+- Real Estate Software
+tags_raw:
 - Real Estate
 - United Kingdom
 - PropTech
@@ -55,6 +72,13 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Real-Estate
+  - CRM
+  - Property Listings
+  - Tenancy
+  - Property Management
+  - United Kingdom
+  tags_raw:
   - Real Estate
   - CRM
   - Property Listings
@@ -108,6 +132,11 @@ apis:
   humanURL: https://developers.zoopla.co.uk/leads/reference/api
   baseURL: https://services.zoopla.co.uk
   tags:
+  - Real-Estate
+  - Leads
+  - Property Listings
+  - United Kingdom
+  tags_raw:
   - Real Estate
   - Leads
   - Property Listings
@@ -145,6 +174,11 @@ apis:
   humanURL: https://developers.zoopla.co.uk/premium-listings/reference/api
   baseURL: https://services.zoopla.co.uk
   tags:
+  - Real-Estate
+  - Property Listings
+  - Advertising
+  - United Kingdom
+  tags_raw:
   - Real Estate
   - Property Listings
   - Advertising
@@ -173,6 +207,11 @@ apis:
   humanURL: https://developers.zoopla.co.uk/wfp/reference/api
   baseURL: https://services.zoopla.co.uk
   tags:
+  - Real-Estate
+  - Property Listings
+  - Advertising
+  - United Kingdom
+  tags_raw:
   - Real Estate
   - Property Listings
   - Advertising
