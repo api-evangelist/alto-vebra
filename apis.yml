@@ -21,7 +21,13 @@ description: 'Alto — formerly Vebra Alto, and still trading through vebra.com 
   in the estate, and no RESO Web API or Data Dictionary certification exists — RESO is a North American
   NAR-driven standard with no UK counterpart. Alto publishes no open data; the UK''s open property layer
   sits with HM Land Registry and Ordnance Survey, not with the private CRM duopoly feeders.'
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+imageNote: >-
+  The `image` property was removed on 2026-08-26. It had been copied verbatim out of a
+  bootstrap template and pointed at an icon belonging to groq, not to this company.
+  That asset returns HTTP 200, so the record rendered another company's brand
+  rather than a broken image, which is why it went unreported (roadmap#153).
+  No correct icon has been sourced yet. Shipping the wrong company's mark is worse
+  than shipping none; re-run the icon backfill once a real asset exists.
 tags:
 - Real-Estate
 - United Kingdom
