@@ -66,34 +66,16 @@ created: '2026-07-26'
 modified: '2026-07-26'
 specificationVersion: '0.23'
 apis:
-- aid: alto-vebra:alto-api
-  name: Alto API
-  description: The full Alto REST API for UK estate agency operations — 95 documented paths across 27
-    resource families covering contacts and applicants, property inventory, listings and media, appraisals
-    and valuations, appointments and viewings, leads, offers, sales progression, lettings progression,
-    tenancies, landlords and owners, work orders, suppliers, documents, file notes, branches, negotiators
-    and partner integration status. OpenAPI 3.0.4 with a sandbox and a production server, Bearer JWT obtained
-    via OAuth2 client-credentials against the /token endpoint, an AgencyRef header scoping every call
-    to one agency, and route-level scopes of the form alto/read:contacts and alto/route:get-inventory.
+- aid: alto-vebra:alto-vebra-appointments-api
+  name: Alto (Vebra / Zoopla) Appointments API
+  description: The Appointments API from Alto (Vebra / Zoopla) — 7 operation(s) for appointments.
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
-  - Real-Estate
-  - CRM
-  - Property Listings
-  - Tenancy
-  - Property Management
-  - United Kingdom
-  tags_raw:
-  - Real Estate
-  - CRM
-  - Property Listings
-  - Tenancy
-  - Property Management
-  - United Kingdom
+  - Appointments
   properties:
   - type: OpenAPI
-    url: openapi/alto-api-openapi.json
+    url: openapi/alto-vebra-appointments-api-openapi.yml
   - type: Documentation
     url: https://developers.vebraalto.com/
   - type: APIReference
@@ -116,40 +98,14 @@ apis:
     url: https://partnerfeedback.vebraalto.com/
   - type: Sandbox
     url: sandbox/alto-vebra-sandbox.yml
-    name: Alto sandbox and reference data
   - type: ErrorCatalog
     url: errors/alto-vebra-problem-types.yml
   - type: AsyncAPI
     url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
-    name: Alto webhooks (AsyncAPI 3.0.0)
   - type: Webhooks
     url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
-    name: Alto webhook event catalog
-  - type: Overlay
-    url: overlays/alto-vebra-alto-api-overlay.yaml
   - type: GettingStarted
     url: https://developers.vebraalto.com/guides/authenticating-your-requests/
-- aid: alto-vebra:zoopla-leads-api
-  name: Zoopla Leads API
-  description: Swagger 2.0 poll API for retrieving applicant leads and appraisal (valuation) leads generated
-    on the Zoopla portal, published by Houseful for contracted Zoopla agency customers and their software
-    partners. OAuth2 client-credentials against services-auth.services.zoopla.co.uk with the scopes leads/list:applicant-leads
-    and leads/list:appraisal-leads. A push variant is documented alongside the poll contract.
-  humanURL: https://developers.zoopla.co.uk/leads/reference/api
-  baseURL: https://services.zoopla.co.uk
-  tags:
-  - Real-Estate
-  - Leads
-  - Property Listings
-  - United Kingdom
-  tags_raw:
-  - Real Estate
-  - Leads
-  - Property Listings
-  - United Kingdom
-  properties:
-  - type: OpenAPI
-    url: openapi/zoopla-leads-api-openapi.json
   - type: Documentation
     url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
   - type: APIReference
@@ -164,81 +120,2052 @@ apis:
     url: https://developers.zoopla.co.uk/docs/terms-of-use
   - type: AsyncAPI
     url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
-    name: Zoopla lead push service (AsyncAPI 3.0.0)
   - type: Webhooks
     url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
-    name: Zoopla lead push service
-  - type: Overlay
-    url: overlays/alto-vebra-zoopla-leads-api-overlay.yaml
   - type: GettingStarted
     url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
-- aid: alto-vebra:zoopla-premium-listing-activations-api
-  name: Zoopla Premium Listing Activations API
-  description: OpenAPI 3.0.0 contract for activating and inspecting Zoopla Premium Listing products against
-    a property listing, exposed at /products/premium-listings and /products/premium-listings/{uuid}. OAuth2
-    client-credentials with the api/api_access scope.
-  humanURL: https://developers.zoopla.co.uk/premium-listings/reference/api
-  baseURL: https://services.zoopla.co.uk
-  tags:
-  - Real-Estate
-  - Property Listings
-  - Advertising
-  - United Kingdom
-  tags_raw:
-  - Real Estate
-  - Property Listings
-  - Advertising
-  - United Kingdom
-  properties:
-  - type: OpenAPI
-    url: openapi/zoopla-premium-listing-activations-openapi.json
   - type: Documentation
     url: https://developers.zoopla.co.uk/docs/premium-listings
   - type: APIReference
     url: https://developers.zoopla.co.uk/premium-listings/reference/api
   - type: Errors
     url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
-  - type: Authentication
-    url: https://developers.zoopla.co.uk/docs/authentication
   - type: ErrorCatalog
     url: errors/alto-vebra-error-codes.yml
-    name: Premium Listings error code register
-  - type: Overlay
-    url: overlays/alto-vebra-zoopla-premium-listing-activations-overlay.yaml
-- aid: alto-vebra:zoopla-weekly-featured-property-api
-  name: Zoopla Weekly Featured Property (WFP) Activations API
-  description: OpenAPI 3.0.0 contract for activating Zoopla Weekly Featured Property placements against
-    a listing, exposed at /products/weekly-featured-properties and /products/weekly-featured-properties/{uuid}.
-    OAuth2 client-credentials with the api/api_access scope.
-  humanURL: https://developers.zoopla.co.uk/wfp/reference/api
-  baseURL: https://services.zoopla.co.uk
-  tags:
-  - Real-Estate
-  - Property Listings
-  - Advertising
-  - United Kingdom
-  tags_raw:
-  - Real Estate
-  - Property Listings
-  - Advertising
-  - United Kingdom
-  properties:
-  - type: OpenAPI
-    url: openapi/zoopla-weekly-featured-property-openapi.json
   - type: Documentation
     url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
   - type: APIReference
     url: https://developers.zoopla.co.uk/wfp/reference/api
   - type: Errors
     url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-appraisals-api
+  name: Alto (Vebra / Zoopla) Appraisals API
+  description: The Appraisals API from Alto (Vebra / Zoopla) — 2 operation(s) for appraisals.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Appraisals
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-appraisals-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
   - type: Authentication
     url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
   - type: ErrorCatalog
     url: errors/alto-vebra-error-codes.yml
-    name: WFP error code register
-  - type: Overlay
-    url: overlays/alto-vebra-zoopla-weekly-featured-property-overlay.yaml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-branches-api
+  name: Alto (Vebra / Zoopla) Branches API
+  description: The Branches API from Alto (Vebra / Zoopla) — 2 operation(s) for branches.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Branches
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-branches-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-charges-api
+  name: Alto (Vebra / Zoopla) Charges API
+  description: The Charges API from Alto (Vebra / Zoopla) — 2 operation(s) for charges.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Charges
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-charges-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-clients-api
+  name: Alto (Vebra / Zoopla) Clients API
+  description: The Clients API from Alto (Vebra / Zoopla) — 1 operation(s) for clients.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Clients
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-clients-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-contacts-api
+  name: Alto (Vebra / Zoopla) Contacts API
+  description: The Contacts API from Alto (Vebra / Zoopla) — 13 operation(s) for contacts.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Contacts
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-contacts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-documents-api
+  name: Alto (Vebra / Zoopla) Documents API
+  description: The Documents API from Alto (Vebra / Zoopla) — 5 operation(s) for documents.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-documents-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-filenotes-api
+  name: Alto (Vebra / Zoopla) File Notes API
+  description: The FileNotes API from Alto (Vebra / Zoopla) — 4 operation(s) for filenotes.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - FileNotes
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-filenotes-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-inventory-api
+  name: Alto (Vebra / Zoopla) Inventory API
+  description: The Inventory API from Alto (Vebra / Zoopla) — 10 operation(s) for inventory.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-inventory-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-landlords-api
+  name: Alto (Vebra / Zoopla) Landlords API
+  description: The Landlords API from Alto (Vebra / Zoopla) — 2 operation(s) for landlords.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Landlords
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-landlords-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-leads-api
+  name: Alto (Vebra / Zoopla) Leads API
+  description: The Leads API from Alto (Vebra / Zoopla) — 2 operation(s) for leads.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Leads
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-leads-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-lettingsprogression-api
+  name: Alto (Vebra / Zoopla) Lettings Progression API
+  description: >-
+    The LettingsProgression API from Alto (Vebra / Zoopla) — 1 operation(s) for lettingsprogression.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - LettingsProgression
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-lettingsprogression-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-listing-api
+  name: Alto (Vebra / Zoopla) Listing API
+  description: The Listing API from Alto (Vebra / Zoopla) — 7 operation(s) for listing.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Listing
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-listing-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-managementevents-api
+  name: Alto (Vebra / Zoopla) Management Events API
+  description: >-
+    The ManagementEvents API from Alto (Vebra / Zoopla) — 3 operation(s) for managementevents.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - ManagementEvents
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-managementevents-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-media-api
+  name: Alto (Vebra / Zoopla) Media API
+  description: The Media API from Alto (Vebra / Zoopla) — 3 operation(s) for media.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Media
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-media-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-negotiators-api
+  name: Alto (Vebra / Zoopla) Negotiators API
+  description: The Negotiators API from Alto (Vebra / Zoopla) — 2 operation(s) for negotiators.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Negotiators
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-negotiators-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-offers-api
+  name: Alto (Vebra / Zoopla) Offers API
+  description: The Offers API from Alto (Vebra / Zoopla) — 1 operation(s) for offers.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Offers
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-offers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-owners-api
+  name: Alto (Vebra / Zoopla) Owners API
+  description: The Owners API from Alto (Vebra / Zoopla) — 1 operation(s) for owners.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Owners
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-owners-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-parameters-api
+  name: Alto (Vebra / Zoopla) Parameters API
+  description: The Parameters API from Alto (Vebra / Zoopla) — 6 operation(s) for parameters.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Parameters
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-parameters-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-partners-api
+  name: Alto (Vebra / Zoopla) Partners API
+  description: The Partners API from Alto (Vebra / Zoopla) — 3 operation(s) for partners.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Partners
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-partners-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-products-api
+  name: Alto (Vebra / Zoopla) Products API
+  description: The Products API from Alto (Vebra / Zoopla) — 4 operation(s) for products.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-products-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-referencechecks-api
+  name: Alto (Vebra / Zoopla) Reference Checks API
+  description: The ReferenceChecks API from Alto (Vebra / Zoopla) — 2 operation(s) for referencechecks.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - ReferenceChecks
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-referencechecks-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-referral-api
+  name: Alto (Vebra / Zoopla) Referral API
+  description: The Referral API from Alto (Vebra / Zoopla) — 1 operation(s) for referral.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Referral
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-referral-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-referrals-api
+  name: Alto (Vebra / Zoopla) Referrals API
+  description: The Referrals API from Alto (Vebra / Zoopla) — 1 operation(s) for referrals.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Referrals
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-referrals-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-rest-endpoints-api
+  name: Alto (Vebra / Zoopla) REST Endpoints API
+  description: The REST Endpoints API from Alto (Vebra / Zoopla) — 2 operation(s) for rest endpoints.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - REST Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-rest-endpoints-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-salesprogression-api
+  name: Alto (Vebra / Zoopla) Sales Progression API
+  description: >-
+    The SalesProgression API from Alto (Vebra / Zoopla) — 2 operation(s) for salesprogression.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - SalesProgression
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-salesprogression-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-suppliers-api
+  name: Alto (Vebra / Zoopla) Suppliers API
+  description: The Suppliers API from Alto (Vebra / Zoopla) — 3 operation(s) for suppliers.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Suppliers
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-suppliers-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-tenancies-api
+  name: Alto (Vebra / Zoopla) Tenancies API
+  description: The Tenancies API from Alto (Vebra / Zoopla) — 6 operation(s) for tenancies.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - Tenancies
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-tenancies-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
+- aid: alto-vebra:alto-vebra-workorders-api
+  name: Alto (Vebra / Zoopla) Work Orders API
+  description: The WorkOrders API from Alto (Vebra / Zoopla) — 3 operation(s) for workorders.
+  humanURL: https://developers.vebraalto.com/api
+  baseURL: https://api.alto.zoopla.co.uk
+  tags:
+  - WorkOrders
+  properties:
+  - type: OpenAPI
+    url: openapi/alto-vebra-workorders-api-openapi.yml
+  - type: Documentation
+    url: https://developers.vebraalto.com/
+  - type: APIReference
+    url: https://developers.vebraalto.com/api
+  - type: Authentication
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Webhooks
+    url: https://developers.vebraalto.com/guides/webhooks/
+  - type: TermsOfService
+    url: https://developers.vebraalto.com/api-terms-of-use
+  - type: Errors
+    url: https://developers.vebraalto.com/guides/error-codes/
+  - type: Glossary
+    url: https://developers.vebraalto.com/guides/glossary/
+  - type: Sandbox
+    url: https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/
+  - type: Portal
+    url: https://connect.vebraalto.com/connect
+  - type: Support
+    url: https://partnerfeedback.vebraalto.com/
+  - type: Sandbox
+    url: sandbox/alto-vebra-sandbox.yml
+  - type: ErrorCatalog
+    url: errors/alto-vebra-problem-types.yml
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-alto-webhooks-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.vebraalto.com/guides/authenticating-your-requests/
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/leads/reference/api
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/push-service
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/leads/docs/field-definitions
+  - type: Authentication
+    url: https://developers.zoopla.co.uk/docs/authentication
+  - type: TermsOfService
+    url: https://developers.zoopla.co.uk/docs/terms-of-use
+  - type: AsyncAPI
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: Webhooks
+    url: asyncapi/alto-vebra-zoopla-leads-push-asyncapi.yml
+  - type: GettingStarted
+    url: https://developers.zoopla.co.uk/leads/docs/available-lead-services
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/premium-listings
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/premium-listings/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register
+  - type: ErrorCatalog
+    url: errors/alto-vebra-error-codes.yml
+  - type: Documentation
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties
+  - type: APIReference
+    url: https://developers.zoopla.co.uk/wfp/reference/api
+  - type: Errors
+    url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
 common:
+- type: Overlay
+  url: overlays/alto-vebra-alto-api-overlay.yaml
+- type: Overlay
+  url: overlays/alto-vebra-zoopla-leads-api-overlay.yaml
+- type: Overlay
+  url: overlays/alto-vebra-zoopla-premium-listing-activations-overlay.yaml
+- type: Overlay
+  url: overlays/alto-vebra-zoopla-weekly-featured-property-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/alto-vebra-agentic-access.yml
 - type: DomainSecurity
