@@ -2170,6 +2170,9 @@ apis:
   - type: Errors
     url: https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register
 common:
+- type: CapabilityMap
+  url: capabilities/alto-vebra-capability-edges.yml
+  name: Alto (Vebra / Zoopla) Business Capability Map
 - type: Overlay
   url: overlays/alto-vebra-alto-api-overlay.yaml
 - type: Overlay

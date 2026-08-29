@@ -1,0 +1,100 @@
+slug: alto-vebra
+provider: Alto (Vebra / Zoopla)
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Real Estate
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: WorkOrders
+  spec_file: alto-vebra-workorders-api-openapi.yml
+  capability_id: BC-4940.20
+  capability_id_l1: BC-4940
+  capability_name: Property Maintenance & Work Order Management
+  confidence: 0.9
+  evidence: GET /inventory/{inventoryId}/work-orders  Get Work Orders for a specific inventory item by
+    Property Id; POST /work-orders  Post Work Order
+  reason: Property-level work order creation and tracking against properties in a lettings/property-management
+    CRM — plainly property maintenance and work order management.
+- tag: Offers
+  spec_file: alto-vebra-offers-api-openapi.yml
+  capability_id: BC-4960.60
+  capability_id_l1: BC-4960
+  capability_name: Offer & Negotiation Management
+  confidence: 0.8
+  evidence: GET /offers/sales-offer/{offerId} — 'Gets a sales offer by offerId'; schema Offer
+  reason: Vendor is an estate agency CRM running 'offers, sales and lettings progression'; the operation
+    retrieves a sales offer, which is the offer/negotiation artefact of a brokered transaction. Sub-capability
+    chosen on the explicit 'sales-offer' resource, though the API is read-only rather than negotiation
+    workflow.
+- tag: ReferenceChecks
+  spec_file: alto-vebra-referencechecks-api-openapi.yml
+  capability_id: BC-4950.40
+  capability_id_l1: BC-4950
+  capability_name: Tenant Application & Screening
+  confidence: 0.75
+  evidence: GET /ReferenceChecks; PATCH /ReferenceChecks/{referenceCheckId}; schemas ReferenceCheckStatus,
+    ReferenceCheckDto
+  reason: For a lettings CRM, reference checks are tenant referencing; the target sub-capability explicitly
+    covers 'credit, identity, and reference checks' on tenant applications. Confidence held below 0.8
+    because the spec gives no explicit tenant/applicant linkage in the visible schema names.
+- tag: SalesProgression
+  spec_file: alto-vebra-salesprogression-api-openapi.yml
+  capability_id: BC-4960.70
+  capability_id_l1: BC-4960
+  capability_name: Brokerage Transaction Closing Coordination
+  confidence: 0.75
+  evidence: GET /sales-progressions; schemas AgreedOfferWithMilestones, Milestone, AgreedOffer
+  reason: Tracks agreed offers through milestone stages to completion — the agency-side progression of
+    a brokered sale through conveyancing to closing, matching brokerage transaction closing coordination.
+    Vendor description confirms 'sales and lettings progression'.
+- tag: Tenancies
+  spec_file: alto-vebra-tenancies-api-openapi.yml
+  capability_id: BC-4950.60
+  capability_id_l1: BC-4950
+  capability_name: Lease Administration (Landlord-Side)
+  confidence: 0.75
+  evidence: POST /inventory/{inventoryId}/tenancies  Create a tenancy; GET /tenancies  List Tenancies;
+    Alto.PropertyManagement.Api.Models.Responses.Tenancy
+  reason: Landlord/letting-agent side records of tenancies (UK lettings leases) with tenants, updates
+    and utility meter readings against the tenancy — landlord-side lease/tenancy administration within
+    a property management API. Some ambiguity with property operations (meter readings), hence moderate
+    confidence.
+- tag: Appointments
+  spec_file: alto-vebra-appointments-api-openapi.yml
+  capability_id: BC-4960.50
+  capability_id_l1: BC-4960
+  capability_name: Showing & Open House Operations
+  confidence: 0.7
+  evidence: POST /appointments/viewings 'Create a viewing appointment.', GET /appointments/valuations
+    'Get valuations within a selected time range.', schema ExternalPartnerViewingDetails
+  reason: Estate-agency CRM diary for property viewings and valuation appointments with negotiators —
+    brokerage showing appointment operations. Some spill into valuation scheduling, hence 0.7.
+- tag: Listing
+  spec_file: alto-vebra-listing-api-openapi.yml
+  capability_id: BC-4960.30
+  capability_id_l1: BC-4960
+  capability_name: Listing Data & MLS Management
+  confidence: 0.7
+  evidence: GET /listing/property/{propertyId} "Get a property listing", GET /listing/property/{propertyId}/images
+    "Get property images metadata", PATCH .../summary "Partially update a property listing summary"; ListingSaleResponse,
+    ListingRentalResponse, ListingAuctionResponse, ListingEpcResponse
+  reason: Property listing content management including images, room detail, sale/rental/auction attributes
+    for an estate agency — listing data and media management on the brokerage/agency side.
+- tag: Suppliers
+  spec_file: alto-vebra-suppliers-api-openapi.yml
+  capability_id: BC-4940.30
+  capability_id_l1: BC-4940
+  capability_name: Property Vendor & Service Contract Management
+  confidence: 0.7
+  evidence: GET /inventory/{inventoryId}/suppliers; schema Alto.PropertyManagement.Api.Models.Responses.Supplier
+  reason: Supplier records live in the vendor's PropertyManagement API namespace and are retrievable per
+    property inventory item, matching property-level service vendor management in the vendor's stated
+    'property management, work orders' scope. Read-only surface limits confidence.
