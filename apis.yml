@@ -588,6 +588,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - File Notes
+  tags_raw:
   - FileNotes
   properties:
   - type: OpenAPI
@@ -1526,6 +1528,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Product
+  tags_raw:
   - Products
   properties:
   - type: OpenAPI
@@ -1887,6 +1891,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Sales Progression
+  tags_raw:
   - SalesProgression
   properties:
   - type: OpenAPI
@@ -2103,6 +2109,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Work Orders
+  tags_raw:
   - WorkOrders
   properties:
   - type: OpenAPI
