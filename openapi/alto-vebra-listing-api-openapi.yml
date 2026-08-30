@@ -1,0 +1,1257 @@
+openapi: 3.2.0
+info:
+  title: Alto Listing API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Listing
+paths:
+  /listing/filter:
+    get:
+      tags:
+      - Listing
+      summary: Filter property listings
+      description: Get a paginated list of filtered property listings
+      parameters:
+      - name: status
+        in: query
+        description: '[Optional] Set the status to filter results.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/InventoryStatus'
+      - name: auction
+        in: query
+        description: '[Optional] Set whether to include auction listings or not.'
+        schema:
+          type: boolean
+      - name: auction-closing-date-from
+        in: query
+        description: '[Optional] The date from which you wish to consider the results to return. Compliments the auction-closing-date-to filter. If both fields are empty, no consideration of the auction date is applied.'
+        schema:
+          type: string
+          format: date-time
+      - name: auction-closing-date-to
+        in: query
+        description: '[Optional] The date to which you wish to consider the results to return. Compliments the auction-closing-date-from filter. If both fields are empty, no consideration of the auction date is applied.'
+        schema:
+          type: string
+          format: date-time
+      - name: owner-id
+        in: query
+        description: '[Optional] The UserId of the owner/negotiator for the property.'
+        schema:
+          type: integer
+          format: int32
+      - name: next-token
+        in: query
+        description: '[Optional] Set the token for the next page of results.'
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: '[Optional] Set the maximum number of results to return. The default value is 50, and the maximum value is 250.'
+        schema:
+          maximum: 250
+          minimum: 1
+          type: integer
+          format: int32
+      - name: created-from
+        in: query
+        description: '[Optional] The date from which you wish to consider the results to return. Compliments the created-to filter. If both fields are empty, no consideration of the created date is applied.'
+        schema:
+          type: string
+          format: date-time
+      - name: created-to
+        in: query
+        description: '[Optional] The date to which you wish to consider the results to return. Compliments the created-from filter. If both fields are empty, no consideration of the created date is applied.'
+        schema:
+          type: string
+          format: date-time
+      - name: modified-from
+        in: query
+        description: '[Optional] The date from which you wish to consider the results to return. Compliments the modified-to filter. If both fields are empty, no consideration of the modified date is applied.'
+        schema:
+          type: string
+          format: date-time
+      - name: modified-to
+        in: query
+        description: '[Optional] The date to which you wish to consider the results to return. Compliments the modified-from filter. If both fields are empty, no consideration of the modified date is applied.'
+        schema:
+          type: string
+          format: date-time
+      - name: sort-by
+        in: query
+        description: '[Optional] The field to order the results by. Complements sort-order. Default is to order by modified then by id in a descending manner.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/SortBy'
+      - name: sort-order
+        in: query
+        description: '[Optional] The ordering regime of the results returned. Complements sort-by. Default is Descending.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/SortOrder'
+      - name: branch-id
+        in: query
+        description: '[Optional] A list of branch ids to restrict the filter by. An empty list will return all results in all branches.'
+        schema:
+          type: array
+          items:
+            type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the paginated list of filtered property listings
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/FilterListingResponsePagedResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilterListingResponsePagedResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/FilterListingResponsePagedResponse'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-listing-filter
+  /listing/property/{propertyId}:
+    get:
+      tags:
+      - Listing
+      summary: Get a property listing
+      description: Get a property listing by property id
+      parameters:
+      - name: propertyId
+        in: path
+        description: The unique identifier for the Property
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the property listing
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ListingResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ListingResponse'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The property listing was not found
+      security:
+      - appAuth:
+        - alto/route:get-listing-property-propertyid
+  /listing/property/{propertyId}/images:
+    get:
+      tags:
+      - Listing
+      summary: Get property images metadata
+      description: Get image metadata for a property listing
+      parameters:
+      - name: propertyId
+        in: path
+        description: The unique identifier for the Property
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: x-Image-Client
+        in: header
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the image metadata for a property listing
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ListingImagesResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingImagesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ListingImagesResponse'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-listing-property-propertyid-images
+  /listing/property/{propertyId}/images/{imageId}:
+    get:
+      tags:
+      - Listing
+      summary: Get a property listing image
+      description: Get a property listing image by property id and image id
+      parameters:
+      - name: propertyId
+        in: path
+        description: The unique identifier for the Property
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: imageId
+        in: path
+        description: The unique identifier for the Image
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: image-size
+        in: query
+        schema:
+          type: string
+      - name: imageSize
+        in: query
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the property listing image content as a stream
+        '400':
+          description: When the request does not contain the expected information
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: The property listing image was not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-listing-property-propertyid-images-imageid
+  /listing/property/{propertyId}/rooms:
+    patch:
+      tags:
+      - Listing
+      summary: Partially update a property listing rooms
+      description: Apply JSON Patch operations to update lead-in text, lead-out text, and rooms for a property.
+      operationId: PatchListingRooms
+      parameters:
+      - name: propertyId
+        in: path
+        description: The unique identifier for the Property
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JSON Patch document containing operations to apply
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PatchListingRoomsRequestJsonPatchDocument'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PatchListingRoomsRequestJsonPatchDocument'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PatchListingRoomsRequestJsonPatchDocument'
+      responses:
+        '204':
+          description: The listing rooms were updated
+        '400':
+          description: When the request or patch document is invalid
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: When access has not been granted
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: When access to the property is forbidden
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: The listing was not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:patch-listing-property-propertyid-rooms
+  /listing/property/{propertyId}/summary:
+    patch:
+      tags:
+      - Listing
+      summary: Partially update a property listing summary
+      description: Apply JSON Patch operations to update the listing summary and bullets for a property.
+      operationId: PatchListingSummary
+      parameters:
+      - name: propertyId
+        in: path
+        description: The unique identifier for the Property
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JSON Patch document containing operations to apply
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PutListingSummaryJsonPatchDocument'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PutListingSummaryJsonPatchDocument'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PutListingSummaryJsonPatchDocument'
+      responses:
+        '204':
+          description: The listing summary was updated
+        '400':
+          description: When the request or patch document is invalid
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: When access has not been granted
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: When access to the property is forbidden
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: The listing was not found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:patch-listing-property-propertyid-summary
+  /listing/property/items:
+    get:
+      tags:
+      - Listing
+      summary: Get multiple property listings
+      description: Get property listings for multiple property ids
+      parameters:
+      - name: property-id
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the property listings
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ListingResponseItemCollection'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListingResponseItemCollection'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ListingResponseItemCollection'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-listing-property-items
+components:
+  schemas:
+    ListingEpcResponse:
+      type: object
+      properties:
+        energyEfficiencyRatingCurrent:
+          type:
+          - integer
+          - 'null'
+          description: Current energy efficiency rating
+          format: int32
+        energyEfficiencyRatingPotential:
+          type:
+          - integer
+          - 'null'
+          description: Potential energy efficiency rating
+          format: int32
+        energyEfficiencyBandCurrent:
+          type:
+          - string
+          - 'null'
+          description: Current energy efficiency band
+          readOnly: true
+        energyEfficiencyBandPotential:
+          type:
+          - string
+          - 'null'
+          description: Potential energy efficiency band
+          readOnly: true
+        exempt:
+          type: boolean
+          description: Whether listing has an EPC Exemption
+        exemptionReason:
+          type:
+          - string
+          - 'null'
+          description: Reason for an EPC Exemption
+      additionalProperties: false
+    ListingLeaseResponse:
+      type: object
+      properties:
+        yearsRemaining:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        endDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        sharedOwnership:
+          type:
+          - boolean
+          - 'null'
+        sharedOwnershipPercentageShare:
+          type:
+          - number
+          - 'null'
+          format: double
+        sharedOwnershipRent:
+          type:
+          - number
+          - 'null'
+          format: double
+        sharedOwnershipFrequency:
+          type:
+          - string
+          - 'null'
+        serviceCharge:
+          type:
+          - number
+          - 'null'
+          format: double
+        annualGroundRent:
+          type:
+          - number
+          - 'null'
+          format: double
+        groundRentReviewPeriod:
+          type:
+          - number
+          - 'null'
+          format: double
+        groundRentPercentageIncrease:
+          type:
+          - number
+          - 'null'
+          format: double
+      additionalProperties: false
+    ListingResponseItemCollection:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingResponse'
+      additionalProperties: false
+    PutListingSummaryOperation:
+      type: object
+      properties:
+        path:
+          type:
+          - string
+          - 'null'
+        op:
+          type:
+          - string
+          - 'null'
+        from:
+          type:
+          - string
+          - 'null'
+        value: {}
+      additionalProperties: false
+    ListingResponse:
+      type: object
+      properties:
+        propertyId:
+          type: integer
+          format: int32
+        market:
+          type:
+          - string
+          - 'null'
+        displayAddress:
+          type:
+          - string
+          - 'null'
+        priceQualifier:
+          type:
+          - string
+          - 'null'
+        currency:
+          type:
+          - string
+          - 'null'
+        price:
+          type:
+          - number
+          - 'null'
+          format: double
+        bedrooms:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        bathrooms:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        receptions:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        floorAreaInSquareFeet:
+          type:
+          - number
+          - 'null'
+          format: double
+        landAreaInAcres:
+          type:
+          - number
+          - 'null'
+          format: double
+        propertyType:
+          type:
+          - string
+          - 'null'
+        taxBand:
+          type:
+          - string
+          - 'null'
+        taxBandExemptReason:
+          type:
+          - string
+          - 'null'
+        summary:
+          type:
+          - string
+          - 'null'
+        includeLeadInOutText:
+          type: boolean
+        leadInText:
+          type:
+          - string
+          - 'null'
+        leadOutText:
+          type:
+          - string
+          - 'null'
+        publicViewingNotes:
+          type:
+          - string
+          - 'null'
+        epcCurrent:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          deprecated: true
+        epcPotential:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          deprecated: true
+        epc:
+          allOf:
+          - $ref: '#/components/schemas/ListingEpcResponse'
+        rental:
+          allOf:
+          - $ref: '#/components/schemas/ListingRentalResponse'
+        sale:
+          allOf:
+          - $ref: '#/components/schemas/ListingSaleResponse'
+        isLeasehold:
+          type: boolean
+          readOnly: true
+        lease:
+          allOf:
+          - $ref: '#/components/schemas/ListingLeaseResponse'
+        auction:
+          allOf:
+          - $ref: '#/components/schemas/ListingAuctionResponse'
+        bullets:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingBulletResponse'
+        rooms:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingRoomResponse'
+        age:
+          type:
+          - string
+          - 'null'
+        yearBuilt:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        newBuild:
+          type:
+          - boolean
+          - 'null'
+        parkingTotal:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        uprn:
+          type:
+          - string
+          - 'null'
+        mapping:
+          allOf:
+          - $ref: '#/components/schemas/ListingMappingResponse'
+        createdDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    RoomRecordType:
+      enum:
+      - Unspecified
+      - Room
+      - Paragraph
+      type: string
+    SortBy:
+      enum:
+      - Modified
+      - Created
+      - Id
+      type: string
+    PutListingSummaryJsonPatchDocument:
+      type: object
+      properties:
+        operations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PutListingSummaryOperation'
+          readOnly: true
+      additionalProperties: false
+    ListingRentalResponse:
+      type: object
+      properties:
+        frequency:
+          type:
+          - string
+          - 'null'
+        availableFrom:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deposit:
+          type:
+          - number
+          - 'null'
+          format: double
+        furnishing:
+          type:
+          - string
+          - 'null'
+        lettingType:
+          type:
+          - string
+          - 'null'
+        children:
+          type: boolean
+          description: Whether children are allowed
+        pets:
+          type: boolean
+          description: Whether pets are allowed
+        smokers:
+          type: boolean
+          description: Whether smokers are allowed
+        termLengthMonths:
+          type:
+          - integer
+          - 'null'
+          description: Term Length (months)
+          format: int32
+      additionalProperties: false
+    InventoryStatus:
+      enum:
+      - Unspecified
+      - Appraisal
+      - Available
+      - UnderOffer
+      - Completed
+      - Let
+      - LetAgreed
+      - LetMarketing
+      - Archived
+      - Suspended
+      - Withdrawn
+      - Instructed
+      - NotInstructed
+      - ExternallyLet
+      - UnderOfferMarketing
+      - UnderOfferAvailable
+      - Exchanged
+      - ExternallySold
+      - Reserved
+      type: string
+    ListingSizesResponse:
+      type: object
+      properties:
+        screen:
+          allOf:
+          - $ref: '#/components/schemas/ListingImageDetailResponse'
+        thumbnail:
+          allOf:
+          - $ref: '#/components/schemas/ListingImageDetailResponse'
+        tile:
+          allOf:
+          - $ref: '#/components/schemas/ListingImageDetailResponse'
+      additionalProperties: false
+    ListingImagesResponse:
+      type: object
+      properties:
+        galleryImages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingImageResponse'
+        virtualTourImages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingImageResponse'
+        virtualTourLinks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingLinkResponse'
+        floorplanImages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingImageResponse'
+        webLinks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingLinkResponse'
+        externalBrochures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingBrochureResponse'
+      additionalProperties: false
+    ListingBulletResponse:
+      type: object
+      properties:
+        orderIndex:
+          type: integer
+          format: int32
+        content:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ListingMappingResponse:
+      type: object
+      properties:
+        mapLocation:
+          allOf:
+          - $ref: '#/components/schemas/ListingMapLocationResponse'
+        streetView:
+          allOf:
+          - $ref: '#/components/schemas/ListingStreetViewResponse'
+      additionalProperties: false
+    ListingAuctionResponse:
+      type: object
+      properties:
+        auction:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the property is for auction.
+        auctionClosingDate:
+          type:
+          - string
+          - 'null'
+          description: The closing date of the auction.
+          format: date-time
+        auctionReserve:
+          type:
+          - number
+          - 'null'
+          description: The reserve amount for the auction.
+          format: double
+      additionalProperties: false
+    PatchListingRoomsRequestJsonPatchDocument:
+      type: object
+      properties:
+        operations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PatchListingRoomsRequestOperation'
+          readOnly: true
+      additionalProperties: false
+    PatchListingRoomsRequestOperation:
+      type: object
+      properties:
+        path:
+          type:
+          - string
+          - 'null'
+        op:
+          type:
+          - string
+          - 'null'
+        from:
+          type:
+          - string
+          - 'null'
+        value: {}
+      additionalProperties: false
+    ListingImageResponse:
+      type: object
+      properties:
+        order:
+          type: integer
+          format: int32
+        main:
+          type: boolean
+        modifiedDate:
+          type: string
+          format: date-time
+        sizes:
+          allOf:
+          - $ref: '#/components/schemas/ListingSizesResponse'
+      additionalProperties: false
+    ListingSaleResponse:
+      type: object
+      properties:
+        tenure:
+          type:
+          - string
+          - 'null'
+        newHome:
+          type: boolean
+      additionalProperties: false
+    ListingStreetViewResponse:
+      type: object
+      properties:
+        latitude:
+          type:
+          - number
+          - 'null'
+          format: double
+        longitude:
+          type:
+          - number
+          - 'null'
+          format: double
+        heading:
+          type:
+          - number
+          - 'null'
+          format: double
+        pitch:
+          type:
+          - number
+          - 'null'
+          format: double
+        zoom:
+          type:
+          - integer
+          - 'null'
+          format: int32
+      additionalProperties: false
+    ListingBrochureResponse:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        modifiedDate:
+          type: string
+          format: date-time
+        defaultPropertyBrochure:
+          type: boolean
+      additionalProperties: false
+    FilterListingResponsePagedResponse:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FilterListingResponse'
+      additionalProperties: false
+    ListingMapLocationResponse:
+      type: object
+      properties:
+        latitude:
+          type:
+          - number
+          - 'null'
+          format: double
+        longitude:
+          type:
+          - number
+          - 'null'
+          format: double
+      additionalProperties: false
+    ListingRoomResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        orderIndex:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        size:
+          type:
+          - string
+          - 'null'
+        sizeMetric:
+          type:
+          - string
+          - 'null'
+        sizeImperial:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        roomRecordType:
+          allOf:
+          - $ref: '#/components/schemas/RoomRecordType'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    ListingLinkResponse:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        modifiedDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    FilterListingResponse:
+      type: object
+      properties:
+        propertyId:
+          type: integer
+          description: The unique identifier of the property.
+          format: int32
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the branch.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/InventoryStatus'
+          description: The status of the property.
+        bedrooms:
+          type:
+          - integer
+          - 'null'
+          description: The number of bedrooms in the property.
+          format: int32
+        priceQualifier:
+          type:
+          - string
+          - 'null'
+          description: The price qualifier on the property.
+        currency:
+          type:
+          - string
+          - 'null'
+          description: The currency associated with the price.
+        price:
+          type:
+          - number
+          - 'null'
+          description: The price of the property.
+          format: double
+        auction:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the property is for auction.
+        auctionClosingDate:
+          type:
+          - string
+          - 'null'
+          description: The closing date of the auction.
+          format: date-time
+        createdDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time the property was created.
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time the property was last modified.
+          format: date-time
+      additionalProperties: false
+    ListingImageDetailResponse:
+      type: object
+      properties:
+        src:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SortOrder:
+      enum:
+      - Ascending
+      - Descending
+      type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

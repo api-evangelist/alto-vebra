@@ -1,0 +1,230 @@
+openapi: 3.2.0
+info:
+  title: Alto Media API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Media
+paths:
+  /inventory/{inventoryId}/media-link:
+    post:
+      tags:
+      - Media
+      summary: Create new link media item (VirtualTour or WebLink).
+      parameters:
+      - name: inventoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - request
+              type: object
+              properties:
+                request:
+                  allOf:
+                  - $ref: '#/components/schemas/PostLinkMediaItemRequest'
+            encoding:
+              request:
+                style: form
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - request
+              type: object
+              properties:
+                request:
+                  allOf:
+                  - $ref: '#/components/schemas/PostLinkMediaItemRequest'
+            encoding:
+              request:
+                style: form
+      responses:
+        '200':
+          description: The id of the new media
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostLinkMediaItemResponse'
+        '401':
+          description: When access has not been granted
+        '400':
+          description: When the request is invalid or MediaType is not VirtualTour or WebLink
+        '404':
+          description: The property is not found
+      security:
+      - appAuth:
+        - alto/route:post-inventory-inventoryid-media-link
+  /media-item:
+    post:
+      tags:
+      - Media
+      summary: Create new media item
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - request
+              type: object
+              properties:
+                request:
+                  allOf:
+                  - $ref: '#/components/schemas/PostMediaItemRequest'
+            encoding:
+              request:
+                style: form
+          application/x-www-form-urlencoded:
+            schema:
+              required:
+              - request
+              type: object
+              properties:
+                request:
+                  allOf:
+                  - $ref: '#/components/schemas/PostMediaItemRequest'
+            encoding:
+              request:
+                style: form
+      responses:
+        '200':
+          description: The id of the new media
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostMediaItemResponse'
+        '401':
+          description: When access has not been granted
+        '400':
+          description: When the request does not contain the expected information
+        '404':
+          description: The entity is not found
+      security:
+      - appAuth:
+        - alto/route:post-media-item
+  /media-item/{mediaItemId}:
+    delete:
+      tags:
+      - Media
+      summary: Delete a media item
+      parameters:
+      - name: mediaItemId
+        in: path
+        description: The unique identifier for the media item
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: The media item has been deleted
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The media item or its property is not found
+      security:
+      - appAuth:
+        - alto/route:delete-media-item-mediaitemid
+components:
+  schemas:
+    PostLinkMediaItemResponse:
+      type: object
+      properties:
+        mediaId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    PostLinkMediaItemRequest:
+      type: object
+      properties:
+        mediaType:
+          enum:
+          - VirtualTour
+          - WebLink
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PostMediaItemResponse:
+      type: object
+      properties:
+        mediaId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    PostMediaItemRequest:
+      type: object
+      properties:
+        linkedType:
+          enum:
+          - Property
+          type: string
+        linkedId:
+          minimum: 1
+          type: integer
+          format: int64
+        mediaType:
+          enum:
+          - Photo
+          - Floorplan
+          - VirtualTour
+          - File
+          - Document
+          - Brochure
+          - EPC
+          - WebLink
+          type:
+          - string
+          - 'null'
+        fileToUpload:
+          type:
+          - string
+          - 'null'
+          format: binary
+        filename:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

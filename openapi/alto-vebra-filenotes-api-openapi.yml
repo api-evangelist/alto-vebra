@@ -1,0 +1,566 @@
+openapi: 3.2.0
+info:
+  title: Alto File Notes API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: FileNotes
+paths:
+  /file-notes:
+    post:
+      tags:
+      - FileNotes
+      summary: Create a file note
+      description: 'Create a file note associated to the requested property, owners/contacts.
+
+        As a minimum a file note must be associated to either a property or a contact(s).'
+      operationId: CreateFileNote
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The object containing the file note request details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateFileNoteRequest'
+        required: true
+      responses:
+        '201':
+          description: Returns the unique identifier of the newly created file note
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:post-file-notes
+  /file-notes/{fileNoteId}:
+    get:
+      tags:
+      - FileNotes
+      summary: Get a file note
+      description: Get a file note by file note id
+      operationId: GetFileNote
+      parameters:
+      - name: fileNoteId
+        in: path
+        description: The unique identifier for the File Note
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the file note
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileNoteResponse'
+        '400':
+          description: When the request does not contain the expected information
+        '404':
+          description: The file note was not found
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-file-notes-filenoteid
+    patch:
+      tags:
+      - FileNotes
+      summary: Patch a file note
+      description: Patch a file note by ID, updating the title or notes text.
+      operationId: PatchFileNote
+      parameters:
+      - name: fileNoteId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/FileNotePatchJsonPatchDocument'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '401':
+          description: Unauthorized
+      security:
+      - appAuth:
+        - alto/route:get-file-notes-filenoteid
+  /file-notes/search:
+    get:
+      tags:
+      - FileNotes
+      summary: Retrieves file notes by criteria
+      description: Retrieves file notes matching the search criteria
+      operationId: SearchFileNotes
+      parameters:
+      - name: contact-id
+        in: query
+        description: The unique identifier of the contact
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the file notes associated with the specified contact
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetFileNoteResponse'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: When the query addresses data which is not available
+      security:
+      - appAuth:
+        - alto/route:get-file-notes-search
+  /inventory/{propertyId}/file-notes:
+    get:
+      tags:
+      - FileNotes
+      summary: Get file notes by property ID
+      description: Get all file notes relating to the specified property ID
+      operationId: GetFileNotesByProperty
+      parameters:
+      - name: propertyId
+        in: path
+        description: The unique identifier for the property
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the file notes associated with the specified property
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileNoteResponse'
+        '400':
+          description: When the request does not contain the expected information or access has not been granted to the property
+        '404':
+          description: When the property specified does not exist
+        '401':
+          description: When access has not been granted to the API
+      security:
+      - appAuth:
+        - alto/route:get-inventory-propertyid-file-notes
+components:
+  schemas:
+    GetFileNoteResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the file note
+          format: int64
+        title:
+          type:
+          - string
+          - 'null'
+          description: Title of the file note if available
+        notes:
+          type:
+          - string
+          - 'null'
+          description: The body/content of the file note
+        contactIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: The unique identifiers of contacts associated to the file note
+        propertyId:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier of the property if one is associated to the file note
+          format: int32
+        createdDate:
+          type: string
+          description: Date/time when file note was created
+          format: date-time
+        updatedDate:
+          type:
+          - string
+          - 'null'
+          description: Date/time when file note was modified
+          format: date-time
+        negotiatorId:
+          type:
+          - integer
+          - 'null'
+          description: The unique identifier of the negotiator
+          format: int32
+        fileNoteType:
+          enum:
+          - Unspecified
+          - PropertyAvailable1
+          - PropertyWithdrawn
+          - PropertyUnderOffer
+          - ContractsExchanged
+          - PropertySaleCompleted
+          - PropertySoldExternally
+          - PropertyArchived
+          - PropertyLet
+          - PropertyAvailableAgain
+          - PropertyUnarchived
+          - PropertySuspended
+          - PropertyInstructed
+          - PropertyImported
+          - LetAgreed
+          - ExternallyLet
+          - PropertyBranchTransfer
+          - TermsSigned
+          - DetailsToVendor
+          - DetailsApproved
+          - HIPOrder
+          - HIPReady
+          - LogEPCOrder
+          - LogEPCReady
+          - SalePriceChange
+          - MarketingStatus
+          - SentOutSub
+          - SentOutCO
+          - RentalPriceChange
+          - FileNote
+          - PhoneCall
+          - TextMessage
+          - EMail
+          - Letter
+          - Labels
+          - MSReferra
+          - LeadNote
+          - ConversionNote
+          - ViewingFollowUp
+          - OfferMade
+          - OfferRevised
+          - OfferWithdrawn
+          - OfferAccepted
+          - OfferRejected
+          - OfferMadeRental
+          - OfferRevisedRental
+          - SaleNegotiated
+          - SaleWithdrawalByVendor
+          - SaleWithdrawalByPurchaser
+          - SaleLostExternalSale
+          - FailedToComplete
+          - ContractRaceLost
+          - LettingsWithdrawalByLandlord
+          - LettingsWithdrawalByApplicant
+          - KeyHandOver
+          - InvoiceRaised
+          - DepositTaken
+          - DepositReturned
+          - KeysOut
+          - KeysIn
+          - AccountPayment
+          - BoardChange
+          - Advertisement
+          - MoneyLaunderingIDRequest
+          - MoneyLaunderingIDVerified
+          - GasSafetyCheckOK
+          - ElectricalCheckOK
+          - FireAndFurnishingsCheckOK
+          - NoticeServed
+          - RecurringDiaryEntry
+          - GeneralDiaryEntry
+          - MarketAppraisal
+          - Viewing
+          - Match
+          - Disbursement
+          - MarketAppraisalFellThrough
+          - VendorReport
+          - MarketingSent
+          - ChangeOfPropertyNegotiator
+          - ChangeOfContactNegotiator
+          - ContactArchived
+          - PersonRegistered
+          - TOBSent
+          - TOBReturned
+          - ExportToCFP
+          - PropertyUploaded
+          - MarketingPrinted
+          - MarketingProduced
+          - MarketingViewed
+          - OtherMarketing
+          - MarketingFollowUp
+          - ReinstatePerson
+          - AllocateLogin
+          - PropertyOwnershipChanged
+          - TodoFollowUpNoteChanged
+          - DocumentSharedWithTenant
+          - DocumentUnsharedWithTenant
+          - DocumentSharedWithLandlord
+          - DocumentUnsharedWithLandlord
+          - FSReferral
+          - SolicitorReferral
+          - ConveyancerReferral
+          - ConveyancerQuote
+          - ConveyancerCaseOpened
+          - KeySetLost
+          - KeySetAdded
+          - KeySetRemoved
+          - KeySetAmended
+          - GeneralDiaryEntryCancelled
+          - AppraisalCancelled
+          - ViewingCancelled
+          - ExternalSaleAdded
+          - PropertySaleOtherStatusChange
+          - PropertyRentalOtherStatusChange
+          - ContractsExchangedReversed
+          - PropertySaleCompletedReversed
+          - SMSInvalidNumber
+          - PropertyBrochureSentViaEmail
+          - PropertyDetailsSentInEmail
+          - PropertyDetailsSentInSMS
+          - PropertyBrochurePrinted
+          - AdvertRunSentViaEmail
+          - PropertyUploadedFirstTime
+          - PropertyUploadedAsDeletion
+          - PropertyBrochureSentWithLetter
+          - PropertyBrowseSheetSentWithLetter
+          - ContactUnarchived
+          - GeneralDiaryEntryReinstated
+          - ViewingReinstated
+          - AppraisalReinstated
+          - ContactBranchTransfer
+          - CreditNoteIssued
+          - PropertyLetReversed
+          - ViewingReminder
+          - AppraisalReminder
+          - ClientDataChangeNote
+          - SigningRequestCopyEmail
+          - SigningRequest
+          - ViewingFeedbackReceived
+          - ViewingFeedbackRequested
+          - AmlCheckRequest
+          - SalesCommissionDue
+          - LettingsFeeDue
+          - DepositDue
+          - DisbursementRechargeDue
+          - RentDue
+          - ContractorExpenseDue
+          - SalesCommissionDueReversal
+          - LettingsFeeDueReversal
+          - DepositDueReversal
+          - DisbursementRechargeDueReversal
+          - RentDueReversal
+          - ContractorExpenseDueReversal
+          - TaskExpired
+          - SubjectAccessRequest
+          - DataPortabilityRequest
+          - SubjectAccessRequestPerson2
+          - DataPortabilityRequestPerson2
+          - PropertyAdded
+          - VacateTenancy
+          - RenewTenancy
+          - VacatedTenancy
+          - RenewedTenancy
+          - PeriodicTenancy
+          - RenewalCancelled
+          - VacateCancelled
+          - TenantAdded
+          - TenantRemoved
+          - TenancyStarted
+          - TenantLeft
+          - FailedToLet
+          - TenancyAdded
+          - VacateTenancyReverted
+          - RenewedTenancyReverted
+          - ReferencingCheckRequested
+          - ReferencingTenantStatusUpdated
+          - TenancyDepositSchemeUpdated
+          - WorkOrderCreated
+          - WorkOrderStatusChanged
+          - WorkOrderQuoteRequest
+          - WorkOrderInstructSupplier
+          - ManagementDateProgressChanged
+          - PropertyFileMaintenanceRequestReceived
+          - ForcedPasswordReset
+          - ForgottenPassword
+          - TwoStepSecurityCode
+          - ExportTenancy
+          - ContactCreatedFromLead
+          - TermsSent
+          - UpdateSalesFees
+          - PropertyCloned
+          - ContactCreatedFromBookingRequest
+          - PmInvoice
+          - PmReceipt
+          - PmRefund
+          - PmLandlordPayment
+          - PmSupplierPayment
+          - PmAgencyPayment
+          - PmBankReconciliation
+          - PmBacsPayment
+          - PmBankTransfer
+          - PmOverseasPayment
+          - pmBacsDownloadRequest
+          - PmPeriodStatement
+          - PmReceiptImportFile
+          - PmReceiptImportUpdate
+          - PmReceiptImportFileDownload
+          - TdsCertificateReceived
+          - TdsUploadBlocked
+          - SelfBillingInvoiceEmailed
+          - ConveyancerReferralFinanceReportEmailed
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CreateFileNoteRequest:
+      type: object
+      properties:
+        negotiatorId:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The unique identifier of a negotiator'
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The unique identifier of the property to associate to the file note'
+        tenancyId:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The unique identifier of the tenancy to associate to the file note'
+        ownerIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: '[Optional] The unique identifiers (contact id) of the property owner(s) to associate to the file note'
+        contactIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: '[Optional] The unique identifiers of additional contact(s) to associate to the file note'
+        title:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] Title of the file note - not currently visible to users'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The body/content of the file note'
+        updateLastContactedDate:
+          type: boolean
+          description: When set to true the Last Contacted Date of Owners and Contacts will be updated
+        fileNoteType:
+          enum:
+          - Unspecified
+          - DetailsToVendor
+          - DetailsApproved
+          - FileNote
+          - PhoneCall
+          - EMail
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The type of file note to create'
+      additionalProperties: false
+    FileNotePatchOperation:
+      anyOf:
+      - title: Title
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /Title
+        description: "\n             Title of the file note\n            \n             [Note] This field is not currently visible to users, and cannot be longer than 50 characters.\n             "
+        example: "\n{ \n    \"path\": \"/Title\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+      - title: Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /Notes
+        description: "\n             The body/content of the file note.\n            \n             [Note] This endpoint only supports fully replacing the notes text, if you need to append you must first load the existing value via the GET file note by ID endpoint, update the notes value returned, and then PATCH the updated value.\n             "
+        example: "\n{ \n    \"path\": \"/Notes\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+    FileNotePatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/FileNotePatchOperation'
+      description: Array of operations to perform
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

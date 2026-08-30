@@ -1,0 +1,3626 @@
+openapi: 3.2.0
+info:
+  title: Alto Inventory API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Inventory
+paths:
+  /inventory:
+    get:
+      tags:
+      - Inventory
+      parameters:
+      - name: nextToken
+        in: query
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: address
+        in: query
+        schema:
+          type: string
+      - name: category
+        in: query
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyCategoryType'
+      - name: recordType
+        in: query
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyRecordType'
+      - name: archived
+        in: query
+        schema:
+          type: boolean
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryPagedResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryPagedResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryPagedResults'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-inventory
+  /inventory/{inventoryId}:
+    get:
+      tags:
+      - Inventory
+      summary: Get an inventory item
+      description: Get an inventory item by id
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The unique identifier for the inventory item
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the inventory item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryDetailItem'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The inventory item was not found
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid
+    patch:
+      tags:
+      - Inventory
+      parameters:
+      - name: inventoryId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.InventoryPatch'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid
+  /inventory/{inventoryId}/keyset:
+    post:
+      tags:
+      - Inventory
+      summary: Create a key set for an inventory item
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The unique identifier for the inventory
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The key set to create
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Requests.AddKeySetRequest'
+        required: true
+      responses:
+        '201':
+          description: Returns the created key set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Domain.AltoKeySet'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The inventory was not found
+      security:
+      - appAuth:
+        - alto/route:post-inventory-inventoryid-keyset
+  /inventory/{inventoryId}/keyset/{keySetId}:
+    patch:
+      tags:
+      - Inventory
+      summary: Update a key set for an inventory item
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The unique identifier for the inventory
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: keySetId
+        in: path
+        description: The unique identifier for the key set
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JSON Patch operations to apply
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.KeySetPatch'
+        required: true
+      responses:
+        '204':
+          description: The key set was updated
+        '400':
+          description: When the request does not contain valid information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The inventory or key set was not found
+      security:
+      - appAuth:
+        - alto/route:delete-inventory-inventoryid-keyset-keysetid
+    delete:
+      tags:
+      - Inventory
+      summary: Delete a key set for an inventory item
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The unique identifier for the inventory
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: keySetId
+        in: path
+        description: The unique identifier for the key set
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: The key set was deleted, or did not exist
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The inventory was not found
+      security:
+      - appAuth:
+        - alto/route:delete-inventory-inventoryid-keyset-keysetid
+  /inventory/{inventoryId}/keysets:
+    get:
+      tags:
+      - Inventory
+      summary: Get key sets by inventoryId
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The unique identifier for the inventory
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the key sets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.Inventory.Api.Domain.AltoKeySet'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The inventory was not found
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid-keysets
+  /inventory/{inventoryId}/owner:
+    post:
+      tags:
+      - Inventory
+      summary: Associates a Contact with an Inventory item as its Owner
+      description: Associates a Contact with an Inventory item as its Owner
+      parameters:
+      - name: inventoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Requests.AddInventoryOwner'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: When the request does not contain the expected information
+        '404':
+          description: Not Found
+        '401':
+          description: When access has not been granted
+        '409':
+          description: When there is a conflict with current data
+      security:
+      - appAuth:
+        - alto/route:post-inventory-inventoryid-owner
+  /inventory/filter:
+    get:
+      tags:
+      - Inventory
+      summary: Filter inventory items
+      description: Get a paginated list of filtered inventory items, which can contain properties for lettings, sales, or both depending on the query parameters used.
+      parameters:
+      - name: categoryType
+        in: query
+        description: 'The category type to filter inventory items.
+
+
+          [Note] If you use a value of "Unspecified" this field will be ignored.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyCategoryType'
+      - name: recordType
+        in: query
+        description: 'The record type to filter inventory items.
+
+
+          [Note] If you use a value of "Unspecified" or omit this field then both lettings and sales properties will be returned, unless you specify values for management type and / or maintenance type in which case only lettings properties will be returned.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyRecordType'
+      - name: managementType
+        in: query
+        description: 'The rental management type to filter inventory items.
+
+
+          [Note] If you use a record type value of "Sale" this field will be ignored.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.RentalManagementType'
+      - name: maintenance-type
+        in: query
+        description: 'The rental maintenance type to filter inventory items.
+
+
+          [Note] If you use a record type value of "Sale" this field will be ignored.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.MaintenanceType'
+      - name: archived
+        in: query
+        description: The archived status to filter inventory items.
+        schema:
+          type: boolean
+      - name: inventory-status
+        in: query
+        description: 'The status to filter inventory items.
+
+
+          [Note] If you use a value of "Unspecified" this field will be ignored.'
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.InventoryStatus'
+      - name: instruction-date-from
+        in: query
+        description: The start date for filtering inventory items by instruction date.
+        schema:
+          type: string
+          format: date-time
+      - name: instruction-date-to
+        in: query
+        description: The end date for filtering inventory items by instruction date.
+        schema:
+          type: string
+          format: date-time
+      - name: owner-id
+        in: query
+        description: The ID of the property owner to filter inventory items.
+        schema:
+          type: integer
+          format: int32
+      - name: next-token
+        in: query
+        description: The token for the next page of results.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: The maximum number of results to return. The maximum number of results to return. The default value is 50, and the maximum value is 250.
+        schema:
+          maximum: 250
+          minimum: 1
+          type: integer
+          format: int32
+      - name: branchIds
+        in: query
+        description: The list of branch unique identifiers for filtering inventory items.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: created-from
+        in: query
+        description: The start date for filtering inventory items by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: created-to
+        in: query
+        description: The end date for filtering inventory items by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-from
+        in: query
+        description: The start date for filtering inventory items by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-to
+        in: query
+        description: The end date for filtering inventory items by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the paginated list of filtered inventory items
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults'
+        '400':
+          description: When the request does not contain the expected information
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-inventory-filter
+  /inventory/items:
+    get:
+      tags:
+      - Inventory
+      summary: Get multiple inventory items
+      description: Get inventory items for multiple inventory ids
+      parameters:
+      - name: inventory-id
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the inventory items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Services.SDK.Models.ItemCollection1_Alto.Inventory.Api.Models.Responses.InventoryDetailItem'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: Not Found
+      security:
+      - appAuth:
+        - alto/route:get-inventory-items
+  /inventory/new:
+    post:
+      tags:
+      - Inventory
+      summary: Creates an inventory item
+      description: Creates an inventory item
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The object containing the inventory item request details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Requests.AddInventory'
+        required: true
+      responses:
+        '201':
+          description: Returns the inventory item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryItem'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:post-inventory-new
+  /inventory/search:
+    get:
+      tags:
+      - Inventory
+      summary: Search inventory items
+      description: Get a paginated list of inventory items by searching property
+      parameters:
+      - name: query
+        in: query
+        description: The query term to filter inventory items. Based on specific fields such as address, postcode, contact name, etc.
+        required: true
+        schema:
+          type: string
+      - name: archived
+        in: query
+        description: The archived status to search inventory items.
+        schema:
+          type: boolean
+      - name: recordType
+        in: query
+        description: The record type to search inventory items.
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyRecordType'
+      - name: next-token
+        in: query
+        description: The token for the next page of results.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: The maximum number of results to return. The maximum number of results to return. The default value is 50, and the maximum value is 250.
+        schema:
+          maximum: 250
+          minimum: 1
+          type: integer
+          format: int32
+      - name: branchIds
+        in: query
+        description: The list of branch unique identifiers for filtering inventory items.
+        schema:
+          type: array
+          items:
+            type: string
+      - name: created-from
+        in: query
+        description: The start date for filtering inventory items by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: created-to
+        in: query
+        description: The end date for filtering inventory items by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-from
+        in: query
+        description: The start date for filtering inventory items by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-to
+        in: query
+        description: The end date for filtering inventory items by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the paginated list of searched inventory items
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults'
+        '400':
+          description: When the request does not contain the expected information
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:get-inventory-search
+components:
+  schemas:
+    SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.KeySetPatch:
+      anyOf:
+      - title: Description
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"Front door keys"'
+          path:
+            type: string
+            default: /Description
+        description: The description of the key set.
+        example: "\n{ \n    \"path\": \"/Description\", \n    \"op\": \"replace\", \n    \"value\": \"Front door keys\"\n}"
+      - title: Key Count
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '2'
+          path:
+            type: string
+            default: /KeyCount
+        description: The number of keys in the set.
+        example: "\n{ \n    \"path\": \"/KeyCount\", \n    \"op\": \"replace\", \n    \"value\": 2\n}"
+      - title: Status
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Unspecified
+            - In
+            - Out
+            - Lost
+            - Returned
+            type: string
+            example: In
+          path:
+            type: string
+            default: /Status
+        description: The status of the key set.
+        example: "\n{ \n    \"path\": \"/Status\", \n    \"op\": \"add\", \n    \"value\": \"In\" \n}"
+      - title: Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"Spare set held at branch"'
+          path:
+            type: string
+            default: /Notes
+        description: Notes for the key set.
+        example: "\n{ \n    \"path\": \"/Notes\", \n    \"op\": \"replace\", \n    \"value\": \"Spare set held at branch\"\n}"
+      - title: Expected Date In
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: object
+            example: '"2026-06-15T13:45:30Z"'
+          path:
+            type: string
+            default: /ExpectedDateIn
+        description: The expected date the keys will be returned.
+        example: "\n{ \n    \"path\": \"/ExpectedDateIn\", \n    \"op\": \"replace\", \n    \"value\": \"2026-06-15T13:45:30Z\"\n}"
+      - title: Holder Type
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Contact
+            - User
+            type: string
+            example: Contact
+          path:
+            type: string
+            default: /HolderType
+        description: The type of holder when keys are out.
+        example: "\n{ \n    \"path\": \"/HolderType\", \n    \"op\": \"add\", \n    \"value\": \"Contact\" \n}"
+      - title: Holder Id
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '12345'
+          path:
+            type: string
+            default: /HolderId
+        description: The identifier of the holder when keys are out.
+        example: "\n{ \n    \"path\": \"/HolderId\", \n    \"op\": \"replace\", \n    \"value\": 12345\n}"
+    Alto.Internal.Nts.Water:
+      type: object
+      properties:
+        supply:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.WaterSupply'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Owner:
+      type: object
+      properties:
+        contactId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Alto.Internal.Nts.Heating:
+      type: object
+      properties:
+        source:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.HeatingSource'
+      additionalProperties: false
+    Alto.Internal.Nts.Electricity:
+      type: object
+      properties:
+        supply:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.ElectricitySupply'
+      additionalProperties: false
+    Alto.Services.SDK.Models.ItemCollection1_Alto.Inventory.Api.Models.Responses.InventoryDetailItem:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryDetailItem'
+      additionalProperties: false
+    Alto.Services.SDK.PropertyRecordType:
+      enum:
+      - Unspecified
+      - Sale
+      - Rent
+      type: string
+    Alto.Internal.Nts.AccessibilityRequirements:
+      type: object
+      properties:
+        accessibility:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.Accessibility'
+      additionalProperties: false
+    SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.InventoryPatch:
+      anyOf:
+      - title: Display Address
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"Bluebellwood Close, Luton"'
+          path:
+            type: string
+            default: /DisplayAddress
+        description: The displayable address.
+        example: "\n{ \n    \"path\": \"/DisplayAddress\", \n    \"op\": \"replace\", \n    \"value\": \"Bluebellwood Close, Luton\"\n}"
+      - title: Tax Band
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"E"'
+          path:
+            type: string
+            default: /TaxBand
+        description: The council tax band of the building or property.
+        example: "\n{ \n    \"path\": \"/TaxBand\", \n    \"op\": \"replace\", \n    \"value\": \"E\"\n}"
+      - title: Tax Band Exempt Reason
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"Not a house"'
+          path:
+            type: string
+            default: /TaxBandExemptReason
+        description: The reason for a tax exemption on a building or property.
+        example: "\n{ \n    \"path\": \"/TaxBandExemptReason\", \n    \"op\": \"replace\", \n    \"value\": \"Not a house\"\n}"
+      - title: Local Authority
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"Cornwall County Council"'
+          path:
+            type: string
+            default: /LocalAuthority
+        description: The unitary authority in governance of the building or property.
+        example: "\n{ \n    \"path\": \"/LocalAuthority\", \n    \"op\": \"replace\", \n    \"value\": \"Cornwall County Council\"\n}"
+      - title: Service Charge
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"1250 pa"'
+          path:
+            type: string
+            default: /ServiceCharge
+        description: The service charge summary for a building or property.
+        example: "\n{ \n    \"path\": \"/ServiceCharge\", \n    \"op\": \"replace\", \n    \"value\": \"1250 pa\"\n}"
+      - title: Service Charge Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"A note regarding the service charge"'
+          path:
+            type: string
+            default: /ServiceChargeNotes
+        description: Any additional notes pertaining to the service charge for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/ServiceChargeNotes\", \n    \"op\": \"replace\", \n    \"value\": \"A note regarding the service charge\"\n}"
+      - title: Ground Rent
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"1500 pa"'
+          path:
+            type: string
+            default: /GroundRent
+        description: The ground rent summary for a building or property.
+        example: "\n{ \n    \"path\": \"/GroundRent\", \n    \"op\": \"replace\", \n    \"value\": \"1500 pa\"\n}"
+      - title: Lease Remaining Term
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '32'
+          path:
+            type: string
+            default: /LeaseRemainingTerm
+        description: The remaining term in months of the lease for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/LeaseRemainingTerm\", \n    \"op\": \"replace\", \n    \"value\": 32\n}"
+      - title: Lease Term
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '99'
+          path:
+            type: string
+            default: /LeaseTerm
+        description: The term of the lease for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/LeaseTerm\", \n    \"op\": \"replace\", \n    \"value\": 99\n}"
+      - title: Lease End Date
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: object
+            example: '"2024-06-15T13:45:30Z"'
+          path:
+            type: string
+            default: /LeaseEndDate
+        description: The end date of the lease for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/LeaseEndDate\", \n    \"op\": \"replace\", \n    \"value\": \"2024-06-15T13:45:30Z\"\n}"
+      - title: Ground Rent Review Period
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '5'
+          path:
+            type: string
+            default: /GroundRentReviewPeriod
+        description: The review period of the ground rent for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/GroundRentReviewPeriod\", \n    \"op\": \"replace\", \n    \"value\": 5\n}"
+      - title: Ground Rent Percentage Increase
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '5.5'
+          path:
+            type: string
+            default: /GroundRentPercentageIncrease
+        description: The percentage increase of the ground rent for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/GroundRentPercentageIncrease\", \n    \"op\": \"replace\", \n    \"value\": 5.5\n}"
+      - title: Ground Rent Fixed For Term
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /GroundRentFixedForTerm
+        description: The flag to indicate whether the ground rent is fixed for the duration of the lease.
+        example: "\n{ \n    \"path\": \"/GroundRentFixedForTerm\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Ground Rent Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"A note regarding the ground rent"'
+          path:
+            type: string
+            default: /GroundRentNotes
+        description: Any additional notes pertaining to the ground rent for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/GroundRentNotes\", \n    \"op\": \"replace\", \n    \"value\": \"A note regarding the ground rent\"\n}"
+      - title: Shared Ownership
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /SharedOwnership
+        description: The flag to indicate whether there is shared ownership on a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/SharedOwnership\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Shared Ownership Percentage Share
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '45.5'
+          path:
+            type: string
+            default: /SharedOwnershipPercentageShare
+        description: The percentage share of ownership for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/SharedOwnershipPercentageShare\", \n    \"op\": \"replace\", \n    \"value\": 45.5\n}"
+      - title: Shared Ownership Rent
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1050.50'
+          path:
+            type: string
+            default: /SharedOwnershipRent
+        description: The rent value of shared ownership for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/SharedOwnershipRent\", \n    \"op\": \"replace\", \n    \"value\": 1050.50\n}"
+      - title: Shared Ownership Rent Frequency
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Yearly
+            - Quarterly
+            - Monthly
+            - Weekly
+            - Daily
+            type: string
+            example: Monthly
+          path:
+            type: string
+            default: /SharedOwnershipRentFrequency
+        description: The frequency of rent income on a shared ownership leasehold building or property.
+        example: "\n{ \n    \"path\": \"/SharedOwnershipRentFrequency\", \n    \"op\": \"add\", \n    \"value\": \"Monthly\" \n}"
+      - title: Lease Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"A note regarding the lease"'
+          path:
+            type: string
+            default: /LeaseNotes
+        description: Any additional notes pertaining to the lease for a leasehold building or property.
+        example: "\n{ \n    \"path\": \"/LeaseNotes\", \n    \"op\": \"replace\", \n    \"value\": \"A note regarding the lease\"\n}"
+      - title: Private Viewing Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"A note regarding property viewing"'
+          path:
+            type: string
+            default: /PrivateViewingNotes
+        description: Any private notes pertaining to the viewing
+        example: "\n{ \n    \"path\": \"/PrivateViewingNotes\", \n    \"op\": \"replace\", \n    \"value\": \"A note regarding property viewing\"\n}"
+      - title: Status
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - LetAgreed
+            type: string
+            example: LetAgreed
+          path:
+            type: string
+            default: /Status
+        description: The status to set for a building or property from a restricted set of values.
+        example: "\n{ \n    \"path\": \"/Status\", \n    \"op\": \"add\", \n    \"value\": \"LetAgreed\" \n}"
+      - title: Property Sub Type
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - NotSpecified
+            - HouseDetached
+            - HouseSemiDetached
+            - HouseTownhouse
+            - HouseMews
+            - HouseTerraced
+            - HouseEndTerrace
+            - Flat
+            - FlatPenthouse
+            - LandBuildingPlot
+            - Farm
+            - Apartment
+            - CottageDetached
+            - ApartmentAboveShop
+            - BungalowSemiDetached
+            - BungalowDetached
+            - BarnConversion
+            - HouseLowBuild
+            - ApartmentLoft
+            - ChaletSemiDetached
+            - Shop
+            - Maisonette
+            - HouseVilla
+            - BarnConversionBungalow
+            - Land
+            - ApartmentBasement
+            - ChaletDetached
+            - ApartmentConversion
+            - ApartmentDoubleUpper
+            - ApartmentDuplex
+            - ApartmentGarden
+            - MobileHome
+            - ParkHome
+            - Hotel
+            - ApartmentMansionBlock
+            - ApartmentPenthouse
+            - ApartmentPurposeBuilt
+            - ApartmentRetirement
+            - ApartmentStudio
+            - ApartmentSheltered
+            - ApartmentTriplex
+            - BarnConversionHouse
+            - BarnConversionUnconverted
+            - Bungalow
+            - BungalowDormerTerrace
+            - BungalowDormerDetached
+            - BungalowDormerSemiDetached
+            - BungalowLodge
+            - BungalowSheltered
+            - BungalowTerrace
+            - Cabana
+            - ChapelConverted
+            - ChapelUnconverted
+            - CottageSemiDetached
+            - CottageTerraced
+            - CountryHome
+            - CountryHomeEstate
+            - DevelopmentProperty
+            - FarmCommercial
+            - FarmResidential
+            - FlatAboveShop
+            - FlatBasement
+            - FlatConversion
+            - FlatDoubleUpper
+            - FlatDuplex
+            - FlatGarden
+            - FlatLoft
+            - FlatMansionBlock
+            - FlatPurposeBuilt
+            - FlatRetirement
+            - FlatStudio
+            - FlatSheltered
+            - FlatTriplex
+            - Garage
+            - GarageLockup
+            - House
+            - HouseBackToBack
+            - HouseEndMews
+            - HouseLinkDetached
+            - HouseLodge
+            - HouseMidQuasi
+            - HouseMidTerrace
+            - HouseQuasi
+            - HouseQuasiSemi
+            - HouseRetirement
+            - HouseSheltered
+            - HouseTerraceInnerThrough
+            - HouseEndTownhouse
+            - LandDevelopment
+            - LandGrazing
+            - LandPaddock
+            - LandArable
+            - LandPasture
+            - LandSmallholding
+            - LandWoodland
+            - MaisonetteDuplex
+            - MaisonetteGarden
+            - MaisonetteLower
+            - MaisonetteUpper
+            - Studio
+            - StudioConversion
+            - StudioPurposeBuilt
+            - BedandBreakfast
+            - Business
+            - BusinessAsGoingConcern
+            - Care
+            - Catering
+            - Commercial
+            - Equestrian
+            - Factory
+            - GaragePetrolStation
+            - GuestHouse
+            - IndustrialUnit
+            - Office
+            - PublicHouse
+            - Retail
+            - Warehouse
+            - Coachhouse
+            - ShopWithLivingAccommodation
+            - ParkingSpace
+            - CottageEndTerraced
+            - BlockOfFlats
+            - Room
+            - BungalowLinkDetached
+            - HouseAttached
+            - HolidayComplex
+            - Sporting
+            - OpenStorageYard
+            - InvestmentLet
+            - Leisure
+            - Estate
+            - Croft
+            - HouseLinkSemiDetached
+            - Educational
+            - Medical
+            - SelfBuild
+            - ServicedOffice
+            - A1Retail
+            - A2FinancialAndProfessional
+            - A3RestaurantsAndCafes
+            - D1NonResidentInstitutions
+            - D2AssemblyAndLeisure
+            - Nash
+            - Stucco
+            - MixedUse
+            - RoomToRent
+            - Renovation
+            - Villa
+            - Investment
+            - Workshop
+            - ManorHouse
+            - CountryResidence
+            - VictorianResidence
+            - CharacterProperty
+            - HouseWithLand
+            - Smallholding2To50Acres
+            - CountryHouse
+            - Paddock
+            - AmenityLand
+            - GrassField
+            - LandWithBuildings
+            - Allotments
+            - ArableLand
+            - Woodland
+            - HousesWithland
+            - Farm50PlusAcres
+            - DormerDetached
+            - DormerSemi
+            - HolidayChalet
+            - HouseWithAnnexe
+            - LodgingHouse
+            - Cottage
+            - ExLocalAuthority
+            - BeachHut
+            - StudentProperty
+            - CharacterPropertyDetached
+            - CharacterPropertySemiDetached
+            - CharacterPropertyTerrace
+            - FlatApartment
+            - Wing
+            - ChaletBungalowDetached
+            - ChaletBungalowSemiDetached
+            - Fishing
+            - FarmHouse
+            - DevelopmentOpportunity
+            - Other
+            - HouseBoat
+            - PropertyWithLand
+            - HouseCountryLessThan2
+            - HouseSmallholding2to25Acres
+            - HouseFarm25Acres
+            - HouseDerelictForConversion
+            type: string
+            example: Flat, Land, Shop
+          path:
+            type: string
+            default: /PropertySubType
+        description: The sub type of the building or property.
+        example: "\n{ \n    \"path\": \"/PropertySubType\", \n    \"op\": \"add\", \n    \"value\": \"Flat, Land, Shop\" \n}"
+      - title: Tenure
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - LetAgreed
+            type: string
+            example: Freehold, Leasehold
+          path:
+            type: string
+            default: /Tenure
+        description: The tenure of the building or property.
+        example: "\n{ \n    \"path\": \"/Tenure\", \n    \"op\": \"add\", \n    \"value\": \"Freehold, Leasehold\" \n}"
+      - title: Year Built
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '2000'
+          path:
+            type: string
+            default: /YearBuilt
+        description: The year build of a building or property.
+        example: "\n{ \n    \"path\": \"/YearBuilt\", \n    \"op\": \"replace\", \n    \"value\": 2000\n}"
+      - title: New Build
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /NewBuild
+        description: The flag to indicate if building or property is new build.
+        example: "\n{ \n    \"path\": \"/NewBuild\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Bedrooms
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '2'
+          path:
+            type: string
+            default: /Bedrooms
+        description: The number of bedrooms in the building or property.
+        example: "\n{ \n    \"path\": \"/Bedrooms\", \n    \"op\": \"replace\", \n    \"value\": 2\n}"
+      - title: Bathrooms
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '2'
+          path:
+            type: string
+            default: /Bathrooms
+        description: The number of bathrooms in the building or property.
+        example: "\n{ \n    \"path\": \"/Bathrooms\", \n    \"op\": \"replace\", \n    \"value\": 2\n}"
+      - title: Receptions
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '1'
+          path:
+            type: string
+            default: /Receptions
+        description: The number of receptions in the building or property.
+        example: "\n{ \n    \"path\": \"/Receptions\", \n    \"op\": \"replace\", \n    \"value\": 1\n}"
+      - title: Land Area In Acres
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1.0'
+          path:
+            type: string
+            default: /LandAreaInAcres
+        description: The land area in acres in the building or property.
+        example: "\n{ \n    \"path\": \"/LandAreaInAcres\", \n    \"op\": \"replace\", \n    \"value\": 1.0\n}"
+      - title: Floor Area In Square Feet
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1.0'
+          path:
+            type: string
+            default: /FloorAreaInSquareFeet
+        description: The floor area in square feet of the building or property..
+        example: "\n{ \n    \"path\": \"/FloorAreaInSquareFeet\", \n    \"op\": \"replace\", \n    \"value\": 1.0\n}"
+      - title: Has Asbestos
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /HasAsbestos
+        description: The flag to indicate if asbestos is present in the building or property.
+        example: "\n{ \n    \"path\": \"/HasAsbestos\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rental Date Available
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: object
+            example: '"2024-06-15T13:45:30Z"'
+          path:
+            type: string
+            default: /RentalDateAvailable
+        description: The date that a rental property becomes available.
+        example: "\n{ \n    \"path\": \"/RentalDateAvailable\", \n    \"op\": \"replace\", \n    \"value\": \"2024-06-15T13:45:30Z\"\n}"
+      - title: Accessibility Requirements - Accessibility
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - LateralLiving
+            - StepFreeAccess
+            - WetRoom
+            - WheelchairAccessible
+            - DisabledFeatures
+            - LevelAccess
+            - RampedAccess
+            - LiftAccess
+            - StairLift
+            - WideDoorways
+            - LevelAccessShower
+            - VariableHeightKitchenSurfaces
+            type: string
+            example: LateralLiving
+          path:
+            type: string
+            default: /AccessibilityRequirements/Accessibility
+        description: "\n            Accessibility features of the property, such as step-free access\n            "
+        example: "\n{ \n    \"path\": \"/AccessibilityRequirements/Accessibility/-\", \n    \"op\": \"add\", \n    \"value\": \"LateralLiving\" \n}"
+      - title: Broadband - Supply
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - Adsl
+            - Cable
+            - FixedWireless
+            - Fttc
+            - Fttp
+            - Mobile
+            - None
+            - Other
+            - Satellite
+            type: string
+            example: Adsl
+          path:
+            type: string
+            default: /Broadband/Supply
+        description: "\n            Details of the broadband provision for the property including speed\n            "
+        example: "\n{ \n    \"path\": \"/Broadband/Supply/-\", \n    \"op\": \"add\", \n    \"value\": \"Adsl\" \n}"
+      - title: Broadband - Speed
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /Broadband/Speed
+        description: "\n            Details of the broadband provision for the property including speed\n            "
+        example: "\n{ \n    \"path\": \"/Broadband/Speed\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+      - title: Building Safety - Issue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /BuildingSafety/Issue
+        description: "\n            Issues with the property's safety\n            "
+        example: "\n{ \n    \"path\": \"/BuildingSafety/Issue/-\", \n    \"op\": \"add\", \n    \"value\": \"\"\n}"
+      - title: Coastal Erosion
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /CoastalErosion
+        description: "\n            Whether the property is subject to the risk of coastal erosion\n            "
+        example: "\n{ \n    \"path\": \"/CoastalErosion\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Construction - Material
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: string
+            example: '"brick"'
+          path:
+            type: string
+            default: /Construction/Material
+        description: "\n            Types of construction of the property, eg tile, brick.\n            "
+        example: "\n{ \n    \"path\": \"/Construction/Material/-\", \n    \"op\": \"add\", \n    \"value\": \"brick\"\n}"
+      - title: Electricity - Supply
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - MainsSupply
+            - PrivateSupply
+            - SolarPvPanels
+            - WindTurbine
+            - Generator
+            - Other
+            type: string
+            example: MainsSupply
+          path:
+            type: string
+            default: /Electricity/Supply
+        description: "\n            The types of electricity supply available to the property\n            "
+        example: "\n{ \n    \"path\": \"/Electricity/Supply/-\", \n    \"op\": \"add\", \n    \"value\": \"MainsSupply\" \n}"
+      - title: Flooding Risks - Sources Of Flooding - Source
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - River
+            - Sea
+            - Groundwater
+            - Lake
+            - Reservoir
+            - Other
+            type: string
+            example: River
+          path:
+            type: string
+            default: /FloodingRisks/SourcesOfFlooding/Source
+        description: "\n            Details of any flooding risks to the property including their source\n            "
+        example: "\n{ \n    \"path\": \"/FloodingRisks/SourcesOfFlooding/Source/-\", \n    \"op\": \"add\", \n    \"value\": \"River\" \n}"
+      - title: Flooding Risks - Flooded Within Last 5 Years
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /FloodingRisks/FloodedWithinLast5Years
+        description: "\n            Details of any flooding risks to the property including their source\n            "
+        example: "\n{ \n    \"path\": \"/FloodingRisks/FloodedWithinLast5Years\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Flooding Risks - Flood Defenses Present
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /FloodingRisks/FloodDefensesPresent
+        description: "\n            Details of any flooding risks to the property including their source\n            "
+        example: "\n{ \n    \"path\": \"/FloodingRisks/FloodDefensesPresent\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Known Planning Considerations
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /KnownPlanningConsiderations
+        description: "\n            Any planning considerations that are known\n            "
+        example: "\n{ \n    \"path\": \"/KnownPlanningConsiderations\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+      - title: Heating - Source
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - BiomassBoiler
+            - Communal
+            - ElectricMains
+            - ElectricRoomHeaters
+            - GasMains
+            - HeatPumpAirSource
+            - HeatPumpGroundSource
+            - Lpg
+            - NightStorageHeaters
+            - Oil
+            - Other
+            - SolarPanels
+            - SolarPhotovoltaicThermal
+            - SolarThermal
+            - UnderFloorHeating
+            - WoodBurner
+            - OpenFire
+            type: string
+            example: BiomassBoiler
+          path:
+            type: string
+            default: /Heating/Source
+        description: "\n            How the property can be heated\n            "
+        example: "\n{ \n    \"path\": \"/Heating/Source/-\", \n    \"op\": \"add\", \n    \"value\": \"BiomassBoiler\" \n}"
+      - title: Mining Risks - Coalfields
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /MiningRisks/Coalfields
+        description: "\n            What mining risks the property is exposed to \n            "
+        example: "\n{ \n    \"path\": \"/MiningRisks/Coalfields\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Mining Risks - Other Mining Activities
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /MiningRisks/OtherMiningActivities
+        description: "\n            What mining risks the property is exposed to \n            "
+        example: "\n{ \n    \"path\": \"/MiningRisks/OtherMiningActivities\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Mobile Coverage
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /MobileCoverage
+        description: "\n            The mobile coverage for the property\n            "
+        example: "\n{ \n    \"path\": \"/MobileCoverage\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+      - title: Parking - Parking Type
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - DoubleGarage
+            - OffStreetParking
+            - ResidentsParking
+            - SingleGarage
+            - Underground
+            - CommunalCarParkAllocatedSpace
+            - CommunalCarParkNoAllocatedSpace
+            - DisabledParkingAvailable
+            - DisabledParkingNotAvailable
+            - DrivewayPrivate
+            - DrivewayShared
+            - EvChargingPrivate
+            - EvChargingShared
+            - Garage
+            - GarageBloc
+            - GarageCarport
+            - GarageDetached
+            - GarageIntegral
+            - GatedParking
+            - NoParkingAvailable
+            - RearOfProperty
+            - StreetParkingPermitNotRequired
+            - StreetParkingPermitRequired
+            - Undercroft
+            - UndergroundParkingAllocatedSpace
+            - UndergroundParkingNoAllocatedSpace
+            - Other
+            type: string
+            example: DoubleGarage
+          path:
+            type: string
+            default: /Parking/ParkingType
+        description: "\n            The parking facilities available to the property\n            "
+        example: "\n{ \n    \"path\": \"/Parking/ParkingType/-\", \n    \"op\": \"add\", \n    \"value\": \"DoubleGarage\" \n}"
+      - title: Restrictions - Conservation Area
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/ConservationArea
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/ConservationArea\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Lease Restrictions
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/LeaseRestrictions
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/LeaseRestrictions\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Listed Building
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/ListedBuilding
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/ListedBuilding\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Permitted Development
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/PermittedDevelopment
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/PermittedDevelopment\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Real Burdens
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/RealBurdens
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/RealBurdens\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Holiday Home Rental
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/HolidayHomeRental
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/HolidayHomeRental\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Restrictive Covenant
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/RestrictiveCovenant
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/RestrictiveCovenant\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Business From Property
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/BusinessFromProperty
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/BusinessFromProperty\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Property Subletting
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/PropertySubletting
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/PropertySubletting\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Tree Preservation Order
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/TreePreservationOrder
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/TreePreservationOrder\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Restrictions - Other
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Restrictions/Other
+        description: "\n            Any restrictions on the property's use\n            "
+        example: "\n{ \n    \"path\": \"/Restrictions/Other\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Right Of Way Public
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/RightOfWayPublic
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/RightOfWayPublic\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Right Of Way Private
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/RightOfWayPrivate
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/RightOfWayPrivate\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Registered Easements Hmlr
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/RegisteredEasementsHmlr
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/RegisteredEasementsHmlr\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Servitudes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/Servitudes
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/Servitudes\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Shared Driveway
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/SharedDriveway
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/SharedDriveway\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Loft Access
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/LoftAccess
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/LoftAccess\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Drain Access
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/DrainAccess
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/DrainAccess\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Rights And Easements - Other
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /RightsAndEasements/Other
+        description: "\n            Any rights or easements over the property\n            "
+        example: "\n{ \n    \"path\": \"/RightsAndEasements/Other\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Sewerage - Supply
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - Mains
+            - SepticTank
+            - DomesticSmallSewageTreatmentPlants
+            - Cesspit
+            - Cesspool
+            - Other
+            type: string
+            example: Mains
+          path:
+            type: string
+            default: /Sewerage/Supply
+        description: "\n            Details of the property's sewerage\n            "
+        example: "\n{ \n    \"path\": \"/Sewerage/Supply/-\", \n    \"op\": \"add\", \n    \"value\": \"Mains\" \n}"
+      - title: Water - Supply
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            - add
+            - remove
+            type: string
+          value:
+            enum:
+            - Mains
+            - PrivateWell
+            - PrivateSpring
+            - PrivateBorehole
+            - PublicWell
+            - PublicSpring
+            - PublicBorehole
+            - Other
+            type: string
+            example: Mains
+          path:
+            type: string
+            default: /Water/Supply
+        description: "\n            The water supplies available to the property\n            "
+        example: "\n{ \n    \"path\": \"/Water/Supply/-\", \n    \"op\": \"add\", \n    \"value\": \"Mains\" \n}"
+      - title: Epc - Energy Efficiency Rating Current
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '31'
+          path:
+            type: string
+            default: /Epc/EnergyEfficiencyRatingCurrent
+        description: "\n            Current energy efficiency rating\n            "
+        example: "\n{ \n    \"path\": \"/Epc/EnergyEfficiencyRatingCurrent\", \n    \"op\": \"replace\", \n    \"value\": 31\n}"
+      - title: Epc - Energy Efficiency Rating Potential
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: integer
+            example: '37'
+          path:
+            type: string
+            default: /Epc/EnergyEfficiencyRatingPotential
+        description: "\n            Potential energy efficiency rating\n            "
+        example: "\n{ \n    \"path\": \"/Epc/EnergyEfficiencyRatingPotential\", \n    \"op\": \"replace\", \n    \"value\": 37\n}"
+      - title: Epc - Exempt
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: boolean
+            example: 'true'
+          path:
+            type: string
+            default: /Epc/Exempt
+        description: "\n            Whether listing has an EPC Exemption\n            "
+        example: "\n{ \n    \"path\": \"/Epc/Exempt\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
+      - title: Epc - Exemption Reason
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /Epc/ExemptionReason
+        description: "\n            Reason for an EPC Exemption\n            "
+        example: "\n{ \n    \"path\": \"/Epc/ExemptionReason\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+      - title: UPRN
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"123456789012"'
+          path:
+            type: string
+            default: /UPRN
+        description: "\n            The UPRN for the property\n            "
+        example: "\n{ \n    \"path\": \"/UPRN\", \n    \"op\": \"replace\", \n    \"value\": \"123456789012\"\n}"
+      - title: Price
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '300000.0'
+          path:
+            type: string
+            default: /Price
+        description: "\n            The inventory price, either sale or rental price depending on the property type\n            "
+        example: "\n{ \n    \"path\": \"/Price\", \n    \"op\": \"replace\", \n    \"value\": 300000.0\n}"
+      - title: Advert Details
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"Advert text"'
+          path:
+            type: string
+            default: /AdvertDetails
+        description: "\n            The Property Advert Summary\n            "
+        example: "\n{ \n    \"path\": \"/AdvertDetails\", \n    \"op\": \"replace\", \n    \"value\": \"Advert text\"\n}"
+    Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventoryItem'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Requests.Lease:
+      type: object
+      properties:
+        tenure:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.PropertyTenureType'
+          description: The tenure of the long lease.
+        remainingTerm:
+          type:
+          - integer
+          - 'null'
+          description: The remaining term in years of the long lease. You must supply either this or and end date.
+          format: int32
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the long lease. You must supply either this or a remaining term.
+          format: date-time
+      additionalProperties: false
+    Alto.Services.SDK.Models.Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+        uprn:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.BuildingSafety:
+      type: object
+      properties:
+        issue:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Enums.PropertyCategoryType:
+      enum:
+      - Unspecified
+      - Residential
+      - Commercial
+      type: string
+    Alto.Internal.Nts.Sewerage:
+      type: object
+      properties:
+        supply:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.SewerageSupply'
+      additionalProperties: false
+    Alto.Inventory.Api.Domain.AltoKeySet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        propertyId:
+          type: integer
+          format: int32
+        referenceCode:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        keyCount:
+          type: integer
+          format: int32
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.Property.KeySetStatus'
+        notes:
+          type:
+          - string
+          - 'null'
+        dateOut:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expectedDateIn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        holderType:
+          enum:
+          - Contact
+          - User
+          type:
+          - string
+          - 'null'
+        holderId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        holderName:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.Restrictions:
+      type: object
+      properties:
+        conservationArea:
+          type:
+          - boolean
+          - 'null'
+        leaseRestrictions:
+          type:
+          - boolean
+          - 'null'
+        listedBuilding:
+          type:
+          - boolean
+          - 'null'
+        permittedDevelopment:
+          type:
+          - boolean
+          - 'null'
+        realBurdens:
+          type:
+          - boolean
+          - 'null'
+        holidayHomeRental:
+          type:
+          - boolean
+          - 'null'
+        restrictiveCovenant:
+          type:
+          - boolean
+          - 'null'
+        businessFromProperty:
+          type:
+          - boolean
+          - 'null'
+        propertySubletting:
+          type:
+          - boolean
+          - 'null'
+        treePreservationOrder:
+          type:
+          - boolean
+          - 'null'
+        other:
+          type:
+          - boolean
+          - 'null'
+      additionalProperties: false
+    Alto.Services.SDK.PropertyTenureType:
+      enum:
+      - Unspecified
+      - Freehold
+      - Leasehold
+      - LeaseholdWithShareOfFreehold
+      - FlyingFreehold
+      - Commonhold
+      - ShareOfFreehold
+      type: string
+    Alto.Inventory.Api.Models.Responses.InventoryPagedResults:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryItem'
+      additionalProperties: false
+    Alto.Internal.Nts.SewerageSupply:
+      enum:
+      - Mains
+      - SepticTank
+      - DomesticSmallSewageTreatmentPlants
+      - Cesspit
+      - Cesspool
+      - Other
+      type: string
+    Alto.Internal.Nts.RightsAndEasements:
+      type: object
+      properties:
+        rightOfWayPublic:
+          type:
+          - boolean
+          - 'null'
+        rightOfWayPrivate:
+          type:
+          - boolean
+          - 'null'
+        registeredEasementsHmlr:
+          type:
+          - boolean
+          - 'null'
+        servitudes:
+          type:
+          - boolean
+          - 'null'
+        sharedDriveway:
+          type:
+          - boolean
+          - 'null'
+        loftAccess:
+          type:
+          - boolean
+          - 'null'
+        drainAccess:
+          type:
+          - boolean
+          - 'null'
+        other:
+          type:
+          - boolean
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.Broadband:
+      type: object
+      properties:
+        supply:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.BroadbandSupply'
+        speed:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Enums.MaintenanceType:
+      enum:
+      - Unspecified
+      - MaintainedByLandlord
+      - MaintainedByUs
+      type: string
+    Alto.Inventory.Api.Enums.RentalManagementType:
+      enum:
+      - Unspecified
+      - NotManaged
+      - PartManaged
+      - Managed
+      - FullyManaged
+      - RentCollectionService
+      - LetOnly
+      type: string
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.InventoryPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.InventoryPatch'
+      description: Array of operations to perform
+    Alto.Internal.Nts.SourceOfFlooding:
+      enum:
+      - River
+      - Sea
+      - Groundwater
+      - Lake
+      - Reservoir
+      - Other
+      type: string
+    Alto.Inventory.Api.Models.SecurityUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.InventoryDetailItem:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        category:
+          type:
+          - string
+          - 'null'
+        recordType:
+          type:
+          - string
+          - 'null'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
+        priceQualifier:
+          type:
+          - string
+          - 'null'
+        currency:
+          type:
+          - string
+          - 'null'
+        yearBuilt:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        newBuild:
+          type:
+          - boolean
+          - 'null'
+        floorAreaInSquareFeet:
+          type:
+          - number
+          - 'null'
+          format: double
+        landAreaInAcres:
+          type:
+          - number
+          - 'null'
+          format: double
+        price:
+          type:
+          - number
+          - 'null'
+          format: double
+        bedrooms:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        receptions:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        bathrooms:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        propertySubTypeId:
+          type: integer
+          format: int32
+        propertyType:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        inventoryStatus:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.InventoryStatus'
+        archived:
+          type: boolean
+        isAtActiveStatus:
+          type: boolean
+        tenureId:
+          type: integer
+          format: int32
+        tenure:
+          type:
+          - string
+          - 'null'
+        rentalFrequency:
+          type:
+          - string
+          - 'null'
+        tenancyType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.Property.Rental.PropertyContractType'
+        owners:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Owner'
+        taxBand:
+          type:
+          - string
+          - 'null'
+        taxBandExemptReason:
+          type:
+          - string
+          - 'null'
+        serviceCharge:
+          type:
+          - string
+          - 'null'
+        groundRent:
+          type:
+          - string
+          - 'null'
+        localAuthority:
+          type:
+          - string
+          - 'null'
+        leaseRemainingYears:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        leaseTerm:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        leaseEndDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        groundRentReviewPeriod:
+          type:
+          - number
+          - 'null'
+          format: double
+        groundRentPercentageIncrease:
+          type:
+          - number
+          - 'null'
+          format: double
+        sharedOwnership:
+          type:
+          - boolean
+          - 'null'
+        sharedOwnershipPercentageShare:
+          type:
+          - number
+          - 'null'
+          format: double
+        sharedOwnershipRent:
+          type:
+          - number
+          - 'null'
+          format: double
+        sharedOwnershipRentFrequencyId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        leaseNotes:
+          type:
+          - string
+          - 'null'
+        privateViewingNotes:
+          type:
+          - string
+          - 'null'
+        displayAddress:
+          type:
+          - string
+          - 'null'
+        hasAsbestos:
+          type:
+          - boolean
+          - 'null'
+        rentalDateAvailable:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        groundRentFixedForTerm:
+          type:
+          - boolean
+          - 'null'
+        groundRentNotes:
+          type:
+          - string
+          - 'null'
+        serviceChargeNotes:
+          type:
+          - string
+          - 'null'
+        negotiator:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.SecurityUser'
+        negotiatorName:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+        instructionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        managementType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.RentalManagementType'
+        maintenanceType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.MaintenanceType'
+        accessibilityRequirements:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.AccessibilityRequirements'
+        broadband:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Broadband'
+        buildingSafety:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.BuildingSafety'
+        construction:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Construction'
+        coastalErosion:
+          type:
+          - boolean
+          - 'null'
+        electricity:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Electricity'
+        floodingRisks:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.FloodingRisks'
+        heating:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Heating'
+        knownPlanningConsiderations:
+          type:
+          - string
+          - 'null'
+        miningRisks:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.MiningRisks'
+        mobileCoverage:
+          type:
+          - string
+          - 'null'
+        parking:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Parking'
+        restrictions:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Restrictions'
+        rightsAndEasements:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.RightsAndEasements'
+        sewerage:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Sewerage'
+        water:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.Water'
+        epc:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Epc'
+          description: Energy Performance Certificate
+        uprn:
+          type:
+          - string
+          - 'null'
+        createdDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        propertyManager:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.SecurityUser'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Requests.AddInventory:
+      type: object
+      properties:
+        market:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.PropertyRecordType'
+          description: '[Required] The market in which the property is being advertised.'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Models.Address'
+          description: '[Required] The address of the property.'
+        owners:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Owner'
+          description: '[Required] The owner(s) of the property.'
+        negotiatorId:
+          type: integer
+          description: '[Required] The unique identifier of the negotiator with whom the new property will be associated.'
+          format: int32
+        branchId:
+          type: integer
+          description: '[Required] The unique identifier of the branch where the negotiator works.'
+          format: int32
+        lease:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Requests.Lease'
+          description: The long lease on leasehold property.
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Name:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.ParkingType:
+      enum:
+      - DoubleGarage
+      - OffStreetParking
+      - ResidentsParking
+      - SingleGarage
+      - Underground
+      - CommunalCarParkAllocatedSpace
+      - CommunalCarParkNoAllocatedSpace
+      - DisabledParkingAvailable
+      - DisabledParkingNotAvailable
+      - DrivewayPrivate
+      - DrivewayShared
+      - EvChargingPrivate
+      - EvChargingShared
+      - Garage
+      - GarageBloc
+      - GarageCarport
+      - GarageDetached
+      - GarageIntegral
+      - GatedParking
+      - NoParkingAvailable
+      - RearOfProperty
+      - StreetParkingPermitNotRequired
+      - StreetParkingPermitRequired
+      - Undercroft
+      - UndergroundParkingAllocatedSpace
+      - UndergroundParkingNoAllocatedSpace
+      - Other
+      type: string
+    Alto.Inventory.Api.Models.Responses.Search.InventoryItem:
+      type: object
+      properties:
+        inventoryId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the inventory record.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the branch.
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the inventory record was created.
+          format: date-time
+        modifiedAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the inventory record was last modified.
+          format: date-time
+        categoryType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyCategoryType'
+          description: The category type of the inventory record.
+        recordType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyRecordType'
+          description: The record type of the property in inventory.
+        archived:
+          type: boolean
+          description: boolean value indicating whether inventory record has been archived
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.InventoryStatus'
+          description: The status type of the inventory record.
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
+          description: The address of the inventory record.
+        managementType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.RentalManagementType'
+        maintenanceType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.MaintenanceType'
+          description: Where the responsibility lies for the maintenance of a rental property.
+        instructionDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time the inventory record was instructed.
+          format: date-time
+      additionalProperties: false
+    Alto.Internal.Nts.ElectricitySupply:
+      enum:
+      - MainsSupply
+      - PrivateSupply
+      - SolarPvPanels
+      - WindTurbine
+      - Generator
+      - Other
+      type: string
+    Alto.Internal.Nts.Parking:
+      type: object
+      properties:
+        parkingType:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.ParkingType'
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Epc:
+      type: object
+      properties:
+        energyEfficiencyRatingCurrent:
+          type:
+          - integer
+          - 'null'
+          description: Current energy efficiency rating
+          format: int32
+          example: 31
+        energyEfficiencyRatingPotential:
+          type:
+          - integer
+          - 'null'
+          description: Potential energy efficiency rating
+          format: int32
+          example: 37
+        exempt:
+          type: boolean
+          description: Whether listing has an EPC Exemption
+        exemptionReason:
+          type:
+          - string
+          - 'null'
+          description: Reason for an EPC Exemption
+      additionalProperties: false
+      description: Energy Performance Certificate
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.KeySetPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.KeySetPatch'
+      description: Array of operations to perform
+    Alto.Services.SDK.InventoryStatus:
+      enum:
+      - Unspecified
+      - Appraisal
+      - Available
+      - UnderOffer
+      - Completed
+      - Let
+      - LetAgreed
+      - LetMarketing
+      - Archived
+      - Suspended
+      - Withdrawn
+      - Instructed
+      - NotInstructed
+      - ExternallyLet
+      - UnderOfferMarketing
+      - UnderOfferAvailable
+      - Exchanged
+      - ExternallySold
+      - Reserved
+      type: string
+    Alto.Internal.Nts.FloodingSources:
+      type: object
+      properties:
+        source:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.SourceOfFlooding'
+      additionalProperties: false
+    Alto.Inventory.Api.Enums.PropertyRecordType:
+      enum:
+      - Unspecified
+      - Sale
+      - Rent
+      type: string
+    Alto.Inventory.Api.Models.Requests.AddKeySetRequest:
+      type: object
+      properties:
+        referenceCode:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        keyCount:
+          type: integer
+          format: int32
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.Property.KeySetStatus'
+        notes:
+          type:
+          - string
+          - 'null'
+        expectedDateIn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        holderType:
+          enum:
+          - Contact
+          - User
+          type:
+          - string
+          - 'null'
+        holderId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Requests.AddInventoryOwner:
+      type: object
+      properties:
+        contactId:
+          type: integer
+          description: '[Required] The contact id to associate with the property'
+          format: int32
+      additionalProperties: false
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Alto.Inventory.Api.Models.Responses.Owner:
+      type: object
+      properties:
+        ownerId:
+          type:
+          - string
+          - 'null'
+        contactId:
+          type: integer
+          format: int32
+        name:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Name'
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.EmailAddress'
+      additionalProperties: false
+    Alto.Internal.Nts.FloodingRisks:
+      type: object
+      properties:
+        sourcesOfFlooding:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Internal.Nts.FloodingSources'
+        floodedWithinLast5Years:
+          type:
+          - boolean
+          - 'null'
+        floodDefensesPresent:
+          type:
+          - boolean
+          - 'null'
+      additionalProperties: false
+    Alto.Services.SDK.Enums.Property.Rental.PropertyContractType:
+      enum:
+      - Unspecified
+      - AssuredShortholdTenancy
+      - AssuredTenancy
+      - PublicSector
+      - HousingAssociation
+      - AssuredPeriodicTenancy
+      type: string
+    Alto.Inventory.Api.Models.Responses.Phone:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        type:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.Accessibility:
+      enum:
+      - LateralLiving
+      - StepFreeAccess
+      - WetRoom
+      - WheelchairAccessible
+      - DisabledFeatures
+      - LevelAccess
+      - RampedAccess
+      - LiftAccess
+      - StairLift
+      - WideDoorways
+      - LevelAccessShower
+      - VariableHeightKitchenSurfaces
+      type: string
+    Alto.Internal.Nts.BroadbandSupply:
+      enum:
+      - Adsl
+      - Cable
+      - FixedWireless
+      - Fttc
+      - Fttp
+      - Mobile
+      - None
+      - Other
+      - Satellite
+      type: string
+    Alto.Internal.Nts.HeatingSource:
+      enum:
+      - BiomassBoiler
+      - Communal
+      - ElectricMains
+      - ElectricRoomHeaters
+      - GasMains
+      - HeatPumpAirSource
+      - HeatPumpGroundSource
+      - Lpg
+      - NightStorageHeaters
+      - Oil
+      - Other
+      - SolarPanels
+      - SolarPhotovoltaicThermal
+      - SolarThermal
+      - UnderFloorHeating
+      - WoodBurner
+      - OpenFire
+      type: string
+    Alto.Inventory.Api.Models.Responses.Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNo:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.InventoryItem:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
+      additionalProperties: false
+    Alto.Internal.Nts.Construction:
+      type: object
+      properties:
+        material:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    Alto.Services.SDK.Enums.Property.KeySetStatus:
+      enum:
+      - Unspecified
+      - In
+      - Out
+      - Lost
+      - Returned
+      type: string
+    Alto.Inventory.Api.Models.Responses.Search.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.WaterSupply:
+      enum:
+      - Mains
+      - PrivateWell
+      - PrivateSpring
+      - PrivateBorehole
+      - PublicWell
+      - PublicSpring
+      - PublicBorehole
+      - Other
+      type: string
+    Alto.Internal.Nts.MiningRisks:
+      type: object
+      properties:
+        coalfields:
+          type:
+          - boolean
+          - 'null'
+        otherMiningActivities:
+          type:
+          - boolean
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

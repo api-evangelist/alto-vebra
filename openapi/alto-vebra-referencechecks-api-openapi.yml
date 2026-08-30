@@ -1,0 +1,235 @@
+openapi: 3.2.0
+info:
+  title: Alto Reference Checks API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: ReferenceChecks
+paths:
+  /ReferenceChecks:
+    get:
+      tags:
+      - ReferenceChecks
+      parameters:
+      - name: NextToken
+        in: query
+        schema:
+          type: string
+      - name: MaxResults
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: CreatedFrom
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: CreatedTo
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ReferenceCheckPagedResultsDto'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceCheckPagedResultsDto'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceCheckPagedResultsDto'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-referencechecks
+  /ReferenceChecks/{referenceCheckId}:
+    patch:
+      tags:
+      - ReferenceChecks
+      parameters:
+      - name: referenceCheckId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: ClientId
+        in: header
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchReferenceCheckRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PatchReferenceCheckRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PatchReferenceCheckRequest'
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:patch-referencechecks-referencecheckid
+components:
+  schemas:
+    ReferenceCheckStatus:
+      enum:
+      - Pending
+      - Completed
+      type: string
+    PatchReferenceCheckRequest:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    ReferenceCheckDto:
+      type: object
+      properties:
+        referenceCheckId:
+          type: string
+          format: uuid
+        tenancyId:
+          type: integer
+          format: int32
+        tenantId:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/ReferenceCheckStatus'
+        createdDate:
+          type: string
+          format: date-time
+        createdById:
+          type: integer
+          format: int32
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedBy:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ReferenceCheckPagedResultsDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReferenceCheckDto'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

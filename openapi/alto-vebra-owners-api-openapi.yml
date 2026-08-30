@@ -1,0 +1,223 @@
+openapi: 3.2.0
+info:
+  title: Alto Owners API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Owners
+paths:
+  /owners:
+    get:
+      tags:
+      - Owners
+      summary: Get Owners
+      description: "Required scope: alto/read:contacts. \nSee glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Owner</a>."
+      operationId: GetOwners
+      parameters:
+      - name: active
+        in: query
+        description: Filter only active or non-active owners.
+        schema:
+          type: boolean
+      - name: property-id
+        in: query
+        description: Only return owners where the propertyId matches one of the values provided
+        schema:
+          type: array
+          items:
+            type: string
+      - name: contact-id
+        in: query
+        description: Only return owners where the contactId matches one of the values provided
+        schema:
+          type: array
+          items:
+            type: string
+      - name: next-token
+        in: query
+        description: The token for the next page of results.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: The maximum number of results to return. The default value is 50, and the maximum value is 250
+        schema:
+          type: integer
+          format: int32
+      - name: created-from
+        in: query
+        description: The start date for by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: created-to
+        in: query
+        description: The end date for by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-from
+        in: query
+        description: The start date for by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-to
+        in: query
+        description: The end date for by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Owners matching the query returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner'
+      security:
+      - appAuth:
+        - alto/route:get-owners
+components:
+  schemas:
+    Alto.Contacts.Api.Models.Responses.OwnerContact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: Represents the branch identifier associated with the contact owner.
+      additionalProperties: false
+      description: Represents a contact that owns a property.
+    Alto.Services.SDK.Pagination.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Owner'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.Owner:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        property:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.OwnerProperty'
+          description: Details of the property owned by the contact.
+        contact:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.OwnerContact'
+          description: Represents the contact details of the owner.
+        active:
+          type: boolean
+          description: Indicates whether the owner is currently active.
+        type:
+          enum:
+          - Unknown
+          - Vendor
+          - Landlord
+          type: string
+          description: Represents the type of the owner.
+        percentageShare:
+          type: number
+          description: Represents the owner's share or interest as a percentage.
+          format: double
+        createdAt:
+          type: string
+          description: The date and time when the contact owner was created.
+          format: date-time
+        modifiedAt:
+          type: string
+          description: The date and time when the owner's details were last modified.
+          format: date-time
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.OwnerProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: Represents the branch identifier associated with the property.
+      additionalProperties: false
+      description: Represents a property belonging to a contact.
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

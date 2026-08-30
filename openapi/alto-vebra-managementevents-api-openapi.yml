@@ -1,0 +1,574 @@
+openapi: 3.2.0
+info:
+  title: Alto Management Events API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: ManagementEvents
+paths:
+  /inventory/{inventoryId}/management-events:
+    get:
+      tags:
+      - ManagementEvents
+      summary: Gets management events for a specific inventory item
+      description: Retrieves a paginated list of management events for a specific inventory item for a given AgencyRef and all permissible branches.
+      parameters:
+      - name: inventoryId
+        in: path
+        description: ID of the inventory item
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: createdFrom
+        in: query
+        description: The start date for filtering management events by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: createdTo
+        in: query
+        description: The end date for filtering management events by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: modifiedFrom
+        in: query
+        description: The start date for filtering management events by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: modifiedTo
+        in: query
+        description: The end date for filtering management events by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: nextToken
+        in: query
+        description: Token used to retrieve the next page of results. This is returned in the response of the previous page.
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Maximum number of results to return per page. Defaults to 100 if not specified.
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: upcoming
+        in: query
+        description: When true, filters events to show only those that are either overdue or due within the period defined by their reminderDays field from today's date
+        schema:
+          type: boolean
+      - name: status
+        in: query
+        description: List of event statuses to filter by. If not provided, events of all statuses will be returned.
+        schema:
+          type: array
+          items:
+            enum:
+            - Unspecified
+            - Pending
+            - InProgress
+            - Complete
+            - Cancelled
+            - Expired
+            type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid-management-events
+  /management-events:
+    get:
+      tags:
+      - ManagementEvents
+      summary: Gets a list of management events
+      description: Retrieves a paginated list of management events for a given AgencyRef and all permissible branches.
+      parameters:
+      - name: createdFrom
+        in: query
+        description: The start date for filtering management events by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: createdTo
+        in: query
+        description: The end date for filtering management events by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: modifiedFrom
+        in: query
+        description: The start date for filtering management events by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: modifiedTo
+        in: query
+        description: The end date for filtering management events by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: nextToken
+        in: query
+        description: Token used to retrieve the next page of results. This is returned in the response of the previous page.
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Maximum number of results to return per page. Defaults to 100 if not specified.
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: upcoming
+        in: query
+        description: When true, filters events to show only those that are either overdue or due within the period defined by their reminderDays field from today's date
+        schema:
+          type: boolean
+      - name: status
+        in: query
+        description: List of event statuses to filter by. If not provided, events of all statuses will be returned.
+        schema:
+          type: array
+          items:
+            enum:
+            - Unspecified
+            - Pending
+            - InProgress
+            - Complete
+            - Cancelled
+            - Expired
+            type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-management-events
+    post:
+      tags:
+      - ManagementEvents
+      summary: Creates a new management event
+      description: Creates a new management event for the specified entity.
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest'
+      responses:
+        '201':
+          description: Success. Returns the newly created management event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-management-events
+  /management-events/{eventId}:
+    get:
+      tags:
+      - ManagementEvents
+      summary: Gets a single management event by ID
+      description: Retrieves a specific management event by its ID for a given AgencyRef and all permissible branches.
+      parameters:
+      - name: eventId
+        in: path
+        description: ID of the management event
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '404':
+          description: Management event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-management-events-eventid
+    patch:
+      tags:
+      - ManagementEvents
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-management-events-eventid
+components:
+  schemas:
+    Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest:
+      required:
+      - eventType
+      - linkedId
+      - linkedType
+      - negotiatorId
+      type: object
+      properties:
+        eventType:
+          minLength: 1
+          type: string
+          description: The type of management event.
+        linkedType:
+          minLength: 1
+          type: string
+          description: The entity associated with the management event.
+        linkedId:
+          type: integer
+          description: The id of the entity associated with the management event.
+          format: int32
+        negotiatorId:
+          type: integer
+          description: The id of the negotiator associated with the management event.
+          format: int32
+        dueDate:
+          type:
+          - string
+          - 'null'
+          description: The date the management event is due to be completed.
+          format: date-time
+        notes:
+          maxLength: 2000
+          type:
+          - string
+          - 'null'
+          description: Additional notes for the management event.
+      additionalProperties: false
+      description: Request model for creating a new management event
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.ManagementEventPatch:
+      anyOf:
+      - title: /status
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"InProgress"'
+          path:
+            type: string
+            example: /status
+        description: "\n            The status of the management event within Alto. Supported values are InProgress, Pending, Complete, Cancelled.\n            "
+        example: "\n        {\n            \"path\": \"/status\",\n            \"op\": \"replace\",\n            \"value\": \"InProgress\"\n        }"
+      - title: /completiondate
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"2025-05-08T00:00:00"'
+          path:
+            type: string
+            example: /completiondate
+        description: "\n            The date the event was completed. This value will be ignored if the status is not set to Complete. If no\n            value is provided it will default to today's date.\n            "
+        example: "\n        {\n            \"path\": \"/completiondate\",\n            \"op\": \"replace\",\n            \"value\": \"2025-05-08T00:00:00\"\n        }"
+      - title: /duedate
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"2025-04-02T00:00:00"'
+          path:
+            type: string
+            example: /duedate
+        description: "\n            The date the event is due to be completed.\n            "
+        example: "\n        {\n            \"path\": \"/duedate\",\n            \"op\": \"replace\",\n            \"value\": \"2025-04-02T00:00:00\"\n        }"
+      - title: /rescheduleddate
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"2026-04-02T00:00:00"'
+          path:
+            type: string
+            example: /rescheduleddate
+        description: "\n            The due date for the next iteration of this event, after the current one is completed. This is is only\n            applicable to repeating events, and will be ignored if the status is not Complete. If no value is\n            provided it will default to the due date plus the months and days attributes of the event.\n            "
+        example: "\n        {\n            \"path\": \"/rescheduleddate\",\n            \"op\": \"replace\",\n            \"value\": \"2026-04-02T00:00:00\"\n        }"
+      - title: /notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"Gas safety certificate requested from engineer."'
+          path:
+            type: string
+            example: /notes
+        description: "\n            Agent defined notes for the event.\n            "
+        example: "\n        {\n            \"path\": \"/notes\",\n            \"op\": \"replace\",\n            \"value\": \"Gas safety certificate requested from engineer.\"\n        }"
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.ManagementEventPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
+      description: Array of operations to perform
+    Alto.PropertyManagement.Api.Models.Responses.ManagementEventType:
+      type: object
+      properties:
+        key:
+          type:
+          - string
+          - 'null'
+        label:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        propertyId:
+          type:
+          - string
+          - 'null'
+        tenancyId:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        eventType:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEventType'
+        status:
+          enum:
+          - Unspecified
+          - Pending
+          - InProgress
+          - Complete
+          - Cancelled
+          - Expired
+          type: string
+        priority:
+          enum:
+          - Unspecified
+          - High
+          - Normal
+          - Low
+          type: string
+        critical:
+          type: boolean
+        dueDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        completionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reminderDays:
+          type: integer
+          format: int32
+        recurring:
+          type: boolean
+        rescheduledForDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        notes:
+          type:
+          - string
+          - 'null'
+        createdDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

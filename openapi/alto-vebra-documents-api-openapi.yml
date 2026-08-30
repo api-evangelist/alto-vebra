@@ -1,0 +1,454 @@
+openapi: 3.2.0
+info:
+  title: Alto Documents API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Documents
+paths:
+  /documents:
+    get:
+      tags:
+      - Documents
+      summary: Get documents by document type.
+      description: Returns a paginated list of documents that match the given parameters
+      operationId: GetDocumentsByType
+      parameters:
+      - name: linkedType
+        in: query
+        schema:
+          type: string
+      - name: linkedId
+        in: query
+        description: Id of the document association e.g. PropertyId, ContactId, TenancyId, WorkOrderId, HistoryEventId (or FileNoteId)
+        schema:
+          type: integer
+          format: int64
+      - name: mediaType
+        in: query
+        description: Type of document e.g. File, Image
+        schema:
+          type: string
+      - name: nextToken
+        in: query
+        description: Token to get next set of results
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Number of maximum items to be returned
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+        '400':
+          description: Validation errors e.g. LinkedType must be set
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-documents
+  /documents/{documentId}/content:
+    get:
+      tags:
+      - Documents
+      summary: Get document content by DocumentId.
+      description: Get the contents of a document with the given id
+      parameters:
+      - name: documentId
+        in: path
+        description: The documentId to download document contents
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Validation errors e.g. Document Id must be provided
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-documents-documentid-content
+  /documents/post:
+    post:
+      tags:
+      - Documents
+      summary: Upload a new document
+      description: "Upload documents for Property, Contact, Tenancy or Works Order. A Maximum of 30MB file size is supported\nThe images posted are not for Listing/Marketing purposes. Images are posted to the document section In Alto as below:\n    Property > Media > Other Files\n    Contact > Documents\n    Tenancy > Documents\n    Works Order > Documents"
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileToUpload:
+                  type: string
+                  description: The file to upload
+                  format: binary
+                linkedType:
+                  type: string
+                linkedId:
+                  type: integer
+                  description: Id of the document association e.g. PropertyId, ContactId, TenancyId, WorkOrderId, HistoryEventId (or FileNoteId)
+                  format: int64
+            encoding:
+              fileToUpload:
+                style: form
+              linkedType:
+                style: form
+              linkedId:
+                style: form
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CreateDocumentResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDocumentResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateDocumentResponse'
+        '400':
+          description: Validation errors e.g. Missing LinkedType
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:post-documents-post
+  /inventory/{inventoryId}/documents:
+    get:
+      tags:
+      - Documents
+      summary: Get documents by PropertyId.
+      description: Returns a paginated list of documents for the given PropertyId
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The PropertyId to filter documents
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: type
+        in: query
+        description: Type of file to filter the results by. E.g. File, Image
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaType'
+      - name: fileType
+        in: query
+        description: Filter results for a specific file type. E.g. PDF, JPG
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileType'
+      - name: nextToken
+        in: query
+        description: Token to get next set of results
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Number of maximum items to be returned
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+        '400':
+          description: Validation errors e.g. The MaxResults must be greater than 0
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid-documents
+  /work-orders/{workOrderId}/documents:
+    get:
+      tags:
+      - Documents
+      summary: Get documents by WorkOrderId.
+      description: Returns a paginated list of documents for the given WorkOrderId
+      parameters:
+      - name: workOrderId
+        in: path
+        description: The WorkOrderId to filter documents
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: nextToken
+        in: query
+        description: Token to get next set of results
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Number of maximum items to be returned
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/DocumentPagedResults'
+        '400':
+          description: Validation errors e.g. The MaxResults must be greater than 0
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-work-orders-workorderid-documents
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the document
+        type:
+          type:
+          - string
+          - 'null'
+          description: The type of the document e.g. Property, Tenancy, Contact or Work Order
+        fileName:
+          type:
+          - string
+          - 'null'
+          description: The file name of the document
+        fileType:
+          type:
+          - string
+          - 'null'
+          description: The file type of the document
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL for the document, if applicable
+        caption:
+          type:
+          - string
+          - 'null'
+          description: The caption of the document
+        createdDate:
+          type:
+          - string
+          - 'null'
+          description: The date the document was created
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          description: The date the document was modified
+          format: date-time
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    FileType:
+      enum:
+      - JPG
+      - PDF
+      - PNG
+      - GIF
+      - TXT
+      - DOC
+      - DOCX
+      - XLSX
+      - XLS
+      - CSV
+      type: string
+    CreateDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the new document.
+          format: int64
+          example: 12345
+      additionalProperties: false
+      description: Response describing a newly created document.
+    DocumentPagedResults:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Document'
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    MediaType:
+      enum:
+      - Photo
+      - Floorplan
+      - VirtualTour
+      - File
+      - Document
+      - Brochure
+      - EPC
+      - WebLink
+      type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

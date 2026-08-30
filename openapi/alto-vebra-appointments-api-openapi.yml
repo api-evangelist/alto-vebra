@@ -1,0 +1,1209 @@
+openapi: 3.2.0
+info:
+  title: Alto Appointments API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Appointments
+paths:
+  /appointments/{appointmentId}/{instanceId}:
+    get:
+      tags:
+      - Appointments
+      summary: Retrieves an appointment by their unique identifier and numeric instance
+      description: "Retrieves an appointment by their unique identifier and numeric instance.\n            \nRequired scope: alto/read:appointments"
+      parameters:
+      - name: appointmentId
+        in: path
+        description: The unique identifier of the appointment
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: instanceId
+        in: path
+        description: The numeric instance of an appointment; this value is only greater than zero for general appointment types that are marked as recurring and represents the xth instance of a given appointment in a recurring series.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Appointment retrieved for requested appointment id and instance.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerAppointment'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerAppointment'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerAppointment'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Appointment not found within the scope of the AgencyRef's authorised group and branches
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Validation error e.g. invalid format for appointment identifier or instance
+      security:
+      - appAuth:
+        - alto/route:get-appointments-appointmentid-instanceid
+  /appointments/general:
+    post:
+      tags:
+      - Appointments
+      summary: Create a general appointment.
+      description: 'Creates an appointment with the requested contacts and properties for the given negotiators.
+
+        Required scope: alto/write:appointments_general'
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The object containing the appointment details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneralAppointmentRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GeneralAppointmentRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/GeneralAppointmentRequest'
+      responses:
+        '200':
+          description: Returns an object containing the newly created appointment's unique identifier
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CreateAppointmentData'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAppointmentData'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateAppointmentData'
+        '400':
+          description: Validation error e.g. invalid date range selection.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:post-appointments-general
+  /appointments/general/{appointmentId}:
+    patch:
+      tags:
+      - Appointments
+      summary: Updates an existing general appointment
+      description: "Updates a general appointment with any of the following fields supported for update:\n- /startDate ie. The start date and time in ISO 8601 format to update against the requested general appointment\n- /endDate ie. The end date and time in ISO 8601 format to update against the requested general appointment\n- /negotiatorIds ie. An array of all negotiators' unique identifiers to be associated against the requested general appointment\n            \nRequired scope: alto/write:appointments_general"
+      parameters:
+      - name: appointmentId
+        in: path
+        description: The appointment's unique identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneralAppointmentPatchJsonPatchDocument'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GeneralAppointmentPatchJsonPatchDocument'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/GeneralAppointmentPatchJsonPatchDocument'
+      responses:
+        '200':
+          description: Returns an object with a flag indicating a successful update
+        '400':
+          description: Validation error e.g. invalid date range selection or unsupported patch path/value.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Appointment requesting to be updated does not exist against the requested AgencyRef
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:patch-appointments-general-appointmentid
+  /appointments/negotiators:
+    get:
+      tags:
+      - Appointments
+      summary: Get negotiator's appointments within a selected time range.
+      description: 'Retrieves a paginated list of the requested negotiator''s appointments within the selected time range, grouped by negotiator.
+
+        Required scope: alto/read:appointments'
+      parameters:
+      - name: start-date
+        in: query
+        description: 'Required: The start date and time in ISO 8601 format for filtering negotiator''s appointments.
+
+          Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+          is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+        required: true
+        schema:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00.0000000+00:00'
+        example: '2023-01-01T00:00:00.0000000+00:00'
+      - name: end-date
+        in: query
+        description: 'Required: The end date and time in ISO 8601 format for filtering negotiator''s appointments.
+
+          Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+          is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+        required: true
+        schema:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00.0000000+00:00'
+        example: '2023-01-01T00:00:00.0000000+00:00'
+      - name: type-id
+        in: query
+        description: 'Optional: The appointment type for filtering negotiator appointments;
+
+          NOTE: If not set, this will return all appointment types'
+        schema:
+          enum:
+          - Unspecified
+          - General
+          - Valuation
+          - Viewing
+          - Communication
+          - InternalMessage
+          - Offer
+          - AgreedOffer
+          - Note
+          - AuditedChange
+          - StickyNote
+          - FinancialTransaction
+          - Marketing
+          - Creation
+          - SyncedEmail
+          - AccountingTransaction
+          - WorkOrderEvent
+          - TenancyEvent
+          - FollowUp
+          - PersonalInformationRequest
+          - TdsEvent
+          - SigningRequest
+          - MaintenanceRequest
+          - DocumentSharing
+          - ConveyancerReferral
+          type: string
+          example: General
+        example: General
+      - name: next-token
+        in: query
+        description: The token for the next page of results.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: The maximum number of results to return. The default value is 50, and the maximum value is 250.
+        schema:
+          maximum: 250
+          minimum: 1
+          type: integer
+          format: int32
+          example: 50
+        example: 50
+      - name: negotiator-id
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Appointments retrieved for negotiator.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerUserAppointmentsPagedResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerUserAppointmentsPagedResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerUserAppointmentsPagedResponse'
+        '400':
+          description: Validation error e.g. invalid date range selection.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:get-appointments-negotiators
+  /appointments/valuations:
+    get:
+      tags:
+      - Appointments
+      summary: Get valuations within a selected time range.
+      description: Retrieves a paged collection of valuations per the search criteria, which must include at least a Created Date range.
+      parameters:
+      - name: created-from
+        in: query
+        description: 'Required: The lower limit for created date and time in ISO 8601 format for filtering appointments'
+        schema:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00.0000000+00:00'
+        example: '2023-01-01T00:00:00.0000000+00:00'
+      - name: created-to
+        in: query
+        description: 'Required: The upper limit for created date and time in ISO 8601 format for filtering appointments'
+        schema:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00.0000000+00:00'
+        example: '2023-01-01T00:00:00.0000000+00:00'
+      - name: negotiator-ids
+        in: query
+        description: 'Optional: A comma-separated list of negotiator ids for filtering appointments
+
+          NOTE: If not set, this will default to all negotiators in the searched branches'
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: branch-ids
+        in: query
+        description: 'Optional: A comma-separated list of branch ids for filtering appointments
+
+          NOTE: If not set, this will default to all branches'
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: next-token
+        in: query
+        description: The token for the next page of results.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: The maximum number of results to return. The default value is 50, and the maximum value is 250.
+        schema:
+          maximum: 250
+          minimum: 1
+          type: integer
+          format: int32
+          example: 50
+        example: 50
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Valuations retrieved.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerAppointmentPagedResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerAppointmentPagedResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExternalPartnerAppointmentPagedResponse'
+        '400':
+          description: Validation error e.g. invalid date range selection.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-appointments-valuations
+  /appointments/viewings:
+    post:
+      tags:
+      - Appointments
+      summary: Create a viewing appointment.
+      description: 'Creates a viewing appointment with the requested applicant and property in a negotiator''s calender.
+
+        Required scope: alto/write:appointments_viewings'
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The object containing the viewing details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewingRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ViewingRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ViewingRequest'
+      responses:
+        '200':
+          description: Returns an object containing the newly created viewing appointment's unique identifier
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CreateAppointmentData'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAppointmentData'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/CreateAppointmentData'
+        '400':
+          description: Validation error e.g. invalid date range selection.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:post-appointments-viewings
+  /appointments/viewings/{appointmentId}:
+    patch:
+      tags:
+      - Appointments
+      summary: Updates an existing viewing
+      description: "Updates a viewing with any of the following fields supported for update:\n- /startDate ie. The start date and time in ISO 8601 format to update against the requested viewing\n- /endDate ie. The end date and time in ISO 8601 format to update against the requested viewing\n- /negotiatorId ie. The unique identifier of the negotiator to be associated with the requested viewing\n- /status ie. When cancelling, the status the requested viewing should be set to\n- /notes ie. The notes to be associated with the requested viewing\n- /internalNotes ie. The internal notes to be associated with the requested viewing\n- /applicantFeedback ie. The applicant feedback to be associated with the requested viewing\n            \nRequired scope: alto/write:appointments_viewings"
+      parameters:
+      - name: appointmentId
+        in: path
+        description: The appointment's unique identifier
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewingPatchJsonPatchDocument'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ViewingPatchJsonPatchDocument'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ViewingPatchJsonPatchDocument'
+      responses:
+        '200':
+          description: Returns an object with a flag indicating a successful update
+        '400':
+          description: Validation error e.g. invalid date range selection or unsupported patch path/value.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Appointment requesting to be updated does not exist against the requested AgencyRef
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:patch-appointments-viewings-appointmentid
+components:
+  schemas:
+    GeneralAppointmentPatchOperation:
+      type: object
+      properties:
+        op:
+          enum:
+          - replace
+          type: string
+        value:
+          type: string
+        path:
+          enum:
+          - /startDate
+          - /endDate
+          - /negotiatorIds
+          - /status
+          type: string
+      example: '[ { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorIds", "op": "replace", "value": [47141, 48734] }, { "path": "/status", "op": "replace", "value": "CancelledByOffice" } ]'
+    ExternalPartnerProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the property
+          example: '112233'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related property.
+      additionalProperties: false
+    ExternalPartnerContact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the contact
+          example: '123456'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related contact.
+      additionalProperties: false
+    ViewingPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/ViewingPatchOperation'
+      description: Array of operations to perform
+    ExternalPartnerUserAppointments:
+      type: object
+      properties:
+        negotiatorId:
+          type: integer
+          description: The unique identifier of the negotiator
+          format: int32
+          example: 67890
+        appointments:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerAppointment'
+          description: A collection of appointments belonging to the negotiator; if there are no appointments, then returns an empty collection
+      additionalProperties: false
+    ViewingPatchOperation:
+      type: object
+      properties:
+        op:
+          enum:
+          - replace
+          type: string
+        value:
+          type: string
+        path:
+          enum:
+          - /status
+          - /startDate
+          - /endDate
+          - /negotiatorId
+          - /notes
+          - /applicantFeedback
+          - /internalNotes
+          type: string
+      example: '[ { "path": "/status", "op": "replace", "value": "CancelledByOffice" }, { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorId", "op": "replace", "value": 47141 } ]'
+    ExternalPartnerAppointment:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the appointment
+          format: int64
+          example: 76543
+        instanceId:
+          type: integer
+          description: The numeric instance of an appointment; this value is only greater than zero for general appointment types that are marked as recurring and represents the xth instance of a given appointment in a recurring series.
+          format: int32
+          example: 0
+        type:
+          enum:
+          - Unspecified
+          - General
+          - Valuation
+          - Viewing
+          - Communication
+          - InternalMessage
+          - Offer
+          - AgreedOffer
+          - Note
+          - AuditedChange
+          - StickyNote
+          - FinancialTransaction
+          - Marketing
+          - Creation
+          - SyncedEmail
+          - AccountingTransaction
+          - WorkOrderEvent
+          - TenancyEvent
+          - FollowUp
+          - PersonalInformationRequest
+          - TdsEvent
+          - SigningRequest
+          - MaintenanceRequest
+          - DocumentSharing
+          - ConveyancerReferral
+          type: string
+          description: The type of the appointment
+          example: Viewing
+        startDate:
+          type: string
+          description: The appointment start date and time, returned as a local (UK) diary time with no timezone offset.
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        endDate:
+          type: string
+          description: The appointment end date and time, returned as a local (UK) diary time with no timezone offset.
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        createdDate:
+          type: string
+          description: The appointment's creation date and time in ISO 8601 format
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        modifiedDate:
+          type: string
+          description: The appointment's last modified date and time in ISO 8601 format
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        title:
+          type:
+          - string
+          - 'null'
+          description: The title of the appointment. For general appointments this refers to the appointment entry type
+          example: FS appointment
+        status:
+          enum:
+          - Unspecified
+          - NotYetBooked
+          - Active
+          - CancelledByOffice
+          - CancelledByOwner
+          - CancelledByApplicant
+          - CancelledByContact
+          type: string
+          description: The status of the appointment
+          example: Active
+        isCancelled:
+          type: boolean
+          description: Indicates whether the appointment has a cancelled status; An appointment is only cancelled if the appointment status is not set to either Active or NotYetBooked
+          example: false
+        negotiators:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerNegotiator'
+          description: A collection of negotiators associated with the appointment; if there are no negotiators, then returns an empty collection
+        properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerProperty'
+          description: A collection of properties that are associated with the appointment; if there are no properties, then returns an empty collection
+        contacts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerContact'
+          description: A collection of contacts that are associated with the appointment; if there are no contacts, then returns an empty collection
+        viewingDetails:
+          $ref: '#/components/schemas/ExternalPartnerViewingDetails'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ExternalPartnerViewingDetails:
+      type: object
+      properties:
+        internalNotes:
+          type:
+          - string
+          - 'null'
+          description: The internal notes of the appointment.
+          example: Internal notes
+        applicantFeedback:
+          type:
+          - string
+          - 'null'
+          description: The feedback of the appointment.
+          example: Feedback
+      additionalProperties: false
+    ExternalPartnerNegotiator:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the negotiator
+          example: '45678'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: 'Links to related negotiator;
+
+            NOTE: This is currently set to an empty collection as no api is currently available for retrieving negotiator details'
+      additionalProperties: false
+    ViewingRequest:
+      required:
+      - applicantIds
+      - endDate
+      - negotiatorId
+      - propertyId
+      - startDate
+      type: object
+      properties:
+        negotiatorId:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: 'Required: The unique identifer of the negotiator'
+          format: int32
+          example: 123456
+        branchId:
+          type:
+          - integer
+          - 'null'
+          description: 'Optional: The branch in which to record the viewing diary event.
+
+            When omitted, defaults to the negotiator''s default branch.'
+          format: int32
+          example: 12345
+        applicantIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: 'Required: The unique identifer of the applicant(s)'
+          example:
+          - 7891011
+          - 7891025
+        propertyId:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: 'Required: The unique identifer of the property'
+          format: int32
+          example: 121314
+        startDate:
+          type: string
+          description: 'Required: The start date and time in ISO 8601 format of the viewing appointment to be created.
+
+            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+          format: date-time
+          example: '2023-01-01T10:15:00.0000000+00:00'
+        endDate:
+          type: string
+          description: 'Required: The end date and time in ISO 8601 format of the viewing appointment to be created.
+
+            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+          format: date-time
+          example: '2023-01-01T10:30:00.0000000+00:00'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: 'Optional: Additional notes to accompany the viewing appointment being created.'
+          example: Here are some optional notes
+        isConfirmed:
+          type: boolean
+          description: 'Optional: Marks viewing as confirmed; this will NOT send out confirmation emails and texts
+
+            Default if not set: false'
+          example: true
+        meetingPlaceType:
+          enum:
+          - Unspecified
+          - AtTheOffice
+          - AtTheProperty
+          type: string
+          description: 'Optional: Sets where the negotiator will meet for the viewing;
+
+            Default if not set: AtTheProperty'
+          example: Unspecified
+      additionalProperties: false
+    ExternalPartnerAppointmentPagedResponse:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerAppointment'
+          description: The collection of items in the response.
+      additionalProperties: false
+      description: Represents a paged response containing metadata and a collection of items.
+    CreateAppointmentData:
+      type: object
+      properties:
+        appointmentId:
+          type: integer
+          description: The unique identifier of the viewing appointment that has been created
+          format: int64
+          example: 123456
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ExternalPartnerUserAppointmentsPagedResponse:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerUserAppointments'
+          description: The collection of items in the response.
+      additionalProperties: false
+      description: Represents a paged response containing metadata and a collection of items.
+    GeneralAppointmentPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/GeneralAppointmentPatchOperation'
+      description: Array of operations to perform
+    GeneralAppointmentRequest:
+      required:
+      - endDate
+      - negotiatorIds
+      - startDate
+      - subTypeId
+      type: object
+      properties:
+        negotiatorIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: 'Required: The unique identifer of the negotiator(s)'
+          example:
+          - 356773
+          - 356912
+        branchId:
+          type:
+          - integer
+          - 'null'
+          description: 'Optional: The branch in which to record the appointment diary event.
+
+            When omitted, defaults to the first negotiator''s default branch.'
+          format: int32
+          example: 12345
+        contactIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: 'Optional: The unique identifer of the applicant(s)'
+          example:
+          - 7891011
+          - 7891025
+        propertyIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: 'Optional: The unique identifer of the property(s)'
+          example:
+          - 1244589
+          - 1244676
+        urgent:
+          type: boolean
+          description: 'Optional: Set the Urgent flag for the appointment being created. If ommitted this will default to false.'
+          example: false
+        startDate:
+          type: string
+          description: 'Required: The start date and time in ISO 8601 format of the appointment being created.
+
+            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+          format: date-time
+          example: '2023-01-01T10:15:00.0000000+00:00'
+        endDate:
+          type: string
+          description: 'Required: The end date and time in ISO 8601 format of the appointment being created.
+
+            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+          format: date-time
+          example: '2023-01-01T10:30:00.0000000+00:00'
+        subTypeId:
+          type: integer
+          description: 'Required: The sub type of the appointment being created.'
+          format: int32
+          example: 123
+        location:
+          type:
+          - string
+          - 'null'
+          description: 'Optional: The location where the appointment being created will be held.'
+          example: Meeting room A
+        notes:
+          type:
+          - string
+          - 'null'
+          description: 'Optional: Additional notes to accompany the appointment being created.'
+          example: Here are some optional notes
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

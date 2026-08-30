@@ -1,0 +1,213 @@
+openapi: 3.2.0
+info:
+  title: Alto Branches API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Branches
+paths:
+  /branches:
+    get:
+      tags:
+      - Branches
+      summary: Get Branches
+      description: Get a paginated list of branches
+      parameters:
+      - name: next-token
+        in: query
+        description: The token for the next page of results.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: The maximum number of results to return. The default value is 50, and the maximum value is 250.
+        schema:
+          type: integer
+          format: int32
+      - name: activeOnly
+        in: query
+        description: Set whether active branches only are returned.
+        schema:
+          type: boolean
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns a paginated list of branches.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BranchPagedResponse'
+        '401':
+          description: Unauthorized
+      security:
+      - appAuth:
+        - alto/route:get-branches
+  /branches/{branchId}:
+    get:
+      tags:
+      - Branches
+      summary: Get Branch By Id
+      parameters:
+      - name: branchId
+        in: path
+        description: The unique identifier for the branch.
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the branch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+        '400':
+          description: When the request does not contain the expected information.
+        '401':
+          description: When access to the branch has not been granted.
+        '404':
+          description: When the branch is not found.
+      security:
+      - appAuth:
+        - alto/route:get-branches-branchid
+components:
+  schemas:
+    BranchPagedResponse:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Branch'
+      additionalProperties: false
+    Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+        uprn:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    BranchStatus:
+      enum:
+      - Unknown
+      - Active
+      - Inactive
+      type: string
+    PropertyRecordType:
+      enum:
+      - Unspecified
+      - Sale
+      - Rent
+      type: string
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Branch:
+      type: object
+      properties:
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the branch.
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the branch was created.
+          format: date-time
+        modifiedAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the branch was last modified.
+          format: date-time
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the branch.
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          description: The branch address.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BranchStatus'
+          description: The status of the branch.
+        defaultMarket:
+          allOf:
+          - $ref: '#/components/schemas/PropertyRecordType'
+          description: The default market of the branch.
+      additionalProperties: false
+      description: Represents a branch.
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

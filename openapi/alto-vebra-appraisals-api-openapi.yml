@@ -1,0 +1,495 @@
+openapi: 3.2.0
+info:
+  title: Alto Appraisals API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Appraisals
+paths:
+  /appraisals:
+    post:
+      tags:
+      - Appraisals
+      summary: Create an appraisal
+      description: Creates an appraisal associated to the requested property
+      operationId: CreateAppraisal
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The object containing the appraisal request details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/Alto.Appraisal.Api.Models.Requests.CreateAppraisalRequest'
+        required: true
+      responses:
+        '201':
+          description: Returns the unique identifier of the newly created appraisal
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+      security:
+      - appAuth:
+        - alto/route:post-appraisals
+  /inventory/{propertyId}/appraisal:
+    patch:
+      tags:
+      - Appraisals
+      summary: Update an appraisal
+      description: Update the appraisal associated with the requested property
+      operationId: PatchAppraisal
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The object containing the appraisal request details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest'
+        required: true
+      responses:
+        '204':
+          description: The appraisal was updated
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: Not Found
+      security:
+      - appAuth:
+        - alto/route:patch-inventory-propertyid-appraisal
+components:
+  schemas:
+    Alto.Appraisal.Api.Models.Requests.CreateAppraisalRequest:
+      type: object
+      properties:
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The unique identifier of the property to associate to the appraisal'
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The start date and time of the appraisal'
+          default: '2023-12-11T15:15:40'
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The end date and time of the appraisal'
+          default: '2023-12-11T15:45:40'
+        appraiserIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: '[Required] The unique identifiers of the appraisers, maximum of two appraisers'
+        type:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType'
+          description: '[Required] The valuation type, please see <a href="https://developers.vebraalto.com/alto-data/appraisal-types">Appraisal Types</a>'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] Diary notes for the appraisal'
+        reminderMinutes:
+          type: integer
+          description: '[Optional] Reminder minutes prior to the appraisal'
+          format: int32
+        reminderDeliveryType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType'
+          description: '[Optional] Type of reminder when reminder minutes provided'
+        requestingUserId:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The unique identifier of the requesting user'
+      additionalProperties: false
+    Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType:
+      enum:
+      - Unspecified
+      - Screen
+      - SMS
+      - Both
+      type: string
+    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
+      enum:
+      - Unspecified
+      - FreeMarketAppraisal
+      - BuildingSociety
+      - ABIData
+      - AgencyScheme
+      - Agricultural
+      - InsuranceCompany
+      - Bank
+      - ChargeableValuation
+      - Commercial
+      - CompulsoryPurchaseOrder
+      - Development
+      - Divorce
+      - FamilyDivision
+      - FormalMarketValuation
+      - HomebuyersPrivate
+      - HomebuyersReport
+      - Industrial
+      - Matrimonial
+      - PartExchange
+      - Probate
+      - ReMortgage
+      - Rental
+      - Repossession
+      - RevenueAndCustoms
+      - RightToBuy
+      type: string
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest'
+      description: Array of operations to perform
+    SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
+      anyOf:
+      - title: Sale Upper Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '100000'
+          path:
+            type: string
+            default: /SaleUpperAmount
+        description: The valuer's upper estimated sale amount. For property sales only.
+        example: "\n{ \n    \"path\": \"/SaleUpperAmount\", \n    \"op\": \"replace\", \n    \"value\": 100000\n}"
+      - title: Sale Lower Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '100000'
+          path:
+            type: string
+            default: /SaleLowerAmount
+        description: The valuer's lower estimated sale amount. For property sales only.
+        example: "\n{ \n    \"path\": \"/SaleLowerAmount\", \n    \"op\": \"replace\", \n    \"value\": 100000\n}"
+      - title: Sale Owner Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '100000'
+          path:
+            type: string
+            default: /SaleOwnerAmount
+        description: The vendor's target sale amount. For property sales only.
+        example: "\n{ \n    \"path\": \"/SaleOwnerAmount\", \n    \"op\": \"replace\", \n    \"value\": 100000\n}"
+      - title: Sale Proposed Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '100000'
+          path:
+            type: string
+            default: /SaleProposedAmount
+        description: The valuer's proposed sale amount. For property sales only.
+        example: "\n{ \n    \"path\": \"/SaleProposedAmount\", \n    \"op\": \"replace\", \n    \"value\": 100000\n}"
+      - title: Sale Fee Quoted
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: string
+            example: '"2000"'
+          path:
+            type: string
+            default: /SaleFeeQuoted
+        description: The fee expressed as an amount. For property sales only.
+        example: "\n{ \n    \"path\": \"/SaleFeeQuoted\", \n    \"op\": \"replace\", \n    \"value\": \"2000\"\n}"
+      - title: Sale Commission
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '2.0'
+          path:
+            type: string
+            default: /SaleCommission
+        description: The fee expressed as a sale price percentage. For property sales only.
+        example: "\n{ \n    \"path\": \"/SaleCommission\", \n    \"op\": \"replace\", \n    \"value\": 2.0\n}"
+      - title: Sale Price Qualifier
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Unknown
+            - OffersInTheRegionOf
+            - NoOffers
+            - AskingPrice
+            - OffersOver
+            - AuctionGuide
+            - PriceGuide
+            - InformalTender
+            - OffersInExcessOf
+            - PerSqFoot
+            - Price
+            - PricesFrom
+            - GuidePrice
+            type: string
+            example: Unknown
+          path:
+            type: string
+            default: /SalePriceQualifier
+        description: The Sale Price Qualifier. For property sales only.
+        example: "\n{ \n    \"path\": \"/SalePriceQualifier\", \n    \"op\": \"add\", \n    \"value\": \"Unknown\" \n}"
+      - title: Rent Frequency
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Unknown
+            - Weekly
+            - Monthly
+            - Quarterly
+            - Yearly
+            - AdHoc
+            - Daily
+            - Fortnightly
+            - FourWeekly
+            - MonthlyOnLastDay
+            - QuarterlyOnQuarterDays
+            - HalfYearly
+            - HalfYearlyOnQuarterDays
+            type: string
+            example: '0'
+          path:
+            type: string
+            default: /RentFrequency
+        description: The rent frequency. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentFrequency\", \n    \"op\": \"add\", \n    \"value\": \"0\" \n}"
+      - title: Rent Lower Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1000'
+          path:
+            type: string
+            default: /RentLowerAmount
+        description: The valuer's lower estimated rent amount. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentLowerAmount\", \n    \"op\": \"replace\", \n    \"value\": 1000\n}"
+      - title: Rent Upper Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1000'
+          path:
+            type: string
+            default: /RentUpperAmount
+        description: The valuer's upper estimated rent amount. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentUpperAmount\", \n    \"op\": \"replace\", \n    \"value\": 1000\n}"
+      - title: Rent Owner Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1000'
+          path:
+            type: string
+            default: /RentOwnerAmount
+        description: The landlord's target rent amount. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentOwnerAmount\", \n    \"op\": \"replace\", \n    \"value\": 1000\n}"
+      - title: Rent Proposed Amount
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '1000'
+          path:
+            type: string
+            default: /RentProposedAmount
+        description: The valuer's proposed rent amount. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentProposedAmount\", \n    \"op\": \"replace\", \n    \"value\": 1000\n}"
+      - title: Rent Management Commission
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '2.0'
+          path:
+            type: string
+            default: /RentManagementCommission
+        description: The recurring management fee expressed as a rent amount percentage. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentManagementCommission\", \n    \"op\": \"replace\", \n    \"value\": 2.0\n}"
+      - title: Rent Recurring Fee Fixed
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            type: number
+            example: '2.0'
+          path:
+            type: string
+            default: /RentRecurringFeeFixed
+        description: The recurring management fee expressed as a rent amount. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentRecurringFeeFixed\", \n    \"op\": \"replace\", \n    \"value\": 2.0\n}"
+      - title: Rent Recurring Fee Fixed Frequency
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Unknown
+            - Weekly
+            - Monthly
+            - Quarterly
+            - Yearly
+            - AdHoc
+            - Daily
+            - Fortnightly
+            - FourWeekly
+            - MonthlyOnLastDay
+            - QuarterlyOnQuarterDays
+            - HalfYearly
+            - HalfYearlyOnQuarterDays
+            type: string
+            example: Unknown
+          path:
+            type: string
+            default: /RentRecurringFeeFixedFrequency
+        description: The management fee payment frequency. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentRecurringFeeFixedFrequency\", \n    \"op\": \"add\", \n    \"value\": \"Unknown\" \n}"
+      - title: Rent Price Qualifier
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - test
+            type: string
+          value:
+            enum:
+            - Unspecified
+            - PerWeek
+            - PerMonth
+            - PerAnnum
+            type: string
+            example: Unspecified
+          path:
+            type: string
+            default: /RentPriceQualifier
+        description: The Rent Price Qualifier. For property rentals only.
+        example: "\n{ \n    \"path\": \"/RentPriceQualifier\", \n    \"op\": \"add\", \n    \"value\": \"Unspecified\" \n}"
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

@@ -1,0 +1,281 @@
+openapi: 3.2.0
+info:
+  title: Alto Parameters API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Parameters
+paths:
+  /parameters/appointment-subtypes:
+    get:
+      tags:
+      - Parameters
+      summary: Get general appointment sub-types.
+      description: 'Retrieves a list of all the general appointment sub-types supported by the group.
+
+        Required scope: alto/read:appointments'
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Sub types have been retrieved for general appointments
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiaryEventSubType'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiaryEventSubType'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiaryEventSubType'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:get-parameters-appointment-subtypes
+  /parameters/client-disposal-statuses:
+    get:
+      tags:
+      - Parameters
+      summary: Get Client Disposal Statuses
+      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      operationId: GetClientDisposalStatuses
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Client disposal statuses returned for the given AgencyRef
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+      security:
+      - appAuth:
+        - alto/route:get-parameters-client-disposal-statuses
+  /parameters/client-intentions:
+    get:
+      tags:
+      - Parameters
+      summary: Get Client Intentions
+      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      operationId: GetIntentions
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: client intentions returned for the given AgencyRef
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+      security:
+      - appAuth:
+        - alto/route:get-parameters-client-intentions
+  /parameters/client-positions:
+    get:
+      tags:
+      - Parameters
+      summary: Get Client Positions
+      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      operationId: GetPositions
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: client positions returned for the given AgencyRef
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+      security:
+      - appAuth:
+        - alto/route:get-parameters-client-positions
+  /parameters/lead-sources:
+    get:
+      tags:
+      - Parameters
+      summary: Get Lead Sources
+      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      operationId: GetLeadSources
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lead sources returned for the given AgencyRef
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+      security:
+      - appAuth:
+        - alto/route:get-parameters-lead-sources
+  /parameters/property-types:
+    get:
+      tags:
+      - Parameters
+      summary: Get Property Types
+      description: 'Returns the property types available to the caller''s group. Use the returned `code`s when specifying
+
+        an applicant requirement''s property types. Property types are defined per Group, so the list is scoped
+
+        to the group context of the request.'
+      operationId: GetPropertyTypes
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Property types returned for the given AgencyRef
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+      security:
+      - appAuth:
+        - alto/route:get-parameters-property-types
+components:
+  schemas:
+    Alto.Contacts.Api.Models.Responses.ParameterValue:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    DiaryEventSubType:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the general appointment sub-type
+          format: int32
+        displayName:
+          type:
+          - string
+          - 'null'
+          description: The name of the general appointment sub-type
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

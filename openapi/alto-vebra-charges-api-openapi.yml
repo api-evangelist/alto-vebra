@@ -1,0 +1,613 @@
+openapi: 3.2.0
+info:
+  title: Alto Charges API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Charges
+paths:
+  /inventory/{propertyId}/charges:
+    post:
+      tags:
+      - Charges
+      parameters:
+      - name: propertyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - chargeType
+              type: object
+              properties:
+                chargeType:
+                  enum:
+                  - Maintenance
+                  - Deposit
+                  - DepositToLandlord
+                  - ReferencingFee
+                  - AdministrationFee
+                  - CheckInFee
+                  - CheckOutFee
+                  - TenancyAgreementFee
+                  - CapitalExpenditure
+                  - Cleaning
+                  - Electrical
+                  - Gardening
+                  - Plumbing
+                  - GasSafetyCheck
+                  - EPC
+                  - MaintenanceExpense
+                  - InsuranceBuildings
+                  - InsuranceContents
+                  - InsuranceRentProtection
+                  - UtilitiesWater
+                  - UtilitiesCouncilTax
+                  - UtilitiesElectricity
+                  - UtilitiesGas
+                  - Decorating
+                  - BankCharges
+                  - ServiceCharge
+                  - GroundRent
+                  - ElectricalSafetyCheck
+                  - Appliances
+                  - KeysLocksmith
+                  - Inventory
+                  - Furniture
+                  - PortableApplianceTest
+                  - LeadTest
+                  type: string
+                supplierId:
+                  type: string
+                invoiceReference:
+                  type: string
+                totalNet:
+                  minimum: 0.0
+                  type: number
+                  format: float
+                totalVat:
+                  minimum: 0
+                  type: number
+                  format: float
+                vatRateType:
+                  enum:
+                  - Exempt
+                  - Standard
+                  - Reduced
+                  - Zero
+                  - StandardROI
+                  type: string
+                workOrderId:
+                  type: string
+                invoiceDocument:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                raiseImmediately:
+                  type: boolean
+                chargeDate:
+                  type: string
+                  format: date-time
+            encoding:
+              chargeType:
+                style: form
+              supplierId:
+                style: form
+              invoiceReference:
+                style: form
+              totalNet:
+                style: form
+              totalVat:
+                style: form
+              vatRateType:
+                style: form
+              workOrderId:
+                style: form
+              invoiceDocument:
+                style: form
+              description:
+                style: form
+              raiseImmediately:
+                style: form
+              chargeDate:
+                style: form
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PropertyCharge'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:post-inventory-propertyid-charges
+  /tenancies/{tenancyId}/charges:
+    post:
+      tags:
+      - Charges
+      parameters:
+      - name: tenancyId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - chargeType
+              type: object
+              properties:
+                tenantId:
+                  type: string
+                  description: The unique identifier for the tenant.
+                  example: '123'
+                excludeFromArrears:
+                  type: boolean
+                  description: Excludes the tenancy from arrears. If this is true then Alto.PropertyManagement.Api.Models.Requests.TenancyChargeRequest.ShowInArrearsAfterDays cannot be set. Defaults to false.
+                  example: true
+                showInArrearsAfterDays:
+                  type: integer
+                  description: The tenancy will only show in arrears after so many days. Can only receive a positive value if Alto.PropertyManagement.Api.Models.Requests.TenancyChargeRequest.ExcludeFromArrears is false or null. Defaults to 0.
+                  format: int32
+                  example: 5
+                sendDocs:
+                  type: boolean
+                  description: Should the docs be sent. Defaults to false.
+                  example: true
+                paymentMethod:
+                  enum:
+                  - Unknown
+                  - Bacs
+                  - Cheque
+                  - Cash
+                  - StandingOrder
+                  - DirectDebit
+                  - Internet
+                  - CreditCard
+                  - DebitCard
+                  - Transfer
+                  - Journal
+                  - ReceiptImport
+                  type: string
+                  description: Payment method.
+                  example: DirectDebit
+                paymentReference:
+                  type: string
+                  description: The payment reference.
+                  example: '12345'
+                raiseInAdvanceDays:
+                  type: integer
+                  description: Raise the payment in advance by this many days. Defaults to 0.
+                  format: int32
+                  example: 3
+                raiseEndDate:
+                  type: string
+                  description: Raise the charge up to and including this date.
+                  format: date-time
+                  example: '2024-06-01T00:00:00.0000000+00:00'
+                chargeType:
+                  enum:
+                  - Maintenance
+                  - Deposit
+                  - DepositToLandlord
+                  - ReferencingFee
+                  - AdministrationFee
+                  - CheckInFee
+                  - CheckOutFee
+                  - TenancyAgreementFee
+                  - CapitalExpenditure
+                  - Cleaning
+                  - Electrical
+                  - Gardening
+                  - Plumbing
+                  - GasSafetyCheck
+                  - EPC
+                  - MaintenanceExpense
+                  - InsuranceBuildings
+                  - InsuranceContents
+                  - InsuranceRentProtection
+                  - UtilitiesWater
+                  - UtilitiesCouncilTax
+                  - UtilitiesElectricity
+                  - UtilitiesGas
+                  - Decorating
+                  - BankCharges
+                  - ServiceCharge
+                  - GroundRent
+                  - ElectricalSafetyCheck
+                  - Appliances
+                  - KeysLocksmith
+                  - Inventory
+                  - Furniture
+                  - PortableApplianceTest
+                  - LeadTest
+                  type: string
+                supplierId:
+                  type: string
+                invoiceReference:
+                  type: string
+                totalNet:
+                  minimum: 0.0
+                  type: number
+                  format: float
+                totalVat:
+                  minimum: 0
+                  type: number
+                  format: float
+                vatRateType:
+                  enum:
+                  - Exempt
+                  - Standard
+                  - Reduced
+                  - Zero
+                  - StandardROI
+                  type: string
+                workOrderId:
+                  type: string
+                invoiceDocument:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+                raiseImmediately:
+                  type: boolean
+                chargeDate:
+                  type: string
+                  format: date-time
+            encoding:
+              tenantId:
+                style: form
+              excludeFromArrears:
+                style: form
+              showInArrearsAfterDays:
+                style: form
+              sendDocs:
+                style: form
+              paymentMethod:
+                style: form
+              paymentReference:
+                style: form
+              raiseInAdvanceDays:
+                style: form
+              raiseEndDate:
+                style: form
+              chargeType:
+                style: form
+              supplierId:
+                style: form
+              invoiceReference:
+                style: form
+              totalNet:
+                style: form
+              totalVat:
+                style: form
+              vatRateType:
+                style: form
+              workOrderId:
+                style: form
+              invoiceDocument:
+                style: form
+              description:
+                style: form
+              raiseImmediately:
+                style: form
+              chargeDate:
+                style: form
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyCharge'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:post-tenancies-tenancyid-charges
+components:
+  schemas:
+    Alto.PropertyManagement.Api.Models.Responses.PropertyCharge:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        supplierId:
+          type:
+          - string
+          - 'null'
+        chargeType:
+          enum:
+          - Maintenance
+          - Deposit
+          - DepositToLandlord
+          - ReferencingFee
+          - AdministrationFee
+          - CheckInFee
+          - CheckOutFee
+          - TenancyAgreementFee
+          - CapitalExpenditure
+          - Cleaning
+          - Electrical
+          - Gardening
+          - Plumbing
+          - GasSafetyCheck
+          - EPC
+          - MaintenanceExpense
+          - InsuranceBuildings
+          - InsuranceContents
+          - InsuranceRentProtection
+          - UtilitiesWater
+          - UtilitiesCouncilTax
+          - UtilitiesElectricity
+          - UtilitiesGas
+          - Decorating
+          - BankCharges
+          - ServiceCharge
+          - GroundRent
+          - ElectricalSafetyCheck
+          - Appliances
+          - KeysLocksmith
+          - Inventory
+          - Furniture
+          - PortableApplianceTest
+          - LeadTest
+          type: string
+        totalNet:
+          type: number
+          format: float
+        totalVat:
+          type: number
+          format: float
+        vatRateType:
+          enum:
+          - Exempt
+          - Standard
+          - Reduced
+          - Zero
+          - StandardROI
+          type: string
+        invoiceReference:
+          type:
+          - string
+          - 'null'
+        invoiceDocumentId:
+          type:
+          - string
+          - 'null'
+        workOrderId:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        chargeDate:
+          type: string
+          format: date-time
+        propertyId:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.TenancyCharge:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        supplierId:
+          type:
+          - string
+          - 'null'
+        chargeType:
+          enum:
+          - Maintenance
+          - Deposit
+          - DepositToLandlord
+          - ReferencingFee
+          - AdministrationFee
+          - CheckInFee
+          - CheckOutFee
+          - TenancyAgreementFee
+          - CapitalExpenditure
+          - Cleaning
+          - Electrical
+          - Gardening
+          - Plumbing
+          - GasSafetyCheck
+          - EPC
+          - MaintenanceExpense
+          - InsuranceBuildings
+          - InsuranceContents
+          - InsuranceRentProtection
+          - UtilitiesWater
+          - UtilitiesCouncilTax
+          - UtilitiesElectricity
+          - UtilitiesGas
+          - Decorating
+          - BankCharges
+          - ServiceCharge
+          - GroundRent
+          - ElectricalSafetyCheck
+          - Appliances
+          - KeysLocksmith
+          - Inventory
+          - Furniture
+          - PortableApplianceTest
+          - LeadTest
+          type: string
+        totalNet:
+          type: number
+          format: float
+        totalVat:
+          type: number
+          format: float
+        vatRateType:
+          enum:
+          - Exempt
+          - Standard
+          - Reduced
+          - Zero
+          - StandardROI
+          type: string
+        invoiceReference:
+          type:
+          - string
+          - 'null'
+        invoiceDocumentId:
+          type:
+          - string
+          - 'null'
+        workOrderId:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        chargeDate:
+          type: string
+          format: date-time
+        tenantId:
+          type:
+          - string
+          - 'null'
+        tenancyId:
+          type:
+          - string
+          - 'null'
+        propertyId:
+          type:
+          - string
+          - 'null'
+        excludeFromArrears:
+          type: boolean
+        showInArrearsAfterDays:
+          type: integer
+          format: int32
+        sendDocs:
+          type: boolean
+        paymentMethod:
+          enum:
+          - Unknown
+          - Bacs
+          - Cheque
+          - Cash
+          - StandingOrder
+          - DirectDebit
+          - Internet
+          - CreditCard
+          - DebitCard
+          - Transfer
+          - Journal
+          - ReceiptImport
+          type:
+          - string
+          - 'null'
+        paymentReference:
+          type:
+          - string
+          - 'null'
+        raiseInAdvanceDays:
+          type: integer
+          format: int32
+        raiseEndDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

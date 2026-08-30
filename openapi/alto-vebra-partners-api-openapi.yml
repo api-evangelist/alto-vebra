@@ -1,0 +1,479 @@
+openapi: 3.2.0
+info:
+  title: Alto Partners API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Partners
+paths:
+  /opt-out-status/{linkedType}/{linkedId}:
+    get:
+      tags:
+      - Partners
+      summary: Get the integration opt-out status
+      description: Returns the opt-out status for a linked entity. The linked entity is identified by its type and id. Currently only Property entities are supported.
+      operationId: GetIntegrationOptOutStatus
+      parameters:
+      - name: linkedType
+        in: path
+        description: The type of the linked entity (e.g. Property)
+        required: true
+        schema:
+          type: string
+      - name: linkedId
+        in: path
+        description: The id of the linked entity
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the opt-out status for the linked entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptOutResponse'
+        '400':
+          description: When the request does not contain the expected information
+        '401':
+          description: When access has not been granted
+        '404':
+          description: The linked entity is not found
+      security:
+      - appAuth:
+        - alto/route:get-opt-out-status-linkedtype-linkedid
+  /partners/integration:
+    get:
+      tags:
+      - Partners
+      summary: Get the integration activation state
+      description: Get the current integration activation state for the authenticated partner and agency.
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the integration activation state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationStateResponse'
+        '401':
+          description: When access has not been granted
+        '404':
+          description: When the integration is not enabled for the agency
+      security:
+      - appAuth:
+        - alto/route:get-partners-integration
+  /partners/integration/status:
+    post:
+      tags:
+      - Partners
+      summary: Update the integration activation state
+      description: Update the provider status for the calling partner's integrated services on the requested branches.
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateIntegrationStatusRequest'
+      responses:
+        '200':
+          description: Returns the applied provider status and the affected records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateIntegrationStatusResponse'
+        '400':
+          description: When the request does not contain a recognised provider status
+        '401':
+          description: When access has not been granted
+        '404':
+          description: When no integrated services were found for the partner and requested branches
+      security:
+      - appAuth:
+        - alto/route:post-partners-integration-status
+components:
+  schemas:
+    UpdateIntegrationStatusResponse:
+      type: object
+      properties:
+        partnerIntegrationStatus:
+          allOf:
+          - $ref: '#/components/schemas/PartnerIntegrationStatus'
+        partnerIntegrationStatusDescription:
+          type:
+          - string
+          - 'null'
+        partnerIntegrationStatusUpdatedOn:
+          type: string
+          format: date-time
+        updatedRecordCount:
+          type: integer
+          format: int32
+        updatedBranchIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+      additionalProperties: false
+    BranchAddressResponse:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    EntityOptOutStatus:
+      enum:
+      - OptedIn
+      - OptedOut
+      type: string
+    IntegrationStateResponse:
+      type: object
+      properties:
+        integrationId:
+          type: string
+          format: uuid
+        integrationName:
+          type:
+          - string
+          - 'null'
+        agencyName:
+          type:
+          - string
+          - 'null'
+        requestedBy:
+          type:
+          - string
+          - 'null'
+        agencyIntegrationData: {}
+        branches:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/IntegrationBranchResponse'
+      additionalProperties: false
+    PartnerIntegrationStatus:
+      enum:
+      - Pending
+      - Active
+      type: string
+    IntegrationBranchResponse:
+      type: object
+      properties:
+        branchRef:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type: integer
+          format: int32
+        branchName:
+          type:
+          - string
+          - 'null'
+        branchAddress:
+          allOf:
+          - $ref: '#/components/schemas/BranchAddressResponse'
+        overridesAgencyIntegrationData:
+          type: boolean
+        integrationData: {}
+      additionalProperties: false
+    UpdateIntegrationStatusRequest:
+      type: object
+      properties:
+        partnerIntegrationStatus:
+          type:
+          - string
+          - 'null'
+        partnerIntegrationStatusDescription:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ModelType:
+      enum:
+      - Unknown
+      - Group
+      - User
+      - Role
+      - Product
+      - Transaction
+      - SecurityRelationship
+      - OtherSecurityResource
+      - UserCode
+      - ProductRole
+      - Code
+      - CodeText
+      - Company
+      - Brand
+      - Branch
+      - BranchUser
+      - BranchBankAccount
+      - BranchBrand
+      - MatchArea
+      - BranchMatchArea
+      - CustomLocation
+      - RecurringEvent
+      - BatchList
+      - BatchListItem
+      - BatchTask
+      - BatchTaskSchedule
+      - BatchRun
+      - BatchCounter
+      - BatchError
+      - BatchRunTask
+      - GroupLock
+      - GroupLockHistory
+      - GroupReport
+      - ServiceRequestHistory
+      - SecuritySessionHistory
+      - ValueDomain
+      - Parameter
+      - ParameterList
+      - ParameterTable
+      - ValueDomainItem
+      - CodeList
+      - ParameterValue
+      - GroupCodeList
+      - ParameterListValue
+      - ParameterTableKey
+      - ParameterTableKeyValue
+      - ParameterTableValue
+      - ReportStructure
+      - ReportSection
+      - ReportColumn
+      - ReportFilter
+      - Applicant
+      - Property
+      - Contact
+      - PropertySale
+      - PropertyRental
+      - Room
+      - Media
+      - PostalAddress
+      - Phone
+      - EmailAddress
+      - GroupBankAccount
+      - GroupBankBranch
+      - Vendor
+      - Landlord
+      - Tenant
+      - Guarantor
+      - Supplier
+      - Tenancy
+      - ThirdParty
+      - ClientBankAccount
+      - DefaultFee
+      - FeeInstruction
+      - DiaryEvent
+      - DiaryEventParty
+      - Viewing
+      - PropertyValuation
+      - PropertyMatchArea
+      - PropertyFeature
+      - RoomMedia
+      - PropertyContact
+      - ContactRelationship
+      - Offer
+      - AgreedOffer
+      - Communication
+      - DiaryEventRecurringSchedule
+      - DiaryEventRecurringException
+      - HistoryEvent
+      - HistoryEventParty
+      - ComparableProperty
+      - PropertyBullet
+      - PropertyLease
+      - Requirement
+      - RequirementItem
+      - DiaryEventReminder
+      - AuditedChange
+      - CommunicationError
+      - DocumentTemplate
+      - FollowUp
+      - MediaFile
+      - PropertyInsurance
+      - PropertyUploadIndex
+      - SavedSearch
+      - UploadRequest
+      - KeySet
+      - ReportConfiguration
+      - ReportSchedule
+      - Report
+      - LetterRackItem
+      - Timeline
+      - FinancialTransaction
+      - CashBookItem
+      - Charge
+      - PurchaseInvoice
+      - PurchaseInvoiceItem
+      - SalesInvoice
+      - SalesInvoiceItem
+      - PropertyRelationship
+      - ReportConfigurationItem
+      - PendingDocument
+      - PendingDocumentParty
+      - MarketingEvent
+      - MarketingEventProperty
+      - Help
+      - ChainLink
+      - ChainLinkParty
+      - UnknownProperty
+      - UnknownContact
+      - Progression
+      - ManyToMany
+      - ManyToManyItem
+      - SMSRequest
+      - PropertyTemplate
+      - AdvertRun
+      - AdvertRunProperty
+      - BoardManagement
+      - StandardParagraph
+      - LocalCacheItemContainer
+      - ChainLinkSolicitor
+      - DefaultExpense
+      - MatchAreaGroup
+      - GroupData
+      - Lead
+      - PropertyWebStatistic
+      - ProductDocumentation
+      - WebStatisticsProvider
+      - PropertyMatchOn
+      - ExternalEmailAttachment
+      - Email
+      - SavedMatchList
+      - SavedMatchListRow
+      - ImportExternalKeyMapping
+      - EmailTemplate
+      - SelfBillingInvoice
+      - PropertyUtility
+      - PaymentGroup
+      - PaymentGroupProperty
+      - TaxExemptionPeriod
+      - LinkedAccount
+      - TenancyUtilityReading
+      - TenancyEvent
+      - TenancyDepositProtection
+      - TenancyMarketing
+      - WorkOrder
+      - WorkOrderEvent
+      - PaymentMethod
+      - ManagementDateAttribute
+      - DepositScheme
+      - BranchSequenceNumber
+      - FrequencyAttribute
+      - Accounts
+      - SupplierService
+      - ChargeToPost
+      - AccountTransaction
+      - BacsFileExtension
+      - BacsFileContent
+      - DestinationBankAccount
+      - TransactionHistory
+      - DefaultPMFee
+      - OpeningBalance
+      - HeldMoney
+      - Retention
+      - AuditItem
+      - OpeningBalanceHistory
+      - AccountingDocumentRequest
+      - EffectivePermission
+      - AccountingDocumentGenerationRun
+      - ChargeTemplate
+      - PropertyOwnership
+      - FollowUpEvent
+      - ReviewNotes
+      - PendingReportRequest
+      - SendGridEvent
+      - BookingRequest
+      - TdsCommunicationState
+      - SigningRequest
+      - ContactOwnedPropertiesCollection
+      - MaintenanceRequest
+      - AccountsExportProfile
+      - AccountsDataExport
+      - SecurityAttribute
+      type: string
+    OptOutResponse:
+      type: object
+      properties:
+        linkedType:
+          allOf:
+          - $ref: '#/components/schemas/ModelType'
+        linkedId:
+          type: integer
+          format: int64
+        optOutStatus:
+          allOf:
+          - $ref: '#/components/schemas/EntityOptOutStatus'
+        optedOutAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        optedOutBy:
+          type:
+          - integer
+          - 'null'
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

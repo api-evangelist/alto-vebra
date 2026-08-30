@@ -1,0 +1,368 @@
+openapi: 3.2.0
+info:
+  title: Alto Work Orders API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: WorkOrders
+paths:
+  /inventory/{inventoryId}/work-orders:
+    get:
+      tags:
+      - WorkOrders
+      summary: Get Work Orders for a specific inventory item by Property Id
+      description: Retrieves a Work Order by Id for a given AgencyRef and all permissable branches.
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The unique identity for the property
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.WorkOrder'
+        '404':
+          description: Work Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid-work-orders
+  /work-orders:
+    post:
+      tags:
+      - WorkOrders
+      summary: Post Work Order
+      description: Create a new Work Order in Alto
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Request for the new Work Order
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest'
+      responses:
+        '201':
+          description: Returns the new Work Order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.WorkOrder'
+        '400':
+          description: Validation errors e.g. "Invalid ReportedDate"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:post-work-orders
+  /work-orders/{id}:
+    get:
+      tags:
+      - WorkOrders
+      summary: Gets Work Order by Id
+      description: Retrieves a Work Order by id for a given AgencyRef and all permissable branches.
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Work Order
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.WorkOrder'
+        '404':
+          description: Work Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-work-orders-id
+    patch:
+      tags:
+      - WorkOrders
+      summary: Patch Work Order by Id
+      description: Update selected fields in the Work Order with the given id
+      parameters:
+      - name: id
+        in: path
+        description: Id of the Work Order
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
+      responses:
+        '204':
+          description: Work Order updated
+        '400':
+          description: Validation errors e.g. "Invalid Priority"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '404':
+          description: Work Order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-work-orders-id
+components:
+  schemas:
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.WorkOrderActor:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+          description: A string description of the related party
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the related party, or null for Agency
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.WorkOrder:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Id of the Work Order
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the Property associated with the Work Order.
+        supplierContactId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the Supplier associated with the Work Order.
+        accessDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        reporterDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        chargeDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        reportedDate:
+          type: string
+          description: The date the Work Order was reported.
+          format: date-time
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: The preferred start date for the work to be carried out.
+          format: date-time
+        quote:
+          type:
+          - number
+          - 'null'
+          description: The estimated cost of the work
+          format: double
+        workOrderNumber:
+          type:
+          - string
+          - 'null'
+          description: Unique Work Order reference number
+        status:
+          type:
+          - string
+          - 'null'
+          description: Current status of the Work Order
+        summary:
+          type:
+          - string
+          - 'null'
+          description: The title of the Work Order.
+        description:
+          type:
+          - string
+          - 'null'
+          description: A detailed description of the Work Order.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Additional notes.
+        priority:
+          type:
+          - string
+          - 'null'
+          description: The priority level of the Work Order.
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          description: The date the Work Order was last modified.
+          format: date-time
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
+      description: Array of operations to perform
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest:
+      required:
+      - priority
+      - propertyId
+      - reportedDate
+      - summary
+      type: object
+      properties:
+        propertyId:
+          minLength: 1
+          type: string
+          description: The unique identifier for the property associated with the work order.
+        summary:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The title of the work order.
+        description:
+          type:
+          - string
+          - 'null'
+          description: A detailed description of the work order.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Additional notes.
+        priority:
+          minLength: 1
+          type: string
+          description: The priority level of the work order.
+        reporterDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        accessDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        chargeDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        reportedDate:
+          minLength: 1
+          type: string
+          description: The date the work order was reported.
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: The preferred start date for the works to be carried out.
+        supplierContactId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the supplier (recorded in Alto) who will carry out the works.
+        quote:
+          type:
+          - number
+          - 'null'
+          description: The estimated cost of the works.
+          format: double
+        negotiatorId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the negotiator
+          example: '1234'
+      additionalProperties: false
+      description: Represents a work order
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

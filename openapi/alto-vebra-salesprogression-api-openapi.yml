@@ -1,0 +1,492 @@
+openapi: 3.2.0
+info:
+  title: Alto Sales Progression API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: SalesProgression
+paths:
+  /sales-progressions:
+    get:
+      tags:
+      - SalesProgression
+      parameters:
+      - name: PropertyId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: BranchId
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: ConveyancerId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: NegotiatorId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: Sort
+        in: query
+        schema:
+          $ref: '#/components/schemas/SortType'
+      - name: StatusId
+        in: query
+        schema:
+          type: integer
+          format: int32
+      - name: FTSQuery
+        in: query
+        schema:
+          type: string
+      - name: NextToken
+        in: query
+        schema:
+          type: string
+      - name: MaxResults
+        in: query
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AgreedOfferPagedResults'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgreedOfferPagedResults'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AgreedOfferPagedResults'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:get-sales-progressions
+  /sales-progressions/{offerId}:
+    get:
+      tags:
+      - SalesProgression
+      parameters:
+      - name: offerId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AgreedOfferWithMilestones'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgreedOfferWithMilestones'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AgreedOfferWithMilestones'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '500':
+          description: Internal Server Error
+      security:
+      - appAuth:
+        - alto/route:get-sales-progressions-offerid
+components:
+  schemas:
+    AgreedOfferWithMilestones:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        propertyId:
+          type:
+          - string
+          - 'null'
+        vendorSolicitor:
+          $ref: '#/components/schemas/CompanyResponse'
+        buyerSolicitor:
+          $ref: '#/components/schemas/CompanyResponse'
+        salesProgressor:
+          $ref: '#/components/schemas/SecurityUserResponse'
+        status:
+          type:
+          - string
+          - 'null'
+        offerAmount:
+          type: number
+          format: double
+        currencyCode:
+          type:
+          - string
+          - 'null'
+        offerAgreedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        estimatedExchangeDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        completionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        exchangeDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        milestones:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Milestone'
+        contacts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+      additionalProperties: false
+    AgreedOfferPagedResults:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AgreedOffer'
+      additionalProperties: false
+    ContactResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+        type:
+          type:
+          - string
+          - 'null'
+        broker:
+          $ref: '#/components/schemas/CompanyResponse'
+      additionalProperties: false
+    SortType:
+      enum:
+      - CompletionDate
+      - EstimatedExchangeDate
+      - OfferAcceptedDate
+      - Negotiator
+      - Milestone
+      - OldestToNewest
+      type: string
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    AddressResponse:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    AgreedOffer:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        propertyId:
+          type:
+          - string
+          - 'null'
+        vendorSolicitor:
+          $ref: '#/components/schemas/CompanyResponse'
+        buyerSolicitor:
+          $ref: '#/components/schemas/CompanyResponse'
+        salesProgressor:
+          $ref: '#/components/schemas/SecurityUserResponse'
+        status:
+          type:
+          - string
+          - 'null'
+        offerAmount:
+          type: number
+          format: double
+        currencyCode:
+          type:
+          - string
+          - 'null'
+        contacts:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+        offerAgreedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        estimatedExchangeDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        completionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        exchangeDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    CompanyResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        companyName:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+      additionalProperties: false
+    SecurityUserResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+      additionalProperties: false
+    Milestone:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        targetDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        completedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        notes:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        priority:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        customization:
+          type:
+          - string
+          - 'null'
+        ordering:
+          type: integer
+          format: int32
+        subTypeId:
+          type: integer
+          format: int32
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

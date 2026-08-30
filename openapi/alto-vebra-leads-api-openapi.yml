@@ -1,0 +1,957 @@
+openapi: 3.2.0
+info:
+  title: Alto Leads API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Leads
+paths:
+  /leads:
+    get:
+      tags:
+      - Leads
+      summary: Gets a paginated list of Leads
+      description: 'Retrieves a paginated list of leads in the requested state of processing for a given AgencyRef and all permissible branches.
+
+        Required scope: alto/read:leads'
+      parameters:
+      - name: modified-from
+        in: query
+        description: 'Required: The modified date and time in ISO 8601 format from which Leads should be retrieved from.'
+        schema:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00.0000000+00:00'
+        example: '2023-01-01T00:00:00.0000000+00:00'
+      - name: modified-to
+        in: query
+        description: 'Required: The modified date and time in ISO 8601 format from which Leads should be retrieved up until.'
+        schema:
+          type: string
+          format: date-time
+          example: '2023-12-31T23:59:59.0000000+00:00'
+        example: '2023-12-31T23:59:59.0000000+00:00'
+      - name: lead-status
+        in: query
+        description: "Optional: The LeadStatus type for filtering leads. Permitted values are:\n- Unspecified: Leads that have not been able to be processed after import\n- Unprocessed: Leads that are queued up for processing after import\n- Processed: Leads that are ready for triage\n- Rejected: Leads that have been triaged and rejected by the agent or party acting on behalf of the agent\n- Accepted: Leads that have been triaged and accepted by the agent or party acting on behalf of the agent\n            \nNOTE: If not set, this will default to Accepted"
+        schema:
+          allOf:
+          - $ref: '#/components/schemas/LeadStatus'
+          example: Accepted
+        example: Accepted
+      - name: enquiry-from
+        in: query
+        description: 'Required: The enquiry date and time in ISO 8601 format from which Leads should be retrieved from.'
+        schema:
+          type: string
+          format: date-time
+          example: '2023-01-01T00:00:00.0000000+00:00'
+        example: '2023-01-01T00:00:00.0000000+00:00'
+      - name: enquiry-to
+        in: query
+        description: 'Required: The enquiry date and time in ISO 8601 format from which Leads should be retrieved up until.'
+        schema:
+          type: string
+          format: date-time
+          example: '2023-12-31T23:59:59.0000000+00:00'
+        example: '2023-12-31T23:59:59.0000000+00:00'
+      - name: next-token
+        in: query
+        description: Sets the token for the next page of resultss.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: Sets the maximum number of results to return. The maximum number of results to return. The default value is 50, and the maximum value is 250
+        schema:
+          maximum: 250
+          minimum: 1
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/LeadPagedResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadPagedResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/LeadPagedResponse'
+        '400':
+          description: Validation error i.e. invalid date range or missing branch level activation.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+        '403':
+          description: Invalid scope or AgencyRef for request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-leads
+    post:
+      tags:
+      - Leads
+      summary: Create Lead
+      description: Creates a new lead within Alto
+      parameters:
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PostLeadRequest'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PostLeadRequest'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/PostLeadRequest'
+      responses:
+        '201':
+          description: A new lead has been created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Lead'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+        '400':
+          description: A lead could not be created from the request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+        '409':
+          description: A lead already exists for the source identifier value in the request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+        '422':
+          description: A lead could not be created for the specified branch
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-leads
+  /leads/{leadId}:
+    get:
+      tags:
+      - Leads
+      summary: Get Lead by Id
+      description: Get a lead item by id
+      operationId: GetById
+      parameters:
+      - name: leadId
+        in: path
+        description: The unique identifier of the lead
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lead returned for LeadId.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Lead'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+        '400':
+          description: Validation error e.g. invalid LeadId.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+        '404':
+          description: Lead not found for LeadId.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-leads-leadid
+    patch:
+      tags:
+      - Leads
+      summary: Update Lead by Id
+      description: "Updates a lead by leadId with any of the following fields supported for update:\n- /contactId ie. The id of the contact associated with the lead\n- /leadStatus ie. Set the new status of a Processed lead to either Accepted/Rejected. Only leads with a status of Processed can be updated\n            \nRequired scope: alto/update:leads"
+      operationId: UpdateLead
+      parameters:
+      - name: leadId
+        in: path
+        description: The unique identifier for the Lead.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: JsonPatchDocument payload with the intended changes.
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LeadPatchJsonPatchDocument'
+          text/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LeadPatchJsonPatchDocument'
+          application/*+json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LeadPatchJsonPatchDocument'
+      responses:
+        '200':
+          description: Returns the updated Lead.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Lead'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Lead'
+        '400':
+          description: Invalid Patch request.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '403':
+          description: Forbidden
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Lead not found.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-leads-leadid
+components:
+  schemas:
+    LeadPagedResponse:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+          description: The metadata for the response.
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Lead'
+          description: The collection of items in the response.
+      additionalProperties: false
+      description: Represents a paged response containing metadata and a collection of items.
+    Lead:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the lead
+          example: '76543'
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The identifier of the branch the lead belongs to
+          example: '11'
+        leadStatus:
+          allOf:
+          - $ref: '#/components/schemas/LeadStatus'
+          description: The processing state of the lead
+          example: Accepted
+        leadSource:
+          allOf:
+          - $ref: '#/components/schemas/LeadSource'
+          description: The denotes where the lead's enquiry was submitted
+          example: Zoopla
+        enquiryDate:
+          type: string
+          description: The date and time in ISO 8601 format that the lead enquired
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        createdDate:
+          type: string
+          description: The date and time in ISO 8601 format that the lead was imported into Alto eg. the status of the lead has changed to "Processed"
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        modifiedDate:
+          type: string
+          description: The date and time in ISO 8601 format that the lead was last modified eg. the status of the lead has changed from "Processed" to "Accepted"
+          format: date-time
+          example: '2024-11-01T14:07:17.0000000+00:00'
+        enquiryType:
+          allOf:
+          - $ref: '#/components/schemas/EnquiryType'
+          description: The type of enquiry the lead has made
+          example: LookingToBuy
+        enquirerDetails:
+          allOf:
+          - $ref: '#/components/schemas/EnquirerDetails'
+          description: The lead's enquirer contact details that have been submitted as part of the enquiry;
+        contact:
+          allOf:
+          - $ref: '#/components/schemas/Contact'
+          description: A contact that has been associated to the lead; if no contact has been associated to a lead, then will return null
+        properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Property'
+          description: A collection of properties that the lead has enquired against; if no properties have been enquired against, then returns an empty collection
+        comment:
+          type:
+          - string
+          - 'null'
+          description: Comment or note for the lead
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LeadPropertyEnquiry:
+      type: object
+      properties:
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier of the property.
+        price:
+          type: number
+          description: The price of the property.
+          format: double
+        postcode:
+          type:
+          - string
+          - 'null'
+          description: The postcode of the property.
+        bedrooms:
+          type:
+          - integer
+          - 'null'
+          description: The number of bedrooms.
+          format: int32
+      additionalProperties: false
+    PostLeadRequest:
+      required:
+      - branchId
+      - enquirerDetails
+      - sourceIdentifier
+      type: object
+      properties:
+        branchId:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          description: Unique identifier for the Alto branch receiving the lead.
+          format: int32
+        enquiryType:
+          allOf:
+          - $ref: '#/components/schemas/EnquiryType'
+          description: Type of enquiry.
+        preferredContactMethod:
+          allOf:
+          - $ref: '#/components/schemas/PreferredContactMethod'
+          description: The enquirer's preferred contact method.
+        preferredContactTime:
+          allOf:
+          - $ref: '#/components/schemas/PreferredContactTime'
+          description: The enquirer's preferred contact time.
+        sourceIdentifier:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Unique identifier for this lead.
+        enquiryDate:
+          type:
+          - string
+          - 'null'
+          description: Enquiry date.
+          format: date-time
+        enquirerDetails:
+          allOf:
+          - $ref: '#/components/schemas/EnquirerDetailsRequest'
+          description: The enquirer's contact details.
+        propertyEnquiries:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LeadPropertyEnquiry'
+          description: Collection of property enquiries
+        comment:
+          maxLength: 2000
+          type:
+          - string
+          - 'null'
+          description: Comment from the enquirer.
+          example: I am looking for a rental property that allows pets
+      additionalProperties: false
+    EnquirerAddressRequest:
+      type: object
+      properties:
+        houseName:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The house or flat name of the enquirer's address
+          example: Oak Lodge
+        houseNumber:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The house or flat number of the enquirer's address
+          example: '14'
+        street:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The street of the enquirer's address
+          example: Oak Street
+        locality:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The locality of the enquirer's address
+          example: St Clement
+        area:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The area of the enquirer's address
+        town:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The town or city of the enquirer's address
+          example: London
+        county:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The county of the enquirer's address
+          example: Hampshire
+        country:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The country of the enquirer's address
+          example: UK
+        postcode:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The postal code of the enquirer's addres
+          example: SW45 3AP
+      additionalProperties: false
+    EnquiryType:
+      enum:
+      - Unspecified
+      - LookingToBuy
+      - LookingToLet
+      - LookingToRent
+      - LookingToSell
+      - Other
+      type: string
+    EnquirerDetailsRequest:
+      required:
+      - forename
+      type: object
+      properties:
+        title:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The formal title of the enquirer
+          example: Ms
+        forename:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: The first or given name of the enquirer
+          example: Jane
+        surname:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The surname of the enquirer
+          example: Smith
+        phoneNumberDay:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The day time phone number of the enquirer
+          example: 07683726192
+        phoneNumberEve:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The evening phone number of the enquirer
+          example: 07683726192
+        email:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The email address of the enquirer
+          format: email
+          example: jane.smith@enquirer.com
+        address:
+          allOf:
+          - $ref: '#/components/schemas/EnquirerAddressRequest'
+      additionalProperties: false
+    Property:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the property
+          example: '123456'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related property.
+      additionalProperties: false
+    EnquirerDetails:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+          description: The formal title of the enquirer
+          example: Ms
+        forename:
+          type:
+          - string
+          - 'null'
+          description: The first or given name of the enquirer
+          example: Jane
+        surname:
+          type:
+          - string
+          - 'null'
+          description: The surname of the enquirer
+          example: Smith
+        phoneNumberDay:
+          type:
+          - string
+          - 'null'
+          description: The day time phone number of the enquirer
+          example: 07683726192
+        phoneNumberEve:
+          type:
+          - string
+          - 'null'
+          description: The evening phone number of the enquirer
+          example: 07683726192
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email address of the enquirer
+          example: jane.smith@enquirer.com
+        address:
+          allOf:
+          - $ref: '#/components/schemas/EnquirerAddress'
+          description: Represents a physical address of the enqurier
+      additionalProperties: false
+      description: The lead's enquirer contact details that have been submitted as part of the enquiry;
+    LeadSource:
+      enum:
+      - Unspecified
+      - Agent
+      - RightMove
+      - Vebra
+      - Zoopla
+      - Api
+      - ZooplaAdReachExpress
+      - ZooplaAudienceConnect
+      type: string
+    Contact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the contact
+          example: '123456'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related contact.
+      additionalProperties: false
+      description: A contact that has been associated to the lead; if no contact has been associated to a lead, then will return null
+    ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    PreferredContactTime:
+      enum:
+      - Unspecified
+      - Afternoon
+      - Anytime
+      - Evening
+      - Morning
+      type: string
+    PreferredContactMethod:
+      enum:
+      - Unspecified
+      - Email
+      - Phone
+      - Post
+      type: string
+    EnquirerAddress:
+      type: object
+      properties:
+        houseName:
+          type:
+          - string
+          - 'null'
+          description: The house or flat name of the enquirer's address
+          example: Oak Lodge
+        houseNumber:
+          type:
+          - string
+          - 'null'
+          description: The house or flat number of the enquirer's address
+          example: '14'
+        street:
+          type:
+          - string
+          - 'null'
+          description: The street of the enquirer's address
+          example: Oak Street
+        locality:
+          type:
+          - string
+          - 'null'
+          description: The locality of the enquirer's address
+          example: St Clement
+        area:
+          type:
+          - string
+          - 'null'
+          description: The area of the enquirer's address
+        town:
+          type:
+          - string
+          - 'null'
+          description: The town or city of the enquirer's address
+          example: London
+        county:
+          type:
+          - string
+          - 'null'
+          description: The county of the enquirer's address
+          example: Hampshire
+        country:
+          type:
+          - string
+          - 'null'
+          description: The country of the enquirer's address
+          example: UK
+        postcode:
+          type:
+          - string
+          - 'null'
+          description: The postal code of the enquirer's addres
+          example: SW45 3AP
+      additionalProperties: false
+      description: Represents a physical address of the enqurier
+    LeadPatchOperation:
+      type: object
+      properties:
+        op:
+          enum:
+          - replace
+          type: string
+        value:
+          type: string
+        path:
+          enum:
+          - /contactId
+          - /leadStatus
+          type: string
+      example: '{ "path": "/leadStatus", "op": "replace", "value": "Rejected" }'
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    LeadPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/LeadPatchOperation'
+      description: Array of operations to perform
+    LeadStatus:
+      enum:
+      - Unspecified
+      - Unprocessed
+      - Processed
+      - Rejected
+      - Accepted
+      type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

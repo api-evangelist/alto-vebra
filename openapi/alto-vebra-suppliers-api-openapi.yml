@@ -1,0 +1,327 @@
+openapi: 3.2.0
+info:
+  title: Alto Suppliers API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Suppliers
+paths:
+  /inventory/{inventoryId}/suppliers:
+    get:
+      tags:
+      - Suppliers
+      parameters:
+      - name: inventoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: nextToken
+        in: query
+        description: Token used to retrieve the next page of results. This is returned in the response of the previous page.
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Maximum number of results to return per page. Defaults to 100 if not specified.
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-inventory-inventoryid-suppliers
+  /suppliers:
+    get:
+      tags:
+      - Suppliers
+      parameters:
+      - name: nextToken
+        in: query
+        description: Token used to retrieve the next page of results. This is returned in the response of the previous page.
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Maximum number of results to return per page. Defaults to 100 if not specified.
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-suppliers
+  /suppliers/{supplierId}:
+    get:
+      tags:
+      - Suppliers
+      parameters:
+      - name: supplierId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Supplier'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-suppliers-supplierid
+components:
+  schemas:
+    Alto.PropertyManagement.Api.Models.Responses.Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNo:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Person:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        telephoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Alto.PropertyManagement.Api.Models.Responses.Supplier:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        companyName:
+          type:
+          - string
+          - 'null'
+        providedServices:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        address:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Address'
+        people:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Person'
+        notes:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Supplier'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

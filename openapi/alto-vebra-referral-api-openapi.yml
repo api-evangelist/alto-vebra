@@ -1,0 +1,63 @@
+openapi: 3.2.0
+info:
+  title: Alto Referral API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Referral
+paths:
+  /voidswitching/referrals/{referralId}:
+    patch:
+      tags:
+      - Referral
+      parameters:
+      - name: referralId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: ''
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchReferralRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PatchReferralRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PatchReferralRequest'
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    PatchReferralRequest:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+        fees:
+          type: number
+          format: double
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

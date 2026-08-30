@@ -1,0 +1,1671 @@
+openapi: 3.2.0
+info:
+  title: Alto Tenancies API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Tenancies
+paths:
+  /inventory/{inventoryId}/tenancies:
+    get:
+      tags:
+      - Tenancies
+      parameters:
+      - name: inventoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: nextToken
+        in: query
+        description: Token used to retrieve the next page of results. This is returned in the response of the previous page.
+        schema:
+          type: string
+      - name: maxResults
+        in: query
+        description: Maximum number of results to return per page. Defaults to 100 if not specified.
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Tenancy'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Tenancy'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Tenancy'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:post-inventory-inventoryid-tenancies
+    post:
+      tags:
+      - Tenancies
+      summary: Create a tenancy
+      description: Asynchronously creates a proposed tenancy. Use the returned TenancyId to poll /tenancies/{tenancyId} to check if the tenancy is created.
+      parameters:
+      - name: inventoryId
+        in: path
+        description: The property Id
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: Json request body containing the tenancy details.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateProposedTenancyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateProposedTenancyRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.CreateProposedTenancyRequest'
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:post-inventory-inventoryid-tenancies
+  /tenancies:
+    get:
+      tags:
+      - Tenancies
+      summary: List Tenancies
+      description: Retrieves a paginated list of tenancies, with optional filtering and inclusion of tenant data.
+      parameters:
+      - name: next-token
+        in: query
+        description: Token used to retrieve the next page of results. This is returned in the response of the previous page.
+        schema:
+          type: string
+      - name: max-results
+        in: query
+        description: Maximum number of results to return per page. Defaults to 100 if not specified.
+        schema:
+          maximum: 100
+          minimum: 1
+          type: integer
+          format: int32
+      - name: created-from
+        in: query
+        description: The start date for filtering tenancies by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: created-to
+        in: query
+        description: The end date for filtering tenancies by created date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-from
+        in: query
+        description: The start date for filtering tenancies by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: modified-to
+        in: query
+        description: The end date for filtering tenancies by modified date.
+        schema:
+          type: string
+          format: date-time
+      - name: start-date-from
+        in: query
+        description: The start date for filtering tenancies by start date.
+        schema:
+          type: string
+          format: date-time
+      - name: start-date-to
+        in: query
+        description: The end date for filtering tenancies by start date.
+        schema:
+          type: string
+          format: date-time
+      - name: target-vacate-date-from
+        in: query
+        description: The start date for filtering tenancies by target vacate date.
+        schema:
+          type: string
+          format: date-time
+      - name: target-vacate-date-to
+        in: query
+        description: The end date for filtering tenancies by target vacate date.
+        schema:
+          type: string
+          format: date-time
+      - name: first-full-rent-date-from
+        in: query
+        description: The start date for filtering tenancies by first full rent date.
+        schema:
+          type: string
+          format: date-time
+      - name: first-full-rent-date-to
+        in: query
+        description: The end date for filtering tenancies by first full rent date.
+        schema:
+          type: string
+          format: date-time
+      - name: notice-to-quit-date-from
+        in: query
+        description: The start date for filtering tenancies by notice to quit date.
+        schema:
+          type: string
+          format: date-time
+      - name: notice-to-quit-date-to
+        in: query
+        description: The end date for filtering tenancies by notice to quit date.
+        schema:
+          type: string
+          format: date-time
+      - name: end-date-from
+        in: query
+        description: The start date for filtering tenancies by end date.
+        schema:
+          type: string
+          format: date-time
+      - name: end-date-to
+        in: query
+        description: The end date for filtering tenancies by end date.
+        schema:
+          type: string
+          format: date-time
+      - name: renewal-date-from
+        in: query
+        description: The start date for filtering tenancies by renewal date.
+        schema:
+          type: string
+          format: date-time
+      - name: renewal-date-to
+        in: query
+        description: The end date for filtering tenancies by renewal date.
+        schema:
+          type: string
+          format: date-time
+      - name: include-tenants
+        in: query
+        description: Controls whether tenants should be included in the response for each tenancy result. By default tenants will not be included.
+        schema:
+          type: boolean
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.TenancyListItem'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.TenancyListItem'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.TenancyListItem'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-tenancies
+  /tenancies/{tenancyId}:
+    get:
+      tags:
+      - Tenancies
+      parameters:
+      - name: tenancyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyLight'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyLight'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyLight'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-tenancies-tenancyid
+    patch:
+      tags:
+      - Tenancies
+      summary: Updates a tenancy using JSON Patch
+      parameters:
+      - name: tenancyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyPatch'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyPatch'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyPatch'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-tenancies-tenancyid
+  /tenancies/{tenancyId}/meter-readings:
+    get:
+      tags:
+      - Tenancies
+      summary: Get Meter Readings by Tenancy Id
+      parameters:
+      - name: tenancyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading'
+      security:
+      - appAuth:
+        - alto/route:get-tenancies-tenancyid-meter-readings
+    post:
+      tags:
+      - Tenancies
+      summary: Post tenancy meter reading
+      parameters:
+      - name: tenancyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.PostTenancyMeterReadingRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.PostTenancyMeterReadingRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Requests.PostTenancyMeterReadingRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+        '409':
+          description: Conflict
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-tenancies-tenancyid-meter-readings
+  /tenancies/{tenancyId}/meter-readings/{utilityType}:
+    patch:
+      tags:
+      - Tenancies
+      summary: Patch tenancy meter reading by type of utility.
+      parameters:
+      - name: tenancyId
+        in: path
+        description: The id of the tenancy whose meter reading is being set.
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: utilityType
+        in: path
+        description: One of the types provided by the UtilityType on a retrieved meter reading or returned in the response when POSTing a new value.
+        required: true
+        schema:
+          type: string
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyUtilityReadingPatch'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyUtilityReadingPatch'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyUtilityReadingPatch'
+      responses:
+        '204':
+          description: Returns no content on a successful update to a tenancy's meter reading for the specified utilityType.
+        '404':
+          description: The tenancy or utility type was not found.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Invalid parameters provided.
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:patch-tenancies-tenancyid-meter-readings-utilitytype
+  /tenancies/{tenancyId}/tenantIds:
+    get:
+      tags:
+      - Tenancies
+      parameters:
+      - name: tenancyId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.TenantIdData'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.TenantIdData'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.TenantIdData'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails'
+      security:
+      - appAuth:
+        - alto/route:get-tenancies-tenancyid-tenantids
+components:
+  schemas:
+    Alto.PropertyManagement.Api.Models.Requests.PostTenancyMeterReadingRequest:
+      required:
+      - propertyId
+      - utilityType
+      type: object
+      properties:
+        utilityType:
+          enum:
+          - Unspecified
+          - Gas
+          - Electricity
+          - Oil
+          - Water
+          - BulkLPG
+          - Council
+          - Sewerage
+          type: string
+          description: 'The type of utility (e.g., electricity, water, gas) for which the reading is recorded.
+
+            This is represented by the UtilityType enum and is required'
+        propertyId:
+          minLength: 1
+          type: string
+          description: 'The property Id for which the reading is recorded against.
+
+            This is required'
+        inHighValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The initial (move-in) high-value meter reading. This may capture peak usage rates or other high-end metrics.
+
+            It''s nullable to handle cases where this data might not be available or applicable.'
+          format: int32
+        inLowValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The initial (move-in) low-value meter reading. This typically represents off-peak or lower usage rates.
+
+            Nullable to account for situations where this reading is not applicable or available.'
+          format: int32
+        outHighValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The final (move-out) high-value meter reading. Similar to InHighValue but recorded at the end of the tenancy.
+
+            Nullable for cases where the reading isn''t available or needed.'
+          format: int32
+        outLowValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The final (move-out) low-value meter reading. Similar to InLowValue, but for the end of the tenancy period.
+
+            Nullable for cases where this data is not available or relevant.'
+          format: int32
+        inValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The overall move-in meter reading. This is a general reading, not specifically high or low value.
+
+            Nullable to accommodate situations where it might not be available.'
+          format: int32
+        outValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The overall move-out meter reading. Like InValue, but for when the tenancy ends.
+
+            Nullable to handle cases where the reading is not obtained.'
+          format: int32
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Requests.CreateProposedTenancyRequest:
+      type: object
+      properties:
+        rentalAmount:
+          minimum: 0
+          type: number
+          format: double
+        applicantContactIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+          description: The ids of all the applicants for the proposed tenancy.
+        tenancyStartDate:
+          type:
+          - string
+          - 'null'
+          description: The Start Date of the proposed tenancy.
+          format: date-time
+        tenancyTermMonths:
+          type:
+          - integer
+          - 'null'
+          description: The term of the proposed tenancy in months.
+          format: int32
+        tenancyTermYears:
+          type:
+          - integer
+          - 'null'
+          description: The term of the proposed tenancy in years.
+          format: int32
+        sendDefaultLetters:
+          type: boolean
+          description: Whether to send default letters for the proposed tenancy.
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.TenancyLight:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        groupId:
+          type: integer
+          format: int32
+        branchId:
+          type: integer
+          format: int32
+        propertyId:
+          type: integer
+          format: int32
+        termYears:
+          type: integer
+          format: int32
+        termMonths:
+          type: integer
+          format: int32
+        occupantCount:
+          type: integer
+          format: int32
+        rent:
+          type: number
+          format: double
+        rentalFrequency:
+          type:
+          - string
+          - 'null'
+        depositRequested:
+          type: number
+          format: double
+        depositSchemeType:
+          type:
+          - string
+          - 'null'
+        currencyCode:
+          type:
+          - string
+          - 'null'
+        rentalAddress:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Address'
+        startDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        targetVacateDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        firstFullRentDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        noticeToQuitDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        endDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        renewalDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        nextTermTenancyId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.TenancyListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        groupId:
+          type: integer
+          format: int32
+        branchId:
+          type: integer
+          format: int32
+        propertyId:
+          type: integer
+          format: int32
+        termYears:
+          type: integer
+          format: int32
+        termMonths:
+          type: integer
+          format: int32
+        occupantCount:
+          type: integer
+          format: int32
+        rent:
+          type: number
+          format: double
+        rentalFrequency:
+          type:
+          - string
+          - 'null'
+        depositRequested:
+          type: number
+          format: double
+        depositSchemeType:
+          type:
+          - string
+          - 'null'
+        currencyCode:
+          type:
+          - string
+          - 'null'
+        rentalAddress:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Address'
+        startDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        targetVacateDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        firstFullRentDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        noticeToQuitDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        endDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        renewalDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        status:
+          type:
+          - string
+          - 'null'
+        nextTermTenancyId:
+          type: integer
+          format: int32
+        createdDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        tenants:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Tenant'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          readOnly: true
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNo:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.TenancyUtilityReadingPatch:
+      anyOf:
+      - title: /inhighvalue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - remove
+            type: string
+            example: replace
+          value:
+            type: integer
+            example: '100'
+          path:
+            type: string
+            example: /inhighvalue
+        description: "\n            The initial (move-in) high-value meter reading. This may capture peak usage rates or other high-end metrics.\n            It's nullable to handle cases where this data might not be available or applicable.\n            "
+        example: "\n        {\n            \"path\": \"/inhighvalue\",\n            \"op\": \"replace\",\n            \"value\": 100\n        }"
+      - title: /inlowvalue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - remove
+            type: string
+            example: replace
+          value:
+            type: integer
+            example: '100'
+          path:
+            type: string
+            example: /inlowvalue
+        description: "\n            The initial (move-in) low-value meter reading. This typically represents off-peak or lower usage rates.\n            Nullable to account for situations where this reading is not applicable or available.\n            "
+        example: "\n        {\n            \"path\": \"/inlowvalue\",\n            \"op\": \"replace\",\n            \"value\": 100\n        }"
+      - title: /outhighvalue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - remove
+            type: string
+            example: replace
+          value:
+            type: integer
+            example: '100'
+          path:
+            type: string
+            example: /outhighvalue
+        description: "\n            The final (move-out) high-value meter reading. Similar to InHighValue but recorded at the end of the tenancy.\n            Nullable for cases where the reading isn't available or needed.\n            "
+        example: "\n        {\n            \"path\": \"/outhighvalue\",\n            \"op\": \"replace\",\n            \"value\": 100\n        }"
+      - title: /outlowvalue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - remove
+            type: string
+            example: replace
+          value:
+            type: integer
+            example: '100'
+          path:
+            type: string
+            example: /outlowvalue
+        description: "\n            The final (move-out) low-value meter reading. Similar to InLowValue, but for the end of the tenancy period.\n            Nullable for cases where this data is not available or relevant.\n            "
+        example: "\n        {\n            \"path\": \"/outlowvalue\",\n            \"op\": \"replace\",\n            \"value\": 100\n        }"
+      - title: /invalue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - remove
+            type: string
+            example: replace
+          value:
+            type: integer
+            example: '100'
+          path:
+            type: string
+            example: /invalue
+        description: "\n            The overall move-in meter reading. This is a general reading, not specifically high or low value.\n            Nullable to accommodate situations where it might not be available.\n            "
+        example: "\n        {\n            \"path\": \"/invalue\",\n            \"op\": \"replace\",\n            \"value\": 100\n        }"
+      - title: /outvalue
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            - remove
+            type: string
+            example: replace
+          value:
+            type: integer
+            example: '100'
+          path:
+            type: string
+            example: /outvalue
+        description: "\n            The overall move-out meter reading. Like InValue, but for when the tenancy ends.\n            Nullable to handle cases where the reading is not obtained.\n            "
+        example: "\n        {\n            \"path\": \"/outvalue\",\n            \"op\": \"replace\",\n            \"value\": 100\n        }"
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.TenancyPatch:
+      anyOf:
+      - title: /rent
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: number
+            example: '500.000'
+          path:
+            type: string
+            example: /rent
+        description: "\n            The rent amount of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/rent\",\n            \"op\": \"replace\",\n            \"value\": 500.000\n        }"
+      - title: /rentalfrequency
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '"Monthly"'
+          path:
+            type: string
+            example: /rentalfrequency
+        description: "\n            The rent frequency of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/rentalfrequency\",\n            \"op\": \"replace\",\n            \"value\": \"Monthly\"\n        }"
+      - title: /depositrequested
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: number
+            example: '100.000'
+          path:
+            type: string
+            example: /depositrequested
+        description: "\n            The requested deposit of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/depositrequested\",\n            \"op\": \"replace\",\n            \"value\": 100.000\n        }"
+      - title: /startdate
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '2020-01-01T00:00:00+00:00'
+          path:
+            type: string
+            example: /startdate
+        description: "\n            The start date of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/startdate\",\n            \"op\": \"replace\",\n            \"value\": 2020-01-01T00:00:00+00:00\n        }"
+      - title: /termyears
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: integer
+            example: '2'
+          path:
+            type: string
+            example: /termyears
+        description: "\n            The term years of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/termyears\",\n            \"op\": \"replace\",\n            \"value\": 2\n        }"
+      - title: /termmonths
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: integer
+            example: '12'
+          path:
+            type: string
+            example: /termmonths
+        description: "\n            The term months of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/termmonths\",\n            \"op\": \"replace\",\n            \"value\": 12\n        }"
+      - title: /targetvacatedate
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '2020-01-01T00:00:00+00:00'
+          path:
+            type: string
+            example: /targetvacatedate
+        description: "\n            The target vacate date of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/targetvacatedate\",\n            \"op\": \"replace\",\n            \"value\": 2020-01-01T00:00:00+00:00\n        }"
+      - title: /firstfullrentdate
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '2020-01-01T00:00:00+00:00'
+          path:
+            type: string
+            example: /firstfullrentdate
+        description: "\n            The first full rent date of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/firstfullrentdate\",\n            \"op\": \"replace\",\n            \"value\": 2020-01-01T00:00:00+00:00\n        }"
+      - title: /noticetoquitdate
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '2020-01-01T00:00:00+00:00'
+          path:
+            type: string
+            example: /noticetoquitdate
+        description: "\n            The notice to quit date of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/noticetoquitdate\",\n            \"op\": \"replace\",\n            \"value\": 2020-01-01T00:00:00+00:00\n        }"
+      - title: /enddate
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '2020-01-01T00:00:00+00:00'
+          path:
+            type: string
+            example: /enddate
+        description: "\n            The end date of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/enddate\",\n            \"op\": \"replace\",\n            \"value\": 2020-01-01T00:00:00+00:00\n        }"
+      - title: /renewaldate
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '2020-01-01T00:00:00+00:00'
+          path:
+            type: string
+            example: /renewaldate
+        description: "\n            The renewal date of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/renewaldate\",\n            \"op\": \"replace\",\n            \"value\": 2020-01-01T00:00:00+00:00\n        }"
+      - title: /tenants
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: integer
+            example: '[123]'
+          path:
+            type: string
+            example: /tenants
+        description: "\n            The tenants Ids of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/tenants\",\n            \"op\": \"replace\",\n            \"value\": [123]\n        }"
+      - title: /depositschemetype
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"DisputeServiceCustodial"'
+          path:
+            type: string
+            example: /depositschemetype
+        description: "\n            Current DepositSchemeType of the Tenancy\n            "
+        example: "\n        {\n            \"path\": \"/depositschemetype\",\n            \"op\": \"replace\",\n            \"value\": \"DisputeServiceCustodial\"\n        }"
+      - title: /occupantcount
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: integer
+            example: '2'
+          path:
+            type: string
+            example: /occupantcount
+        description: "\n            The occupants count of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/occupantcount\",\n            \"op\": \"replace\",\n            \"value\": 2\n        }"
+      - title: /occupantdetails
+        type: object
+        properties:
+          op:
+            enum:
+            - add
+            - replace
+            - remove
+            - test
+            type: string
+            example: add
+          value:
+            type: string
+            example: '"Name Surname"'
+          path:
+            type: string
+            example: /occupantdetails
+        description: "\n            The occupant names of the tenancy\n            "
+        example: "\n        {\n            \"path\": \"/occupantdetails\",\n            \"op\": \"replace\",\n            \"value\": \"Name Surname\"\n        }"
+      - title: /depositregistrationnumber
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+            example: replace
+          value:
+            type: string
+            example: '"0123456"'
+          path:
+            type: string
+            example: /depositregistrationnumber
+        description: "\n            The Registration Number of the tenancy deposit\n            "
+        example: "\n        {\n            \"path\": \"/depositregistrationnumber\",\n            \"op\": \"replace\",\n            \"value\": \"0123456\"\n        }"
+    Alto.PropertyManagement.Api.Models.Responses.TenancyUtilityReading:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for a specific utility reading within a tenancy.
+        utilityType:
+          enum:
+          - Unspecified
+          - Gas
+          - Electricity
+          - Oil
+          - Water
+          - BulkLPG
+          - Council
+          - Sewerage
+          type: string
+          description: 'The type of utility (e.g., electricity, water, gas) for which the reading is recorded.
+
+            This is represented by the UtilityType enum.
+
+            Use the name of type of the utility as the ''id'' when you need to update a meter reading'
+        inHighValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The initial (move-in) high-value meter reading. This may capture peak usage rates or other high-end metrics.
+
+            It''s nullable to handle cases where this data might not be available or applicable.'
+          format: int32
+        inLowValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The initial (move-in) low-value meter reading. This typically represents off-peak or lower usage rates.
+
+            Nullable to account for situations where this reading is not applicable or available.'
+          format: int32
+        outHighValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The final (move-out) high-value meter reading. Similar to InHighValue but recorded at the end of the tenancy.
+
+            Nullable for cases where the reading isn''t available or needed.'
+          format: int32
+        outLowValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The final (move-out) low-value meter reading. Similar to InLowValue, but for the end of the tenancy period.
+
+            Nullable for cases where this data is not available or relevant.'
+          format: int32
+        inValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The overall move-in meter reading. This is a general reading, not specifically high or low value.
+
+            Nullable to accommodate situations where it might not be available.'
+          format: int32
+        outValue:
+          type:
+          - integer
+          - 'null'
+          description: 'The overall move-out meter reading. Like InValue, but for when the tenancy ends.
+
+            Nullable to handle cases where the reading is not obtained.'
+          format: int32
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.TenantIdData:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenantIdData'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Tenancy:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Tenancy'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Tenant:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Address'
+        createdDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          readOnly: true
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.TenancyPatch'
+      description: Array of operations to perform
+    Alto.PropertyManagement.Api.Models.Responses.Tenancy:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        rent:
+          type: number
+          format: double
+        currencyCode:
+          type:
+          - string
+          - 'null'
+        rentalFrequency:
+          type:
+          - string
+          - 'null'
+        startDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        endDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        targetVacateDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        status:
+          type:
+          - string
+          - 'null'
+        occupantCount:
+          type: integer
+          format: int32
+        tenants:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Tenant'
+      additionalProperties: false
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.TenantIdData:
+      type: object
+      properties:
+        tenantId:
+          type: integer
+          format: int32
+        contactId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.TenancyListItem:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.TenancyListItem'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.TenancyUtilityReadingPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.TenancyUtilityReadingPatch'
+      description: Array of operations to perform
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

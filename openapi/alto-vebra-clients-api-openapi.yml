@@ -1,0 +1,235 @@
+openapi: 3.2.0
+info:
+  title: Alto Clients API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Clients
+paths:
+  /clients:
+    get:
+      tags:
+      - Clients
+      summary: This endpoint is now obsolete. Use /contacts endpoint instead.
+      parameters:
+      - name: clientId
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ClientDataItemCollection'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientDataItemCollection'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ClientDataItemCollection'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+      deprecated: true
+      security:
+      - appAuth:
+        - alto/route:get-clients
+components:
+  schemas:
+    EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ClientData:
+      type: object
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        groupId:
+          type: integer
+          format: int32
+        branchId:
+          type: integer
+          format: int32
+        people:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Person'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+      additionalProperties: false
+    Phone:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        type:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+        uprn:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Person:
+      type: object
+      properties:
+        personNo:
+          type: integer
+          format: int32
+        name:
+          allOf:
+          - $ref: '#/components/schemas/Name'
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EmailAddress'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    ClientDataItemCollection:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ClientData'
+      additionalProperties: false
+    Name:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header

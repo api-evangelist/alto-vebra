@@ -1,0 +1,169 @@
+openapi: 3.2.0
+info:
+  title: Alto Offers API
+  version: '1.0'
+servers:
+- url: https://api.alto.zoopladev.co.uk
+  description: Sandbox
+- url: https://api.alto.zoopla.co.uk
+  description: Production
+security:
+- Bearer: []
+tags:
+- name: Offers
+paths:
+  /offers/sales-offer/{offerId}:
+    get:
+      tags:
+      - Offers
+      summary: Gets a sales offer by offerId
+      parameters:
+      - name: offerId
+        in: path
+        description: OfferId to retrieve sales offer for
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: AgencyRef
+        in: header
+        description: A GUID required in the header of all API requests that grants access to an agent's data
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Offer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Offer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorsResponse'
+      security:
+      - appAuth:
+        - alto/route:get-offers-sales-offer-offerid
+components:
+  schemas:
+    ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Offer:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        propertyId:
+          type:
+          - string
+          - 'null'
+        ownerId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        insertDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        effectiveDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        currencyCode:
+          type:
+          - string
+          - 'null'
+        offerAmount:
+          type: number
+          format: double
+        status:
+          enum:
+          - Unspecified
+          - Received
+          - Accepted
+          - Rejected
+          - Withdrawn
+          - Revised
+          type: string
+        recordType:
+          enum:
+          - Unspecified
+          - Sale
+          - Rent
+          type: string
+        salesProgressorName:
+          type:
+          - string
+          - 'null'
+        contactsJson:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please enter JWT with Bearer into field
+      name: Authorization
+      in: header
