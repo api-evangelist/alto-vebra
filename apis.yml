@@ -171,6 +171,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Appraisal
+  tags_raw:
   - Appraisals
   properties:
   - type: OpenAPI
@@ -892,6 +894,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Listings
+  tags_raw:
   - Listing
   properties:
   - type: OpenAPI
@@ -1615,6 +1619,8 @@ apis:
   humanURL: https://developers.vebraalto.com/api
   baseURL: https://api.alto.zoopla.co.uk
   tags:
+  - Referrals
+  tags_raw:
   - Referral
   properties:
   - type: OpenAPI
