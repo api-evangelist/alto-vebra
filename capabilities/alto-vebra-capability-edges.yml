@@ -14,7 +14,8 @@ capability_model:
 edge_count: 8
 edges:
 - tag: WorkOrders
-  spec_file: alto-vebra-workorders-api-openapi.yml
+  spec_file: alto-vebra-work-orders-api-openapi.yml
+  reanchored_from: alto-vebra-workorders-api-openapi.yml
   capability_id: BC-4940.20
   capability_id_l1: BC-4940
   capability_name: Property Maintenance & Work Order Management
