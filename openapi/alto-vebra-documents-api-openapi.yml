@@ -16,7 +16,7 @@ paths:
     get:
       tags:
       - Documents
-      summary: Get documents by document type.
+      summary: Get documents by document type
       description: Returns a paginated list of documents that match the given parameters
       operationId: GetDocumentsByType
       parameters:
@@ -84,7 +84,7 @@ paths:
     get:
       tags:
       - Documents
-      summary: Get document content by DocumentId.
+      summary: Get document content by DocumentId
       description: Get the contents of a document with the given id
       parameters:
       - name: documentId
@@ -118,12 +118,24 @@ paths:
       security:
       - appAuth:
         - alto/route:get-documents-documentid-content
+      operationId: getDocumentsByDocumentIdContent
+      x-operation-id-source: derived
   /documents/post:
     post:
       tags:
       - Documents
       summary: Upload a new document
-      description: "Upload documents for Property, Contact, Tenancy or Works Order. A Maximum of 30MB file size is supported\nThe images posted are not for Listing/Marketing purposes. Images are posted to the document section In Alto as below:\n    Property > Media > Other Files\n    Contact > Documents\n    Tenancy > Documents\n    Works Order > Documents"
+      description: 'Upload documents for Property, Contact, Tenancy or Works Order. A Maximum of 30MB file size is supported
+
+        The images posted are not for Listing/Marketing purposes. Images are posted to the document section In Alto as below:
+
+        Property > Media > Other Files
+
+        Contact > Documents
+
+        Tenancy > Documents
+
+        Works Order > Documents'
       parameters:
       - name: AgencyRef
         in: header
@@ -182,11 +194,13 @@ paths:
       security:
       - appAuth:
         - alto/route:post-documents-post
+      operationId: postDocumentsPost
+      x-operation-id-source: derived
   /inventory/{inventoryId}/documents:
     get:
       tags:
       - Documents
-      summary: Get documents by PropertyId.
+      summary: Get documents by PropertyId
       description: Returns a paginated list of documents for the given PropertyId
       parameters:
       - name: inventoryId
@@ -255,11 +269,13 @@ paths:
       security:
       - appAuth:
         - alto/route:get-inventory-inventoryid-documents
+      operationId: getInventoryByInventoryIdDocuments
+      x-operation-id-source: derived
   /work-orders/{workOrderId}/documents:
     get:
       tags:
       - Documents
-      summary: Get documents by WorkOrderId.
+      summary: Get documents by WorkOrderId
       description: Returns a paginated list of documents for the given WorkOrderId
       parameters:
       - name: workOrderId
@@ -314,8 +330,48 @@ paths:
       security:
       - appAuth:
         - alto/route:get-work-orders-workorderid-documents
+      operationId: getWorkOrdersByWorkOrderIdDocuments
+      x-operation-id-source: derived
 components:
   schemas:
+    FileType:
+      enum:
+      - JPG
+      - PDF
+      - PNG
+      - GIF
+      - TXT
+      - DOC
+      - DOCX
+      - XLSX
+      - XLS
+      - CSV
+      type: string
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    DocumentPagedResults:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Document'
+      additionalProperties: false
     Document:
       type: object
       properties:
@@ -362,6 +418,27 @@ components:
           description: The date the document was modified
           format: date-time
       additionalProperties: false
+    MediaType:
+      enum:
+      - Photo
+      - Floorplan
+      - VirtualTour
+      - File
+      - Document
+      - Brochure
+      - EPC
+      - WebLink
+      type: string
+    CreateDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the new document.
+          format: int64
+          example: 12345
+      additionalProperties: false
+      description: Response describing a newly created document.
     ProblemDetails:
       type: object
       properties:
@@ -387,65 +464,6 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    FileType:
-      enum:
-      - JPG
-      - PDF
-      - PNG
-      - GIF
-      - TXT
-      - DOC
-      - DOCX
-      - XLSX
-      - XLS
-      - CSV
-      type: string
-    CreateDocumentResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The unique identifier of the new document.
-          format: int64
-          example: 12345
-      additionalProperties: false
-      description: Response describing a newly created document.
-    DocumentPagedResults:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Document'
-      additionalProperties: false
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    MediaType:
-      enum:
-      - Photo
-      - Floorplan
-      - VirtualTour
-      - File
-      - Document
-      - Brochure
-      - EPC
-      - WebLink
-      type: string
   securitySchemes:
     Bearer:
       type: apiKey

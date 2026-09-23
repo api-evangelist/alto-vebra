@@ -1,0 +1,29 @@
+# Front Door AI Index — alto-vebra — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: alto-vebra
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.altosoftware.co.uk
+  final_host: www.altosoftware.co.uk
+  ownership: own
+  owner: alto-vebra
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 8
+  host_score: 8
+  density: 4.42
+  words: 1809
+  tiers:
+    agentic: 0
+    core: 8
+    model: 0
+  ambiguous: 29
+  top_terms:
+    agent: 12
+    intelligence: 11
+    AI: 8
+    automation: 4
+    smart: 2

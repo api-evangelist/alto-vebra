@@ -17,7 +17,9 @@ paths:
       tags:
       - Owners
       summary: Get Owners
-      description: "Required scope: alto/read:contacts. \nSee glossary for definition of <a href=\"https://developers.vebraalto.com/guides/glossary\">Owner</a>."
+      description: 'Required scope: alto/read:contacts.
+
+        See glossary for definition of Owner.'
       operationId: GetOwners
       parameters:
       - name: active
@@ -92,36 +94,6 @@ paths:
         - alto/route:get-owners
 components:
   schemas:
-    Alto.Contacts.Api.Models.Responses.OwnerContact:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        branchId:
-          type:
-          - string
-          - 'null'
-          description: Represents the branch identifier associated with the contact owner.
-      additionalProperties: false
-      description: Represents a contact that owns a property.
-    Alto.Services.SDK.Pagination.Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner:
       type: object
       properties:
@@ -134,6 +106,18 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Owner'
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     Alto.Contacts.Api.Models.Responses.Owner:
       type: object
@@ -181,6 +165,28 @@ components:
           description: The date and time when the owner's details were last modified.
           format: date-time
       additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.OwnerContact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: Represents the branch identifier associated with the contact owner.
+      additionalProperties: false
+      description: Represents a contact that owns a property.
     Alto.Contacts.Api.Models.Responses.OwnerProperty:
       type: object
       properties:
@@ -203,14 +209,10 @@ components:
           description: Represents the branch identifier associated with the property.
       additionalProperties: false
       description: Represents a property belonging to a contact.
-    Alto.Api.Material.Hateoas.Link:
+    Alto.Services.SDK.Pagination.Meta:
       type: object
       properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
+        nextToken:
           type:
           - string
           - 'null'

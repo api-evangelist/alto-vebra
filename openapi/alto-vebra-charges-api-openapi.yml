@@ -156,6 +156,10 @@ paths:
       security:
       - appAuth:
         - alto/route:post-inventory-propertyid-charges
+      summary: Create inventory by property id charges
+      x-summary-source: derived
+      operationId: postInventoryByPropertyIdCharges
+      x-operation-id-source: derived
   /tenancies/{tenancyId}/charges:
     post:
       tags:
@@ -364,6 +368,10 @@ paths:
       security:
       - appAuth:
         - alto/route:post-tenancies-tenancyid-charges
+      summary: Create tenancies by tenancy id charges
+      x-summary-source: derived
+      operationId: postTenanciesByTenancyIdCharges
+      x-operation-id-source: derived
 components:
   schemas:
     Alto.PropertyManagement.Api.Models.Responses.PropertyCharge:
@@ -582,17 +590,6 @@ components:
           - 'null'
           format: date-time
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.Error:
       type: object
       properties:
@@ -604,6 +601,17 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
       additionalProperties: false
   securitySchemes:
     Bearer:

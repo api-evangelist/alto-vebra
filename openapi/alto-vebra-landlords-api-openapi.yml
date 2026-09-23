@@ -69,6 +69,10 @@ paths:
       security:
       - appAuth:
         - alto/route:get-inventory-inventoryid-landlords
+      summary: Get inventory by inventory id landlords
+      x-summary-source: derived
+      operationId: getInventoryByInventoryIdLandlords
+      x-operation-id-source: derived
   /landlords:
     get:
       tags:
@@ -144,8 +148,23 @@ paths:
       security:
       - appAuth:
         - alto/route:get-landlords
+      operationId: getLandlords
+      x-operation-id-source: derived
 components:
   schemas:
+    Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.Landlord:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Landlord'
+      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.Landlord:
       type: object
       properties:
@@ -229,6 +248,18 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.LandlordListItem:
       type: object
       properties:
@@ -241,47 +272,31 @@ components:
           items:
             $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.LandlordListItem'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.Landlord:
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
       type: object
       properties:
-        totalCount:
-          type: integer
-          format: int32
-        items:
+        type:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Landlord'
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Person:
-      type: object
-      properties:
         title:
           type:
           - string
           - 'null'
-        forename:
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
           type:
           - string
           - 'null'
-        surname:
+        instance:
           type:
           - string
           - 'null'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        telephoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      additionalProperties: false
+      additionalProperties: {}
     Alto.PropertyManagement.Api.Models.Responses.LandlordListItem:
       type: object
       properties:
@@ -324,17 +339,6 @@ components:
           items:
             $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
           readOnly: true
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        totalItems:
-          type: integer
-          format: int32
       additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.LandlordProperty:
       type: object
@@ -382,42 +386,44 @@ components:
             $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
           readOnly: true
       additionalProperties: false
-    Microsoft.AspNetCore.Mvc.ProblemDetails:
+    Alto.PropertyManagement.Api.Models.Responses.Person:
       type: object
       properties:
-        type:
-          type:
-          - string
-          - 'null'
         title:
           type:
           - string
           - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
+        forename:
           type:
           - string
           - 'null'
-        instance:
+        surname:
           type:
           - string
           - 'null'
-      additionalProperties: {}
-    Alto.Api.Material.Hateoas.Link:
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        telephoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
       type: object
       properties:
-        href:
+        nextToken:
           type:
           - string
           - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
+        totalItems:
+          type: integer
+          format: int32
       additionalProperties: false
   securitySchemes:
     Bearer:

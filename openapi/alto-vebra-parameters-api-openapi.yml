@@ -16,7 +16,7 @@ paths:
     get:
       tags:
       - Parameters
-      summary: Get general appointment sub-types.
+      summary: Get general appointment sub-types
       description: 'Retrieves a list of all the general appointment sub-types supported by the group.
 
         Required scope: alto/read:appointments'
@@ -87,12 +87,14 @@ paths:
       security:
       - appAuth:
         - alto/route:get-parameters-appointment-subtypes
+      operationId: getParametersAppointmentSubtypes
+      x-operation-id-source: derived
   /parameters/client-disposal-statuses:
     get:
       tags:
       - Parameters
       summary: Get Client Disposal Statuses
-      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      description: See glossary for definition of Parameter.
       operationId: GetClientDisposalStatuses
       parameters:
       - name: AgencyRef
@@ -118,7 +120,7 @@ paths:
       tags:
       - Parameters
       summary: Get Client Intentions
-      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      description: See glossary for definition of Parameter.
       operationId: GetIntentions
       parameters:
       - name: AgencyRef
@@ -144,7 +146,7 @@ paths:
       tags:
       - Parameters
       summary: Get Client Positions
-      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      description: See glossary for definition of Parameter.
       operationId: GetPositions
       parameters:
       - name: AgencyRef
@@ -170,7 +172,7 @@ paths:
       tags:
       - Parameters
       summary: Get Lead Sources
-      description: See glossary for definition of <a href="https://developers.vebraalto.com/guides/glossary">Parameter</a>.
+      description: See glossary for definition of Parameter.
       operationId: GetLeadSources
       parameters:
       - name: AgencyRef
@@ -223,17 +225,18 @@ paths:
         - alto/route:get-parameters-property-types
 components:
   schemas:
-    Alto.Contacts.Api.Models.Responses.ParameterValue:
+    DiaryEventSubType:
       type: object
       properties:
-        code:
+        id:
+          type: integer
+          description: The unique identifier of the general appointment sub-type
+          format: int32
+        displayName:
           type:
           - string
           - 'null'
-        name:
-          type:
-          - string
-          - 'null'
+          description: The name of the general appointment sub-type
       additionalProperties: false
     ProblemDetails:
       type: object
@@ -260,18 +263,17 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    DiaryEventSubType:
+    Alto.Contacts.Api.Models.Responses.ParameterValue:
       type: object
       properties:
-        id:
-          type: integer
-          description: The unique identifier of the general appointment sub-type
-          format: int32
-        displayName:
+        code:
           type:
           - string
           - 'null'
-          description: The name of the general appointment sub-type
+        name:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

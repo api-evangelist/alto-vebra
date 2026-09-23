@@ -10,12 +10,12 @@ servers:
 security:
 - Bearer: []
 tags:
-- name: WorkOrders
+- name: Work Orders
 paths:
   /inventory/{inventoryId}/work-orders:
     get:
       tags:
-      - WorkOrders
+      - Work Orders
       summary: Get Work Orders for a specific inventory item by Property Id
       description: Retrieves a Work Order by Id for a given AgencyRef and all permissable branches.
       parameters:
@@ -48,10 +48,12 @@ paths:
       security:
       - appAuth:
         - alto/route:get-inventory-inventoryid-work-orders
+      operationId: getInventoryByInventoryIdWorkOrders
+      x-operation-id-source: derived
   /work-orders:
     post:
       tags:
-      - WorkOrders
+      - Work Orders
       summary: Post Work Order
       description: Create a new Work Order in Alto
       parameters:
@@ -89,10 +91,12 @@ paths:
       security:
       - appAuth:
         - alto/route:post-work-orders
+      operationId: postWorkOrders
+      x-operation-id-source: derived
   /work-orders/{id}:
     get:
       tags:
-      - WorkOrders
+      - Work Orders
       summary: Gets Work Order by Id
       description: Retrieves a Work Order by id for a given AgencyRef and all permissable branches.
       parameters:
@@ -125,9 +129,11 @@ paths:
       security:
       - appAuth:
         - alto/route:get-work-orders-id
+      operationId: getWorkOrdersById
+      x-operation-id-source: derived
     patch:
       tags:
-      - WorkOrders
+      - Work Orders
       summary: Patch Work Order by Id
       description: Update selected fields in the Work Order with the given id
       parameters:
@@ -173,21 +179,10 @@ paths:
       security:
       - appAuth:
         - alto/route:get-work-orders-id
+      operationId: patchWorkOrdersById
+      x-operation-id-source: derived
 components:
   schemas:
-    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
-    Alto.PropertyManagement.Api.Models.Responses.Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.WorkOrderActor:
       type: object
       properties:
@@ -202,6 +197,24 @@ components:
           - 'null'
           description: The unique identifier for the related party, or null for Agency
       additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
+      description: Array of operations to perform
     Alto.PropertyManagement.Api.Models.Responses.WorkOrder:
       type: object
       properties:
@@ -279,22 +292,6 @@ components:
           description: The date the Work Order was last modified.
           format: date-time
       additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
-      description: Array of operations to perform
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest:
       required:
       - priority
@@ -360,6 +357,17 @@ components:
           example: '1234'
       additionalProperties: false
       description: Represents a work order
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

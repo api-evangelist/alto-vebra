@@ -16,7 +16,7 @@ paths:
     post:
       tags:
       - Media
-      summary: Create new link media item (VirtualTour or WebLink).
+      summary: Create new link media item (VirtualTour or WebLink)
       parameters:
       - name: inventoryId
         in: path
@@ -72,6 +72,8 @@ paths:
       security:
       - appAuth:
         - alto/route:post-inventory-inventoryid-media-link
+      operationId: postInventoryByInventoryIdMediaLink
+      x-operation-id-source: derived
   /media-item:
     post:
       tags:
@@ -126,6 +128,8 @@ paths:
       security:
       - appAuth:
         - alto/route:post-media-item
+      operationId: postMediaItem
+      x-operation-id-source: derived
   /media-item/{mediaItemId}:
     delete:
       tags:
@@ -155,15 +159,10 @@ paths:
       security:
       - appAuth:
         - alto/route:delete-media-item-mediaitemid
+      operationId: deleteMediaItemByMediaItemId
+      x-operation-id-source: derived
 components:
   schemas:
-    PostLinkMediaItemResponse:
-      type: object
-      properties:
-        mediaId:
-          type: integer
-          format: int32
-      additionalProperties: false
     PostLinkMediaItemRequest:
       type: object
       properties:
@@ -182,6 +181,13 @@ components:
           - 'null'
       additionalProperties: false
     PostMediaItemResponse:
+      type: object
+      properties:
+        mediaId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    PostLinkMediaItemResponse:
       type: object
       properties:
         mediaId:

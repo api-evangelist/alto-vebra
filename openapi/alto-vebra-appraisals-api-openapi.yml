@@ -148,40 +148,6 @@ components:
       - SMS
       - Both
       type: string
-    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
-      enum:
-      - Unspecified
-      - FreeMarketAppraisal
-      - BuildingSociety
-      - ABIData
-      - AgencyScheme
-      - Agricultural
-      - InsuranceCompany
-      - Bank
-      - ChargeableValuation
-      - Commercial
-      - CompulsoryPurchaseOrder
-      - Development
-      - Divorce
-      - FamilyDivision
-      - FormalMarketValuation
-      - HomebuyersPrivate
-      - HomebuyersReport
-      - Industrial
-      - Matrimonial
-      - PartExchange
-      - Probate
-      - ReMortgage
-      - Rental
-      - Repossession
-      - RevenueAndCustoms
-      - RightToBuy
-      type: string
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest'
-      description: Array of operations to perform
     SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
       anyOf:
       - title: Sale Upper Amount
@@ -487,6 +453,40 @@ components:
             default: /RentPriceQualifier
         description: The Rent Price Qualifier. For property rentals only.
         example: "\n{ \n    \"path\": \"/RentPriceQualifier\", \n    \"op\": \"add\", \n    \"value\": \"Unspecified\" \n}"
+    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
+      enum:
+      - Unspecified
+      - FreeMarketAppraisal
+      - BuildingSociety
+      - ABIData
+      - AgencyScheme
+      - Agricultural
+      - InsuranceCompany
+      - Bank
+      - ChargeableValuation
+      - Commercial
+      - CompulsoryPurchaseOrder
+      - Development
+      - Divorce
+      - FamilyDivision
+      - FormalMarketValuation
+      - HomebuyersPrivate
+      - HomebuyersReport
+      - Industrial
+      - Matrimonial
+      - PartExchange
+      - Probate
+      - ReMortgage
+      - Rental
+      - Repossession
+      - RevenueAndCustoms
+      - RightToBuy
+      type: string
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest'
+      description: Array of operations to perform
   securitySchemes:
     Bearer:
       type: apiKey

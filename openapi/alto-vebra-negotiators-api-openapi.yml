@@ -48,6 +48,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-negotiators
+      operationId: getNegotiators
+      x-operation-id-source: derived
   /negotiators/{negotiatorId}:
     get:
       tags:
@@ -81,6 +83,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-negotiators-negotiatorid
+      operationId: getNegotiatorsByNegotiatorId
+      x-operation-id-source: derived
 components:
   schemas:
     Meta:

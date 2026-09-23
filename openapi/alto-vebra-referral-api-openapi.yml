@@ -42,6 +42,10 @@ paths:
       responses:
         '200':
           description: OK
+      summary: Update voidswitching referrals by referral id
+      x-summary-source: derived
+      operationId: patchVoidswitchingReferralsByReferralId
+      x-operation-id-source: derived
 components:
   schemas:
     PatchReferralRequest:

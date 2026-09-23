@@ -16,7 +16,7 @@ paths:
     get:
       tags:
       - Clients
-      summary: This endpoint is now obsolete. Use /contacts endpoint instead.
+      summary: This endpoint is now obsolete. Use /contacts endpoint instead
       parameters:
       - name: clientId
         in: query
@@ -60,41 +60,10 @@ paths:
       security:
       - appAuth:
         - alto/route:get-clients
+      operationId: getClients
+      x-operation-id-source: derived
 components:
   schemas:
-    EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        address:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ClientData:
-      type: object
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        groupId:
-          type: integer
-          format: int32
-        branchId:
-          type: integer
-          format: int32
-        people:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Person'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Address'
-      additionalProperties: false
     Phone:
       type: object
       properties:
@@ -154,6 +123,22 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    Name:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     Person:
       type: object
       properties:
@@ -175,6 +160,49 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/EmailAddress'
+      additionalProperties: false
+    ClientDataItemCollection:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ClientData'
+      additionalProperties: false
+    EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ClientData:
+      type: object
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        groupId:
+          type: integer
+          format: int32
+        branchId:
+          type: integer
+          format: int32
+        people:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Person'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
       additionalProperties: false
     ProblemDetails:
       type: object
@@ -201,32 +229,6 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    ClientDataItemCollection:
-      type: object
-      properties:
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ClientData'
-      additionalProperties: false
-    Name:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        forename:
-          type:
-          - string
-          - 'null'
-        surname:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

@@ -91,6 +91,10 @@ paths:
       security:
       - appAuth:
         - alto/route:get-sales-progressions
+      summary: Get sales progressions
+      x-summary-source: derived
+      operationId: getSalesProgressions
+      x-operation-id-source: derived
   /sales-progressions/{offerId}:
     get:
       tags:
@@ -132,8 +136,86 @@ paths:
       security:
       - appAuth:
         - alto/route:get-sales-progressions-offerid
+      summary: Get sales progressions by offer id
+      x-summary-source: derived
+      operationId: getSalesProgressionsByOfferId
+      x-operation-id-source: derived
 components:
   schemas:
+    AddressResponse:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    CompanyResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        companyName:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     AgreedOfferWithMilestones:
       type: object
       properties:
@@ -231,6 +313,80 @@ components:
         broker:
           $ref: '#/components/schemas/CompanyResponse'
       additionalProperties: false
+    Milestone:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        targetDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        completedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        notes:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
+        priority:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        customization:
+          type:
+          - string
+          - 'null'
+        ordering:
+          type: integer
+          format: int32
+        subTypeId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    SecurityUserResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+      additionalProperties: false
     SortType:
       enum:
       - CompletionDate
@@ -240,91 +396,6 @@ components:
       - Milestone
       - OldestToNewest
       type: string
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    AddressResponse:
-      type: object
-      properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNumber:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postcode:
-          type:
-          - string
-          - 'null'
-        countryCode:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     AgreedOffer:
       type: object
       properties:
@@ -384,105 +455,42 @@ components:
           - 'null'
           format: date-time
       additionalProperties: false
-    CompanyResponse:
+    ProblemDetails:
       type: object
       properties:
-        id:
+        type:
           type:
           - string
           - 'null'
-        companyName:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        phone:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        address:
-          $ref: '#/components/schemas/AddressResponse'
-      additionalProperties: false
-    SecurityUserResponse:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        phone:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        address:
-          $ref: '#/components/schemas/AddressResponse'
-      additionalProperties: false
-    Milestone:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        description:
+        title:
           type:
           - string
           - 'null'
         status:
           type:
-          - string
+          - integer
           - 'null'
-        targetDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        completedDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        notes:
-          type:
-          - string
-          - 'null'
-        branchId:
-          type:
-          - string
-          - 'null'
-        priority:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-        customization:
-          type:
-          - string
-          - 'null'
-        ordering:
-          type: integer
           format: int32
-        subTypeId:
-          type: integer
-          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

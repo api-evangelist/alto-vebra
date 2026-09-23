@@ -104,6 +104,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-inventory-inventoryid-management-events
+      operationId: getInventoryByInventoryIdManagementEvents
+      x-operation-id-source: derived
   /management-events:
     get:
       tags:
@@ -189,6 +191,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-management-events
+      operationId: getManagementEvents
+      x-operation-id-source: derived
     post:
       tags:
       - ManagementEvents
@@ -228,6 +232,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-management-events
+      operationId: postManagementEvents
+      x-operation-id-source: derived
   /management-events/{eventId}:
     get:
       tags:
@@ -269,6 +275,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-management-events-eventid
+      operationId: getManagementEventsByEventId
+      x-operation-id-source: derived
     patch:
       tags:
       - ManagementEvents
@@ -307,66 +315,94 @@ paths:
       security:
       - appAuth:
         - alto/route:get-management-events-eventid
+      summary: Update management events by event id
+      x-summary-source: derived
+      operationId: patchManagementEventsByEventId
+      x-operation-id-source: derived
 components:
   schemas:
-    Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest:
-      required:
-      - eventType
-      - linkedId
-      - linkedType
-      - negotiatorId
+    Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
       type: object
       properties:
+        id:
+          type:
+          - string
+          - 'null'
+        propertyId:
+          type:
+          - string
+          - 'null'
+        tenancyId:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type:
+          - string
+          - 'null'
         eventType:
-          minLength: 1
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEventType'
+        status:
+          enum:
+          - Unspecified
+          - Pending
+          - InProgress
+          - Complete
+          - Cancelled
+          - Expired
           type: string
-          description: The type of management event.
-        linkedType:
-          minLength: 1
+        priority:
+          enum:
+          - Unspecified
+          - High
+          - Normal
+          - Low
           type: string
-          description: The entity associated with the management event.
-        linkedId:
-          type: integer
-          description: The id of the entity associated with the management event.
-          format: int32
-        negotiatorId:
-          type: integer
-          description: The id of the negotiator associated with the management event.
-          format: int32
+        critical:
+          type: boolean
         dueDate:
           type:
           - string
           - 'null'
-          description: The date the management event is due to be completed.
+          format: date-time
+        completionDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reminderDays:
+          type: integer
+          format: int32
+        recurring:
+          type: boolean
+        rescheduledForDate:
+          type:
+          - string
+          - 'null'
           format: date-time
         notes:
-          maxLength: 2000
           type:
           - string
           - 'null'
-          description: Additional notes for the management event.
-      additionalProperties: false
-      description: Request model for creating a new management event
-    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Error:
-      type: object
-      properties:
-        code:
+        createdDate:
           type:
           - string
           - 'null'
-        message:
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ManagementEventType:
+      type: object
+      properties:
+        key:
+          type:
+          - string
+          - 'null'
+        label:
           type:
           - string
           - 'null'
@@ -469,92 +505,68 @@ components:
       items:
         $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
       description: Array of operations to perform
-    Alto.PropertyManagement.Api.Models.Responses.ManagementEventType:
+    Alto.PropertyManagement.Api.Models.Responses.Error:
       type: object
       properties:
-        key:
+        code:
           type:
           - string
           - 'null'
-        label:
+        message:
           type:
           - string
           - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
       type: object
       properties:
-        id:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
           type:
-          - string
+          - array
           - 'null'
-        propertyId:
-          type:
-          - string
-          - 'null'
-        tenancyId:
-          type:
-          - string
-          - 'null'
-        branchId:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest:
+      required:
+      - eventType
+      - linkedId
+      - linkedType
+      - negotiatorId
+      type: object
+      properties:
         eventType:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEventType'
-        status:
-          enum:
-          - Unspecified
-          - Pending
-          - InProgress
-          - Complete
-          - Cancelled
-          - Expired
+          minLength: 1
           type: string
-        priority:
-          enum:
-          - Unspecified
-          - High
-          - Normal
-          - Low
+          description: The type of management event.
+        linkedType:
+          minLength: 1
           type: string
-        critical:
-          type: boolean
+          description: The entity associated with the management event.
+        linkedId:
+          type: integer
+          description: The id of the entity associated with the management event.
+          format: int32
+        negotiatorId:
+          type: integer
+          description: The id of the negotiator associated with the management event.
+          format: int32
         dueDate:
           type:
           - string
           - 'null'
-          format: date-time
-        completionDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        reminderDays:
-          type: integer
-          format: int32
-        recurring:
-          type: boolean
-        rescheduledForDate:
-          type:
-          - string
-          - 'null'
+          description: The date the management event is due to be completed.
           format: date-time
         notes:
+          maxLength: 2000
           type:
           - string
           - 'null'
-        createdDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        modifiedDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
+          description: Additional notes for the management event.
       additionalProperties: false
+      description: Request model for creating a new management event
     Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
       type: object
       properties:

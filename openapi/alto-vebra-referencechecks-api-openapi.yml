@@ -70,6 +70,10 @@ paths:
       security:
       - appAuth:
         - alto/route:get-referencechecks
+      summary: Get reference checks
+      x-summary-source: derived
+      operationId: getReferenceChecks
+      x-operation-id-source: derived
   /ReferenceChecks/{referenceCheckId}:
     patch:
       tags:
@@ -132,13 +136,12 @@ paths:
       security:
       - appAuth:
         - alto/route:patch-referencechecks-referencecheckid
+      summary: Update reference checks by reference check id
+      x-summary-source: derived
+      operationId: patchReferenceChecksByReferenceCheckId
+      x-operation-id-source: derived
 components:
   schemas:
-    ReferenceCheckStatus:
-      enum:
-      - Pending
-      - Completed
-      type: string
     PatchReferenceCheckRequest:
       type: object
       properties:
@@ -147,6 +150,35 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ReferenceCheckPagedResultsDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReferenceCheckDto'
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ReferenceCheckStatus:
+      enum:
+      - Pending
+      - Completed
+      type: string
     ProblemDetails:
       type: object
       properties:
@@ -202,30 +234,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ReferenceCheckPagedResultsDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReferenceCheckDto'
       additionalProperties: false
   securitySchemes:
     Bearer:

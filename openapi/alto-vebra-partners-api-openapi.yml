@@ -82,6 +82,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-partners-integration
+      operationId: getPartnersIntegration
+      x-operation-id-source: derived
   /partners/integration/status:
     post:
       tags:
@@ -117,133 +119,10 @@ paths:
       security:
       - appAuth:
         - alto/route:post-partners-integration-status
+      operationId: postPartnersIntegrationStatus
+      x-operation-id-source: derived
 components:
   schemas:
-    UpdateIntegrationStatusResponse:
-      type: object
-      properties:
-        partnerIntegrationStatus:
-          allOf:
-          - $ref: '#/components/schemas/PartnerIntegrationStatus'
-        partnerIntegrationStatusDescription:
-          type:
-          - string
-          - 'null'
-        partnerIntegrationStatusUpdatedOn:
-          type: string
-          format: date-time
-        updatedRecordCount:
-          type: integer
-          format: int32
-        updatedBranchIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: integer
-            format: int32
-      additionalProperties: false
-    BranchAddressResponse:
-      type: object
-      properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNumber:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postCode:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    EntityOptOutStatus:
-      enum:
-      - OptedIn
-      - OptedOut
-      type: string
-    IntegrationStateResponse:
-      type: object
-      properties:
-        integrationId:
-          type: string
-          format: uuid
-        integrationName:
-          type:
-          - string
-          - 'null'
-        agencyName:
-          type:
-          - string
-          - 'null'
-        requestedBy:
-          type:
-          - string
-          - 'null'
-        agencyIntegrationData: {}
-        branches:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/IntegrationBranchResponse'
-      additionalProperties: false
-    PartnerIntegrationStatus:
-      enum:
-      - Pending
-      - Active
-      type: string
-    IntegrationBranchResponse:
-      type: object
-      properties:
-        branchRef:
-          type:
-          - string
-          - 'null'
-        branchId:
-          type: integer
-          format: int32
-        branchName:
-          type:
-          - string
-          - 'null'
-        branchAddress:
-          allOf:
-          - $ref: '#/components/schemas/BranchAddressResponse'
-        overridesAgencyIntegrationData:
-          type: boolean
-        integrationData: {}
-      additionalProperties: false
-    UpdateIntegrationStatusRequest:
-      type: object
-      properties:
-        partnerIntegrationStatus:
-          type:
-          - string
-          - 'null'
-        partnerIntegrationStatusDescription:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     ModelType:
       enum:
       - Unknown
@@ -470,6 +349,131 @@ components:
           - integer
           - 'null'
           format: int32
+      additionalProperties: false
+    IntegrationStateResponse:
+      type: object
+      properties:
+        integrationId:
+          type: string
+          format: uuid
+        integrationName:
+          type:
+          - string
+          - 'null'
+        agencyName:
+          type:
+          - string
+          - 'null'
+        requestedBy:
+          type:
+          - string
+          - 'null'
+        agencyIntegrationData: {}
+        branches:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/IntegrationBranchResponse'
+      additionalProperties: false
+    PartnerIntegrationStatus:
+      enum:
+      - Pending
+      - Active
+      type: string
+    UpdateIntegrationStatusRequest:
+      type: object
+      properties:
+        partnerIntegrationStatus:
+          type:
+          - string
+          - 'null'
+        partnerIntegrationStatusDescription:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    EntityOptOutStatus:
+      enum:
+      - OptedIn
+      - OptedOut
+      type: string
+    UpdateIntegrationStatusResponse:
+      type: object
+      properties:
+        partnerIntegrationStatus:
+          allOf:
+          - $ref: '#/components/schemas/PartnerIntegrationStatus'
+        partnerIntegrationStatusDescription:
+          type:
+          - string
+          - 'null'
+        partnerIntegrationStatusUpdatedOn:
+          type: string
+          format: date-time
+        updatedRecordCount:
+          type: integer
+          format: int32
+        updatedBranchIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: integer
+            format: int32
+      additionalProperties: false
+    IntegrationBranchResponse:
+      type: object
+      properties:
+        branchRef:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type: integer
+          format: int32
+        branchName:
+          type:
+          - string
+          - 'null'
+        branchAddress:
+          allOf:
+          - $ref: '#/components/schemas/BranchAddressResponse'
+        overridesAgencyIntegrationData:
+          type: boolean
+        integrationData: {}
+      additionalProperties: false
+    BranchAddressResponse:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postCode:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

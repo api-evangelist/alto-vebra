@@ -71,6 +71,8 @@ paths:
       security:
       - appAuth:
         - alto/route:get-offers-sales-offer-offerid
+      operationId: getOffersSalesOfferByOfferId
+      x-operation-id-source: derived
 components:
   schemas:
     ErrorsResponse:
