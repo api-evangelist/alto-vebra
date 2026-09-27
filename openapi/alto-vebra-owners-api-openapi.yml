@@ -94,19 +94,6 @@ paths:
         - alto/route:get-owners
 components:
   schemas:
-    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Owner'
-      additionalProperties: false
     Alto.Api.Material.Hateoas.Link:
       type: object
       properties:
@@ -119,51 +106,18 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.Owner:
+    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner:
       type: object
       properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
+        items:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        property:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.OwnerProperty'
-          description: Details of the property owned by the contact.
-        contact:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.OwnerContact'
-          description: Represents the contact details of the owner.
-        active:
-          type: boolean
-          description: Indicates whether the owner is currently active.
-        type:
-          enum:
-          - Unknown
-          - Vendor
-          - Landlord
-          type: string
-          description: Represents the type of the owner.
-        percentageShare:
-          type: number
-          description: Represents the owner's share or interest as a percentage.
-          format: double
-        createdAt:
-          type: string
-          description: The date and time when the contact owner was created.
-          format: date-time
-        modifiedAt:
-          type: string
-          description: The date and time when the owner's details were last modified.
-          format: date-time
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Owner'
       additionalProperties: false
     Alto.Contacts.Api.Models.Responses.OwnerContact:
       type: object
@@ -216,6 +170,52 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.Owner:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        property:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.OwnerProperty'
+          description: Details of the property owned by the contact.
+        contact:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.OwnerContact'
+          description: Represents the contact details of the owner.
+        active:
+          type: boolean
+          description: Indicates whether the owner is currently active.
+        type:
+          enum:
+          - Unknown
+          - Vendor
+          - Landlord
+          type: string
+          description: Represents the type of the owner.
+        percentageShare:
+          type: number
+          description: Represents the owner's share or interest as a percentage.
+          format: double
+        createdAt:
+          type: string
+          description: The date and time when the contact owner was created.
+          format: date-time
+        modifiedAt:
+          type: string
+          description: The date and time when the owner's details were last modified.
+          format: date-time
       additionalProperties: false
   securitySchemes:
     Bearer:

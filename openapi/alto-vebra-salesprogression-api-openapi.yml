@@ -142,6 +142,94 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ContactResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+        type:
+          type:
+          - string
+          - 'null'
+        broker:
+          $ref: '#/components/schemas/CompanyResponse'
+      additionalProperties: false
+    SecurityUserResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        address:
+          $ref: '#/components/schemas/AddressResponse'
+      additionalProperties: false
+    SortType:
+      enum:
+      - CompletionDate
+      - EstimatedExchangeDate
+      - OfferAcceptedDate
+      - Negotiator
+      - Milestone
+      - OldestToNewest
+      type: string
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
     AddressResponse:
       type: object
       properties:
@@ -178,43 +266,69 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    CompanyResponse:
+    Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Milestone:
       type: object
       properties:
         id:
           type:
           - string
           - 'null'
-        companyName:
+        description:
           type:
           - string
           - 'null'
-        name:
+        status:
           type:
           - string
           - 'null'
-        phone:
+        targetDate:
           type:
           - string
           - 'null'
-        email:
+          format: date-time
+        completedDate:
           type:
           - string
           - 'null'
-        address:
-          $ref: '#/components/schemas/AddressResponse'
-      additionalProperties: false
-    Meta:
-      type: object
-      properties:
-        nextToken:
+          format: date-time
+        notes:
           type:
           - string
           - 'null'
-        previousToken:
+        branchId:
           type:
           - string
           - 'null'
+        priority:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        customization:
+          type:
+          - string
+          - 'null'
+        ordering:
+          type: integer
+          format: int32
+        subTypeId:
+          type: integer
+          format: int32
       additionalProperties: false
     AgreedOfferWithMilestones:
       type: object
@@ -281,94 +395,14 @@ components:
           items:
             $ref: '#/components/schemas/ContactResponse'
       additionalProperties: false
-    AgreedOfferPagedResults:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AgreedOffer'
-      additionalProperties: false
-    ContactResponse:
+    CompanyResponse:
       type: object
       properties:
         id:
           type:
           - string
           - 'null'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-        type:
-          type:
-          - string
-          - 'null'
-        broker:
-          $ref: '#/components/schemas/CompanyResponse'
-      additionalProperties: false
-    Milestone:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - string
-          - 'null'
-        targetDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        completedDate:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        notes:
-          type:
-          - string
-          - 'null'
-        branchId:
-          type:
-          - string
-          - 'null'
-        priority:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-        customization:
-          type:
-          - string
-          - 'null'
-        ordering:
-          type: integer
-          format: int32
-        subTypeId:
-          type: integer
-          format: int32
-      additionalProperties: false
-    SecurityUserResponse:
-      type: object
-      properties:
-        id:
+        companyName:
           type:
           - string
           - 'null'
@@ -387,15 +421,6 @@ components:
         address:
           $ref: '#/components/schemas/AddressResponse'
       additionalProperties: false
-    SortType:
-      enum:
-      - CompletionDate
-      - EstimatedExchangeDate
-      - OfferAcceptedDate
-      - Negotiator
-      - Milestone
-      - OldestToNewest
-      type: string
     AgreedOffer:
       type: object
       properties:
@@ -455,42 +480,17 @@ components:
           - 'null'
           format: date-time
       additionalProperties: false
-    ProblemDetails:
+    AgreedOfferPagedResults:
       type: object
       properties:
-        type:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
           type:
-          - string
+          - array
           - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/AgreedOffer'
       additionalProperties: false
   securitySchemes:
     Bearer:

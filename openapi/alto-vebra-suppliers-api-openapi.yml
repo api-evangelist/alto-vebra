@@ -196,54 +196,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Address:
-      type: object
-      properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNo:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postcode:
-          type:
-          - string
-          - 'null'
-        country:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Supplier'
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.Error:
       type: object
       properties:
@@ -281,6 +233,29 @@ components:
           - string
           - 'null'
       additionalProperties: {}
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Supplier'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.Person:
       type: object
       properties:
@@ -320,16 +295,41 @@ components:
           type: integer
           format: int32
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+    Alto.PropertyManagement.Api.Models.Responses.Address:
       type: object
       properties:
-        errors:
+        subDwelling:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
+        nameNo:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

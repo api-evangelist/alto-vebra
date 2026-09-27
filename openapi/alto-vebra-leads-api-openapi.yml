@@ -396,65 +396,32 @@ paths:
         - alto/route:get-leads-leadid
 components:
   schemas:
-    LeadPatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/LeadPatchOperation'
-      description: Array of operations to perform
-    PostLeadRequest:
-      required:
-      - branchId
-      - enquirerDetails
-      - sourceIdentifier
+    LeadPatchOperation:
       type: object
       properties:
-        branchId:
-          maximum: 2147483647
-          minimum: 1
-          type: integer
-          description: Unique identifier for the Alto branch receiving the lead.
-          format: int32
-        enquiryType:
-          allOf:
-          - $ref: '#/components/schemas/EnquiryType'
-          description: Type of enquiry.
-        preferredContactMethod:
-          allOf:
-          - $ref: '#/components/schemas/PreferredContactMethod'
-          description: The enquirer's preferred contact method.
-        preferredContactTime:
-          allOf:
-          - $ref: '#/components/schemas/PreferredContactTime'
-          description: The enquirer's preferred contact time.
-        sourceIdentifier:
-          maxLength: 50
-          minLength: 0
+        op:
+          enum:
+          - replace
           type: string
-          description: Unique identifier for this lead.
-        enquiryDate:
+        value:
+          type: string
+        path:
+          enum:
+          - /contactId
+          - /leadStatus
+          type: string
+      example: '{ "path": "/leadStatus", "op": "replace", "value": "Rejected" }'
+    Meta:
+      type: object
+      properties:
+        nextToken:
           type:
           - string
           - 'null'
-          description: Enquiry date.
-          format: date-time
-        enquirerDetails:
-          allOf:
-          - $ref: '#/components/schemas/EnquirerDetailsRequest'
-          description: The enquirer's contact details.
-        propertyEnquiries:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LeadPropertyEnquiry'
-          description: Collection of property enquiries
-        comment:
-          maxLength: 2000
+        previousToken:
           type:
           - string
           - 'null'
-          description: Comment from the enquirer.
-          example: I am looking for a rental property that allows pets
       additionalProperties: false
     ErrorsResponse:
       type: object
@@ -466,49 +433,69 @@ components:
           items:
             $ref: '#/components/schemas/Error'
       additionalProperties: false
-    Link:
+    EnquirerAddress:
       type: object
       properties:
-        href:
+        houseName:
           type:
           - string
           - 'null'
-        rel:
+          description: The house or flat name of the enquirer's address
+          example: Oak Lodge
+        houseNumber:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    PreferredContactMethod:
-      enum:
-      - Unspecified
-      - Email
-      - Phone
-      - Post
-      type: string
-    LeadPropertyEnquiry:
-      type: object
-      properties:
-        propertyId:
+          description: The house or flat number of the enquirer's address
+          example: '14'
+        street:
           type:
           - string
           - 'null'
-          description: Unique identifier of the property.
-        price:
-          type: number
-          description: The price of the property.
-          format: double
+          description: The street of the enquirer's address
+          example: Oak Street
+        locality:
+          type:
+          - string
+          - 'null'
+          description: The locality of the enquirer's address
+          example: St Clement
+        area:
+          type:
+          - string
+          - 'null'
+          description: The area of the enquirer's address
+        town:
+          type:
+          - string
+          - 'null'
+          description: The town or city of the enquirer's address
+          example: London
+        county:
+          type:
+          - string
+          - 'null'
+          description: The county of the enquirer's address
+          example: Hampshire
+        country:
+          type:
+          - string
+          - 'null'
+          description: The country of the enquirer's address
+          example: UK
         postcode:
           type:
           - string
           - 'null'
-          description: The postcode of the property.
-        bedrooms:
-          type:
-          - integer
-          - 'null'
-          description: The number of bedrooms.
-          format: int32
+          description: The postal code of the enquirer's addres
+          example: SW45 3AP
       additionalProperties: false
+      description: Represents a physical address of the enqurier
+    LeadPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/LeadPatchOperation'
+      description: Array of operations to perform
     Lead:
       type: object
       properties:
@@ -575,6 +562,87 @@ components:
           - 'null'
           description: Comment or note for the lead
       additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    EnquirerDetailsRequest:
+      required:
+      - forename
+      type: object
+      properties:
+        title:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The formal title of the enquirer
+          example: Ms
+        forename:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: The first or given name of the enquirer
+          example: Jane
+        surname:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The surname of the enquirer
+          example: Smith
+        phoneNumberDay:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The day time phone number of the enquirer
+          example: 07683726192
+        phoneNumberEve:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The evening phone number of the enquirer
+          example: 07683726192
+        email:
+          maxLength: 200
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The email address of the enquirer
+          format: email
+          example: jane.smith@enquirer.com
+        address:
+          allOf:
+          - $ref: '#/components/schemas/EnquirerAddressRequest'
+      additionalProperties: false
     PreferredContactTime:
       enum:
       - Unspecified
@@ -583,93 +651,97 @@ components:
       - Evening
       - Morning
       type: string
-    Error:
+    Link:
       type: object
       properties:
-        code:
+        href:
           type:
           - string
           - 'null'
-        message:
+        rel:
           type:
           - string
           - 'null'
       additionalProperties: false
-    LeadStatus:
-      enum:
-      - Unspecified
-      - Unprocessed
-      - Processed
-      - Rejected
-      - Accepted
-      type: string
-    EnquirerAddress:
+    LeadPropertyEnquiry:
       type: object
       properties:
-        houseName:
+        propertyId:
           type:
           - string
           - 'null'
-          description: The house or flat name of the enquirer's address
-          example: Oak Lodge
-        houseNumber:
-          type:
-          - string
-          - 'null'
-          description: The house or flat number of the enquirer's address
-          example: '14'
-        street:
-          type:
-          - string
-          - 'null'
-          description: The street of the enquirer's address
-          example: Oak Street
-        locality:
-          type:
-          - string
-          - 'null'
-          description: The locality of the enquirer's address
-          example: St Clement
-        area:
-          type:
-          - string
-          - 'null'
-          description: The area of the enquirer's address
-        town:
-          type:
-          - string
-          - 'null'
-          description: The town or city of the enquirer's address
-          example: London
-        county:
-          type:
-          - string
-          - 'null'
-          description: The county of the enquirer's address
-          example: Hampshire
-        country:
-          type:
-          - string
-          - 'null'
-          description: The country of the enquirer's address
-          example: UK
+          description: Unique identifier of the property.
+        price:
+          type: number
+          description: The price of the property.
+          format: double
         postcode:
           type:
           - string
           - 'null'
-          description: The postal code of the enquirer's addres
-          example: SW45 3AP
+          description: The postcode of the property.
+        bedrooms:
+          type:
+          - integer
+          - 'null'
+          description: The number of bedrooms.
+          format: int32
       additionalProperties: false
-      description: Represents a physical address of the enqurier
-    EnquiryType:
-      enum:
-      - Unspecified
-      - LookingToBuy
-      - LookingToLet
-      - LookingToRent
-      - LookingToSell
-      - Other
-      type: string
+    PostLeadRequest:
+      required:
+      - branchId
+      - enquirerDetails
+      - sourceIdentifier
+      type: object
+      properties:
+        branchId:
+          maximum: 2147483647
+          minimum: 1
+          type: integer
+          description: Unique identifier for the Alto branch receiving the lead.
+          format: int32
+        enquiryType:
+          allOf:
+          - $ref: '#/components/schemas/EnquiryType'
+          description: Type of enquiry.
+        preferredContactMethod:
+          allOf:
+          - $ref: '#/components/schemas/PreferredContactMethod'
+          description: The enquirer's preferred contact method.
+        preferredContactTime:
+          allOf:
+          - $ref: '#/components/schemas/PreferredContactTime'
+          description: The enquirer's preferred contact time.
+        sourceIdentifier:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Unique identifier for this lead.
+        enquiryDate:
+          type:
+          - string
+          - 'null'
+          description: Enquiry date.
+          format: date-time
+        enquirerDetails:
+          allOf:
+          - $ref: '#/components/schemas/EnquirerDetailsRequest'
+          description: The enquirer's contact details.
+        propertyEnquiries:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LeadPropertyEnquiry'
+          description: Collection of property enquiries
+        comment:
+          maxLength: 2000
+          type:
+          - string
+          - 'null'
+          description: Comment from the enquirer.
+          example: I am looking for a rental property that allows pets
+      additionalProperties: false
     EnquirerAddressRequest:
       type: object
       properties:
@@ -745,62 +817,13 @@ components:
           description: The postal code of the enquirer's addres
           example: SW45 3AP
       additionalProperties: false
-    EnquirerDetailsRequest:
-      required:
-      - forename
-      type: object
-      properties:
-        title:
-          maxLength: 20
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The formal title of the enquirer
-          example: Ms
-        forename:
-          maxLength: 200
-          minLength: 0
-          type: string
-          description: The first or given name of the enquirer
-          example: Jane
-        surname:
-          maxLength: 200
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The surname of the enquirer
-          example: Smith
-        phoneNumberDay:
-          maxLength: 200
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The day time phone number of the enquirer
-          example: 07683726192
-        phoneNumberEve:
-          maxLength: 200
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The evening phone number of the enquirer
-          example: 07683726192
-        email:
-          maxLength: 200
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The email address of the enquirer
-          format: email
-          example: jane.smith@enquirer.com
-        address:
-          allOf:
-          - $ref: '#/components/schemas/EnquirerAddressRequest'
-      additionalProperties: false
+    PreferredContactMethod:
+      enum:
+      - Unspecified
+      - Email
+      - Phone
+      - Post
+      type: string
     LeadPagedResponse:
       type: object
       properties:
@@ -817,72 +840,6 @@ components:
           description: The collection of items in the response.
       additionalProperties: false
       description: Represents a paged response containing metadata and a collection of items.
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    Contact:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the contact
-          example: '123456'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-          description: Links to related contact.
-      additionalProperties: false
-      description: A contact that has been associated to the lead; if no contact has been associated to a lead, then will return null
-    LeadSource:
-      enum:
-      - Unspecified
-      - Agent
-      - RightMove
-      - Vebra
-      - Zoopla
-      - Api
-      - ZooplaAdReachExpress
-      - ZooplaAudienceConnect
-      type: string
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     EnquirerDetails:
       type: object
       properties:
@@ -928,21 +885,6 @@ components:
           description: Represents a physical address of the enqurier
       additionalProperties: false
       description: The lead's enquirer contact details that have been submitted as part of the enquiry;
-    LeadPatchOperation:
-      type: object
-      properties:
-        op:
-          enum:
-          - replace
-          type: string
-        value:
-          type: string
-        path:
-          enum:
-          - /contactId
-          - /leadStatus
-          type: string
-      example: '{ "path": "/leadStatus", "op": "replace", "value": "Rejected" }'
     Property:
       type: object
       properties:
@@ -960,6 +902,64 @@ components:
             $ref: '#/components/schemas/Link'
           description: Links to related property.
       additionalProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    LeadSource:
+      enum:
+      - Unspecified
+      - Agent
+      - RightMove
+      - Vebra
+      - Zoopla
+      - Api
+      - ZooplaAdReachExpress
+      - ZooplaAudienceConnect
+      type: string
+    Contact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the contact
+          example: '123456'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related contact.
+      additionalProperties: false
+      description: A contact that has been associated to the lead; if no contact has been associated to a lead, then will return null
+    LeadStatus:
+      enum:
+      - Unspecified
+      - Unprocessed
+      - Processed
+      - Rejected
+      - Accepted
+      type: string
+    EnquiryType:
+      enum:
+      - Unspecified
+      - LookingToBuy
+      - LookingToLet
+      - LookingToRent
+      - LookingToSell
+      - Other
+      type: string
   securitySchemes:
     Bearer:
       type: apiKey

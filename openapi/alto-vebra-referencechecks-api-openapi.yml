@@ -142,26 +142,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PatchReferenceCheckRequest:
-      type: object
-      properties:
-        status:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ReferenceCheckPagedResultsDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReferenceCheckDto'
-      additionalProperties: false
     Meta:
       type: object
       properties:
@@ -174,11 +154,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    ReferenceCheckStatus:
-      enum:
-      - Pending
-      - Completed
-      type: string
     ProblemDetails:
       type: object
       properties:
@@ -204,6 +179,26 @@ components:
           - string
           - 'null'
       additionalProperties: {}
+    ReferenceCheckPagedResultsDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReferenceCheckDto'
+      additionalProperties: false
+    PatchReferenceCheckRequest:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     ReferenceCheckDto:
       type: object
       properties:
@@ -235,6 +230,11 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ReferenceCheckStatus:
+      enum:
+      - Pending
+      - Completed
+      type: string
   securitySchemes:
     Bearer:
       type: apiKey

@@ -91,6 +91,42 @@ paths:
         - alto/route:patch-inventory-propertyid-appraisal
 components:
   schemas:
+    Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType:
+      enum:
+      - Unspecified
+      - Screen
+      - SMS
+      - Both
+      type: string
+    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
+      enum:
+      - Unspecified
+      - FreeMarketAppraisal
+      - BuildingSociety
+      - ABIData
+      - AgencyScheme
+      - Agricultural
+      - InsuranceCompany
+      - Bank
+      - ChargeableValuation
+      - Commercial
+      - CompulsoryPurchaseOrder
+      - Development
+      - Divorce
+      - FamilyDivision
+      - FormalMarketValuation
+      - HomebuyersPrivate
+      - HomebuyersReport
+      - Industrial
+      - Matrimonial
+      - PartExchange
+      - Probate
+      - ReMortgage
+      - Rental
+      - Repossession
+      - RevenueAndCustoms
+      - RightToBuy
+      type: string
     Alto.Appraisal.Api.Models.Requests.CreateAppraisalRequest:
       type: object
       properties:
@@ -141,13 +177,6 @@ components:
           - 'null'
           description: '[Required] The unique identifier of the requesting user'
       additionalProperties: false
-    Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType:
-      enum:
-      - Unspecified
-      - Screen
-      - SMS
-      - Both
-      type: string
     SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
       anyOf:
       - title: Sale Upper Amount
@@ -453,35 +482,6 @@ components:
             default: /RentPriceQualifier
         description: The Rent Price Qualifier. For property rentals only.
         example: "\n{ \n    \"path\": \"/RentPriceQualifier\", \n    \"op\": \"add\", \n    \"value\": \"Unspecified\" \n}"
-    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
-      enum:
-      - Unspecified
-      - FreeMarketAppraisal
-      - BuildingSociety
-      - ABIData
-      - AgencyScheme
-      - Agricultural
-      - InsuranceCompany
-      - Bank
-      - ChargeableValuation
-      - Commercial
-      - CompulsoryPurchaseOrder
-      - Development
-      - Divorce
-      - FamilyDivision
-      - FormalMarketValuation
-      - HomebuyersPrivate
-      - HomebuyersReport
-      - Industrial
-      - Matrimonial
-      - PartExchange
-      - Probate
-      - ReMortgage
-      - Rental
-      - Repossession
-      - RevenueAndCustoms
-      - RightToBuy
-      type: string
     SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
       type: array
       items:

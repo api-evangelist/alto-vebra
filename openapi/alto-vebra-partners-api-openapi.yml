@@ -123,6 +123,11 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PartnerIntegrationStatus:
+      enum:
+      - Pending
+      - Active
+      type: string
     ModelType:
       enum:
       - Unknown
@@ -350,6 +355,55 @@ components:
           - 'null'
           format: int32
       additionalProperties: false
+    BranchAddressResponse:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postCode:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    EntityOptOutStatus:
+      enum:
+      - OptedIn
+      - OptedOut
+      type: string
+    UpdateIntegrationStatusRequest:
+      type: object
+      properties:
+        partnerIntegrationStatus:
+          type:
+          - string
+          - 'null'
+        partnerIntegrationStatusDescription:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     IntegrationStateResponse:
       type: object
       properties:
@@ -376,28 +430,6 @@ components:
           items:
             $ref: '#/components/schemas/IntegrationBranchResponse'
       additionalProperties: false
-    PartnerIntegrationStatus:
-      enum:
-      - Pending
-      - Active
-      type: string
-    UpdateIntegrationStatusRequest:
-      type: object
-      properties:
-        partnerIntegrationStatus:
-          type:
-          - string
-          - 'null'
-        partnerIntegrationStatusDescription:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    EntityOptOutStatus:
-      enum:
-      - OptedIn
-      - OptedOut
-      type: string
     UpdateIntegrationStatusResponse:
       type: object
       properties:
@@ -442,38 +474,6 @@ components:
         overridesAgencyIntegrationData:
           type: boolean
         integrationData: {}
-      additionalProperties: false
-    BranchAddressResponse:
-      type: object
-      properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNumber:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postCode:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

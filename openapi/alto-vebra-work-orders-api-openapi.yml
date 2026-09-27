@@ -183,38 +183,87 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Alto.PropertyManagement.Api.Models.WorkOrderActor:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-          description: A string description of the related party
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the related party, or null for Agency
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
     SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch:
       type: array
       items:
         $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
       description: Array of operations to perform
+    Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest:
+      required:
+      - priority
+      - propertyId
+      - reportedDate
+      - summary
+      type: object
+      properties:
+        propertyId:
+          minLength: 1
+          type: string
+          description: The unique identifier for the property associated with the work order.
+        summary:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The title of the work order.
+        description:
+          type:
+          - string
+          - 'null'
+          description: A detailed description of the work order.
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Additional notes.
+        priority:
+          minLength: 1
+          type: string
+          description: The priority level of the work order.
+        reporterDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        accessDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        chargeDetails:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
+        reportedDate:
+          minLength: 1
+          type: string
+          description: The date the work order was reported.
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: The preferred start date for the works to be carried out.
+        supplierContactId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the supplier (recorded in Alto) who will carry out the works.
+        quote:
+          type:
+          - number
+          - 'null'
+          description: The estimated cost of the works.
+          format: double
+        negotiatorId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the negotiator
+          example: '1234'
+      additionalProperties: false
+      description: Represents a work order
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
+      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.WorkOrder:
       type: object
       properties:
@@ -292,82 +341,33 @@ components:
           description: The date the Work Order was last modified.
           format: date-time
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Requests.CreateWorkOrderRequest:
-      required:
-      - priority
-      - propertyId
-      - reportedDate
-      - summary
+    Alto.PropertyManagement.Api.Models.WorkOrderActor:
       type: object
       properties:
-        propertyId:
-          minLength: 1
-          type: string
-          description: The unique identifier for the property associated with the work order.
-        summary:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The title of the work order.
-        description:
+        type:
           type:
           - string
           - 'null'
-          description: A detailed description of the work order.
-        notes:
+          description: A string description of the related party
+        id:
           type:
           - string
           - 'null'
-          description: Additional notes.
-        priority:
-          minLength: 1
-          type: string
-          description: The priority level of the work order.
-        reporterDetails:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
-        accessDetails:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
-        chargeDetails:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.WorkOrderActor'
-        reportedDate:
-          minLength: 1
-          type: string
-          description: The date the work order was reported.
-        startDate:
-          type:
-          - string
-          - 'null'
-          description: The preferred start date for the works to be carried out.
-        supplierContactId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the supplier (recorded in Alto) who will carry out the works.
-        quote:
-          type:
-          - number
-          - 'null'
-          description: The estimated cost of the works.
-          format: double
-        negotiatorId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the negotiator
-          example: '1234'
+          description: The unique identifier for the related party, or null for Agency
       additionalProperties: false
-      description: Represents a work order
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+    Alto.PropertyManagement.Api.Models.Responses.Error:
       type: object
       properties:
-        errors:
+        code:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
+        message:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
   securitySchemes:
     Bearer:
       type: apiKey

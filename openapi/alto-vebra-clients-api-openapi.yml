@@ -83,6 +83,90 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Person:
+      type: object
+      properties:
+        personNo:
+          type: integer
+          format: int32
+        name:
+          allOf:
+          - $ref: '#/components/schemas/Name'
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EmailAddress'
+      additionalProperties: false
+    Name:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ClientDataItemCollection:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ClientData'
+      additionalProperties: false
     Address:
       type: object
       properties:
@@ -123,65 +207,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Name:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        forename:
-          type:
-          - string
-          - 'null'
-        surname:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Person:
-      type: object
-      properties:
-        personNo:
-          type: integer
-          format: int32
-        name:
-          allOf:
-          - $ref: '#/components/schemas/Name'
-        phoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Phone'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EmailAddress'
-      additionalProperties: false
-    ClientDataItemCollection:
-      type: object
-      properties:
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ClientData'
-      additionalProperties: false
-    EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        address:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     ClientData:
       type: object
       properties:
@@ -204,31 +229,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/Address'
       additionalProperties: false
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
   securitySchemes:
     Bearer:
       type: apiKey

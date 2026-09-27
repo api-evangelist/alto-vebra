@@ -64,6 +64,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    TenantGuarantorDataItemCollection:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TenantGuarantorData'
+      additionalProperties: false
     TenantGuarantorData:
       type: object
       properties:
@@ -76,17 +86,6 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/GuarantorIdData'
-      additionalProperties: false
-    GuarantorIdData:
-      type: object
-      properties:
-        guarantorContactId:
-          type: integer
-          format: int32
-        guarantorId:
-          type: integer
-          format: int32
-          readOnly: true
       additionalProperties: false
     ProblemDetails:
       type: object
@@ -113,15 +112,16 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    TenantGuarantorDataItemCollection:
+    GuarantorIdData:
       type: object
       properties:
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TenantGuarantorData'
+        guarantorContactId:
+          type: integer
+          format: int32
+        guarantorId:
+          type: integer
+          format: int32
+          readOnly: true
       additionalProperties: false
   securitySchemes:
     Bearer:
