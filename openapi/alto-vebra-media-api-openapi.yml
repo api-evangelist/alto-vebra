@@ -163,6 +163,30 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    PostLinkMediaItemRequest:
+      type: object
+      properties:
+        mediaType:
+          enum:
+          - VirtualTour
+          - WebLink
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    PostLinkMediaItemResponse:
+      type: object
+      properties:
+        mediaId:
+          type: integer
+          format: int32
+      additionalProperties: false
     PostMediaItemRequest:
       type: object
       properties:
@@ -203,30 +227,6 @@ components:
         mediaId:
           type: integer
           format: int32
-      additionalProperties: false
-    PostLinkMediaItemResponse:
-      type: object
-      properties:
-        mediaId:
-          type: integer
-          format: int32
-      additionalProperties: false
-    PostLinkMediaItemRequest:
-      type: object
-      properties:
-        mediaType:
-          enum:
-          - VirtualTour
-          - WebLink
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

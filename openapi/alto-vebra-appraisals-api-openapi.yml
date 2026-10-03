@@ -91,13 +91,6 @@ paths:
         - alto/route:patch-inventory-propertyid-appraisal
 components:
   schemas:
-    Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType:
-      enum:
-      - Unspecified
-      - Screen
-      - SMS
-      - Both
-      type: string
     Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
       enum:
       - Unspecified
@@ -177,6 +170,11 @@ components:
           - 'null'
           description: '[Required] The unique identifier of the requesting user'
       additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest'
+      description: Array of operations to perform
     SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
       anyOf:
       - title: Sale Upper Amount
@@ -482,11 +480,13 @@ components:
             default: /RentPriceQualifier
         description: The Rent Price Qualifier. For property rentals only.
         example: "\n{ \n    \"path\": \"/RentPriceQualifier\", \n    \"op\": \"add\", \n    \"value\": \"Unspecified\" \n}"
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest'
-      description: Array of operations to perform
+    Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType:
+      enum:
+      - Unspecified
+      - Screen
+      - SMS
+      - Both
+      type: string
   securitySchemes:
     Bearer:
       type: apiKey

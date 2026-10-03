@@ -714,52 +714,22 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Alto.Services.SDK.Enums.Property.KeySetStatus:
-      enum:
-      - Unspecified
-      - In
-      - Out
-      - Lost
-      - Returned
-      type: string
-    Alto.Services.SDK.PropertyRecordType:
+    Alto.Inventory.Api.Enums.PropertyRecordType:
       enum:
       - Unspecified
       - Sale
       - Rent
       type: string
-    Alto.Services.SDK.InventoryStatus:
+    Alto.Services.SDK.PropertyTenureType:
       enum:
       - Unspecified
-      - Appraisal
-      - Available
-      - UnderOffer
-      - Completed
-      - Let
-      - LetAgreed
-      - LetMarketing
-      - Archived
-      - Suspended
-      - Withdrawn
-      - Instructed
-      - NotInstructed
-      - ExternallyLet
-      - UnderOfferMarketing
-      - UnderOfferAvailable
-      - Exchanged
-      - ExternallySold
-      - Reserved
+      - Freehold
+      - Leasehold
+      - LeaseholdWithShareOfFreehold
+      - FlyingFreehold
+      - Commonhold
+      - ShareOfFreehold
       type: string
-    Alto.Internal.Nts.Sewerage:
-      type: object
-      properties:
-        supply:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Internal.Nts.SewerageSupply'
-      additionalProperties: false
     Alto.Internal.Nts.FloodingRisks:
       type: object
       properties:
@@ -775,59 +745,42 @@ components:
           - boolean
           - 'null'
       additionalProperties: false
-    Alto.Api.Material.Hateoas.Link:
+    Alto.Inventory.Api.Models.Requests.AddInventoryOwner:
       type: object
       properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
+        contactId:
+          type: integer
+          description: '[Required] The contact id to associate with the property'
+          format: int32
       additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.KeySetPatch:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.KeySetPatch'
-      description: Array of operations to perform
-    Alto.Internal.Nts.RightsAndEasements:
+    Alto.Inventory.Api.Models.Owner:
       type: object
       properties:
-        rightOfWayPublic:
+        contactId:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Alto.Internal.Nts.MiningRisks:
+      type: object
+      properties:
+        coalfields:
           type:
           - boolean
           - 'null'
-        rightOfWayPrivate:
-          type:
-          - boolean
-          - 'null'
-        registeredEasementsHmlr:
-          type:
-          - boolean
-          - 'null'
-        servitudes:
-          type:
-          - boolean
-          - 'null'
-        sharedDriveway:
-          type:
-          - boolean
-          - 'null'
-        loftAccess:
-          type:
-          - boolean
-          - 'null'
-        drainAccess:
-          type:
-          - boolean
-          - 'null'
-        other:
+        otherMiningActivities:
           type:
           - boolean
           - 'null'
       additionalProperties: false
+    Alto.Internal.Nts.SourceOfFlooding:
+      enum:
+      - River
+      - Sea
+      - Groundwater
+      - Lake
+      - Reservoir
+      - Other
+      type: string
     SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.InventoryPatch:
       anyOf:
       - title: Display Address
@@ -2400,167 +2353,6 @@ components:
             default: /AdvertDetails
         description: "\n            The Property Advert Summary\n            "
         example: "\n{ \n    \"path\": \"/AdvertDetails\", \n    \"op\": \"replace\", \n    \"value\": \"Advert text\"\n}"
-    Alto.Internal.Nts.AccessibilityRequirements:
-      type: object
-      properties:
-        accessibility:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Internal.Nts.Accessibility'
-      additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.InventoryPatch:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.InventoryPatch'
-      description: Array of operations to perform
-    Alto.Internal.Nts.FloodingSources:
-      type: object
-      properties:
-        source:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Internal.Nts.SourceOfFlooding'
-      additionalProperties: false
-    Alto.Internal.Nts.MiningRisks:
-      type: object
-      properties:
-        coalfields:
-          type:
-          - boolean
-          - 'null'
-        otherMiningActivities:
-          type:
-          - boolean
-          - 'null'
-      additionalProperties: false
-    Alto.Internal.Nts.Heating:
-      type: object
-      properties:
-        source:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Internal.Nts.HeatingSource'
-      additionalProperties: false
-    Alto.Inventory.Api.Enums.MaintenanceType:
-      enum:
-      - Unspecified
-      - MaintainedByLandlord
-      - MaintainedByUs
-      type: string
-    Alto.Services.SDK.Enums.Property.Rental.PropertyContractType:
-      enum:
-      - Unspecified
-      - AssuredShortholdTenancy
-      - AssuredTenancy
-      - PublicSector
-      - HousingAssociation
-      - AssuredPeriodicTenancy
-      type: string
-    Alto.Internal.Nts.HeatingSource:
-      enum:
-      - BiomassBoiler
-      - Communal
-      - ElectricMains
-      - ElectricRoomHeaters
-      - GasMains
-      - HeatPumpAirSource
-      - HeatPumpGroundSource
-      - Lpg
-      - NightStorageHeaters
-      - Oil
-      - Other
-      - SolarPanels
-      - SolarPhotovoltaicThermal
-      - SolarThermal
-      - UnderFloorHeating
-      - WoodBurner
-      - OpenFire
-      type: string
-    Alto.Inventory.Api.Models.Responses.Phone:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        type:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        number:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Inventory.Api.Models.Requests.AddKeySetRequest:
-      type: object
-      properties:
-        referenceCode:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        keyCount:
-          type: integer
-          format: int32
-        status:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.Property.KeySetStatus'
-        notes:
-          type:
-          - string
-          - 'null'
-        expectedDateIn:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        holderType:
-          enum:
-          - Contact
-          - User
-          type:
-          - string
-          - 'null'
-        holderId:
-          type:
-          - integer
-          - 'null'
-          format: int32
-      additionalProperties: false
-    Alto.Internal.Nts.SewerageSupply:
-      enum:
-      - Mains
-      - SepticTank
-      - DomesticSmallSewageTreatmentPlants
-      - Cesspit
-      - Cesspool
-      - Other
-      type: string
-    Alto.Inventory.Api.Models.Responses.Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.KeySetPatch:
       anyOf:
       - title: Description
@@ -2684,52 +2476,125 @@ components:
             default: /HolderId
         description: The identifier of the holder when keys are out.
         example: "\n{ \n    \"path\": \"/HolderId\", \n    \"op\": \"replace\", \n    \"value\": 12345\n}"
-    Alto.Internal.Nts.Restrictions:
+    Alto.Services.SDK.PropertyRecordType:
+      enum:
+      - Unspecified
+      - Sale
+      - Rent
+      type: string
+    Alto.Services.SDK.Models.Address:
       type: object
       properties:
-        conservationArea:
+        subDwelling:
           type:
-          - boolean
+          - string
           - 'null'
-        leaseRestrictions:
+        nameNumber:
           type:
-          - boolean
+          - string
           - 'null'
-        listedBuilding:
+        street:
           type:
-          - boolean
+          - string
           - 'null'
-        permittedDevelopment:
+        locality:
           type:
-          - boolean
+          - string
           - 'null'
-        realBurdens:
+        town:
           type:
-          - boolean
+          - string
           - 'null'
-        holidayHomeRental:
+        county:
           type:
-          - boolean
+          - string
           - 'null'
-        restrictiveCovenant:
+        postcode:
           type:
-          - boolean
+          - string
           - 'null'
-        businessFromProperty:
+        countryCode:
           type:
-          - boolean
+          - string
           - 'null'
-        propertySubletting:
+        uprn:
           type:
-          - boolean
+          - string
           - 'null'
-        treePreservationOrder:
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Requests.AddKeySetRequest:
+      type: object
+      properties:
+        referenceCode:
           type:
-          - boolean
+          - string
           - 'null'
-        other:
+        description:
           type:
-          - boolean
+          - string
+          - 'null'
+        keyCount:
+          type: integer
+          format: int32
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.Property.KeySetStatus'
+        notes:
+          type:
+          - string
+          - 'null'
+        expectedDateIn:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        holderType:
+          enum:
+          - Contact
+          - User
+          type:
+          - string
+          - 'null'
+        holderId:
+          type:
+          - integer
+          - 'null'
+          format: int32
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNo:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
           - 'null'
       additionalProperties: false
     Alto.Inventory.Api.Enums.RentalManagementType:
@@ -2741,6 +2606,101 @@ components:
       - FullyManaged
       - RentCollectionService
       - LetOnly
+      type: string
+    Alto.Services.SDK.Enums.Property.Rental.PropertyContractType:
+      enum:
+      - Unspecified
+      - AssuredShortholdTenancy
+      - AssuredTenancy
+      - PublicSector
+      - HousingAssociation
+      - AssuredPeriodicTenancy
+      type: string
+    Alto.Services.SDK.Models.ItemCollection1_Alto.Inventory.Api.Models.Responses.InventoryDetailItem:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryDetailItem'
+      additionalProperties: false
+    Alto.Internal.Nts.ParkingType:
+      enum:
+      - DoubleGarage
+      - OffStreetParking
+      - ResidentsParking
+      - SingleGarage
+      - Underground
+      - CommunalCarParkAllocatedSpace
+      - CommunalCarParkNoAllocatedSpace
+      - DisabledParkingAvailable
+      - DisabledParkingNotAvailable
+      - DrivewayPrivate
+      - DrivewayShared
+      - EvChargingPrivate
+      - EvChargingShared
+      - Garage
+      - GarageBloc
+      - GarageCarport
+      - GarageDetached
+      - GarageIntegral
+      - GatedParking
+      - NoParkingAvailable
+      - RearOfProperty
+      - StreetParkingPermitNotRequired
+      - StreetParkingPermitRequired
+      - Undercroft
+      - UndergroundParkingAllocatedSpace
+      - UndergroundParkingNoAllocatedSpace
+      - Other
+      type: string
+    Alto.Inventory.Api.Models.Responses.Search.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.InventoryItem:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
+      additionalProperties: false
+    Alto.Internal.Nts.ElectricitySupply:
+      enum:
+      - MainsSupply
+      - PrivateSupply
+      - SolarPvPanels
+      - WindTurbine
+      - Generator
+      - Other
+      type: string
+    Alto.Inventory.Api.Enums.MaintenanceType:
+      enum:
+      - Unspecified
+      - MaintainedByLandlord
+      - MaintainedByUs
+      type: string
+    Alto.Internal.Nts.SewerageSupply:
+      enum:
+      - Mains
+      - SepticTank
+      - DomesticSmallSewageTreatmentPlants
+      - Cesspit
+      - Cesspool
+      - Other
       type: string
     Alto.Inventory.Api.Domain.AltoKeySet:
       type: object
@@ -2796,139 +2756,37 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.Inventory.Api.Models.Responses.Owner:
+    Alto.Internal.Nts.Electricity:
       type: object
       properties:
-        ownerId:
-          type:
-          - string
-          - 'null'
-        contactId:
-          type: integer
-          format: int32
-        name:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Name'
-        phoneNumbers:
+        supply:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Phone'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.EmailAddress'
+            $ref: '#/components/schemas/Alto.Internal.Nts.ElectricitySupply'
       additionalProperties: false
-    Alto.Inventory.Api.Models.Responses.EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        address:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Internal.Nts.WaterSupply:
+    Alto.Services.SDK.InventoryStatus:
       enum:
-      - Mains
-      - PrivateWell
-      - PrivateSpring
-      - PrivateBorehole
-      - PublicWell
-      - PublicSpring
-      - PublicBorehole
-      - Other
-      type: string
-    Alto.Inventory.Api.Models.Responses.Search.Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Inventory.Api.Models.Responses.InventoryItem:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
-      additionalProperties: false
-    Alto.Inventory.Api.Models.Responses.Search.InventoryItem:
-      type: object
-      properties:
-        inventoryId:
-          type:
-          - string
-          - 'null'
-          description: The ID of the inventory record.
-        branchId:
-          type:
-          - string
-          - 'null'
-          description: The ID of the branch.
-        createdAt:
-          type:
-          - string
-          - 'null'
-          description: The date and time the inventory record was created.
-          format: date-time
-        modifiedAt:
-          type:
-          - string
-          - 'null'
-          description: The date and time the inventory record was last modified.
-          format: date-time
-        categoryType:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyCategoryType'
-          description: The category type of the inventory record.
-        recordType:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyRecordType'
-          description: The record type of the property in inventory.
-        archived:
-          type: boolean
-          description: boolean value indicating whether inventory record has been archived
-        status:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.InventoryStatus'
-          description: The status type of the inventory record.
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
-          description: The address of the inventory record.
-        managementType:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.RentalManagementType'
-        maintenanceType:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.MaintenanceType'
-          description: Where the responsibility lies for the maintenance of a rental property.
-        instructionDate:
-          type:
-          - string
-          - 'null'
-          description: The date and time the inventory record was instructed.
-          format: date-time
-      additionalProperties: false
-    Alto.Internal.Nts.SourceOfFlooding:
-      enum:
-      - River
-      - Sea
-      - Groundwater
-      - Lake
-      - Reservoir
-      - Other
+      - Unspecified
+      - Appraisal
+      - Available
+      - UnderOffer
+      - Completed
+      - Let
+      - LetAgreed
+      - LetMarketing
+      - Archived
+      - Suspended
+      - Withdrawn
+      - Instructed
+      - NotInstructed
+      - ExternallyLet
+      - UnderOfferMarketing
+      - UnderOfferAvailable
+      - Exchanged
+      - ExternallySold
+      - Reserved
       type: string
     Alto.Internal.Nts.Parking:
       type: object
@@ -2940,18 +2798,16 @@ components:
           items:
             $ref: '#/components/schemas/Alto.Internal.Nts.ParkingType'
       additionalProperties: false
-    Alto.Internal.Nts.BroadbandSupply:
-      enum:
-      - Adsl
-      - Cable
-      - FixedWireless
-      - Fttc
-      - Fttp
-      - Mobile
-      - None
-      - Other
-      - Satellite
-      type: string
+    Alto.Internal.Nts.BuildingSafety:
+      type: object
+      properties:
+        issue:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
     Alto.Inventory.Api.Models.Responses.InventoryDetailItem:
       type: object
       properties:
@@ -3248,49 +3104,135 @@ components:
           allOf:
           - $ref: '#/components/schemas/Alto.Inventory.Api.Models.SecurityUser'
       additionalProperties: false
-    Alto.Services.SDK.PropertyTenureType:
-      enum:
-      - Unspecified
-      - Freehold
-      - Leasehold
-      - LeaseholdWithShareOfFreehold
-      - FlyingFreehold
-      - Commonhold
-      - ShareOfFreehold
-      type: string
-    Alto.Inventory.Api.Models.SecurityUser:
+    Alto.Internal.Nts.RightsAndEasements:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
-        name:
+        rightOfWayPublic:
+          type:
+          - boolean
+          - 'null'
+        rightOfWayPrivate:
+          type:
+          - boolean
+          - 'null'
+        registeredEasementsHmlr:
+          type:
+          - boolean
+          - 'null'
+        servitudes:
+          type:
+          - boolean
+          - 'null'
+        sharedDriveway:
+          type:
+          - boolean
+          - 'null'
+        loftAccess:
+          type:
+          - boolean
+          - 'null'
+        drainAccess:
+          type:
+          - boolean
+          - 'null'
+        other:
+          type:
+          - boolean
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Search.InventoryItem:
+      type: object
+      properties:
+        inventoryId:
           type:
           - string
           - 'null'
-        links:
+          description: The ID of the inventory record.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the branch.
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the inventory record was created.
+          format: date-time
+        modifiedAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the inventory record was last modified.
+          format: date-time
+        categoryType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyCategoryType'
+          description: The category type of the inventory record.
+        recordType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.PropertyRecordType'
+          description: The record type of the property in inventory.
+        archived:
+          type: boolean
+          description: boolean value indicating whether inventory record has been archived
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.InventoryStatus'
+          description: The status type of the inventory record.
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Address'
+          description: The address of the inventory record.
+        managementType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.RentalManagementType'
+        maintenanceType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Enums.MaintenanceType'
+          description: Where the responsibility lies for the maintenance of a rental property.
+        instructionDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time the inventory record was instructed.
+          format: date-time
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.InventoryPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.InventoryPatch'
+      description: Array of operations to perform
+    Alto.Services.SDK.Enums.Property.KeySetStatus:
+      enum:
+      - Unspecified
+      - In
+      - Out
+      - Lost
+      - Returned
+      type: string
+    Alto.Internal.Nts.Heating:
+      type: object
+      properties:
+        source:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+            $ref: '#/components/schemas/Alto.Internal.Nts.HeatingSource'
       additionalProperties: false
-    Alto.Inventory.Api.Models.Owner:
+    Alto.Inventory.Api.Models.Responses.InventoryPagedResults:
       type: object
       properties:
-        contactId:
-          type: integer
-          format: int32
-      additionalProperties: false
-    Alto.Internal.Nts.Water:
-      type: object
-      properties:
-        supply:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Meta'
+        items:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Internal.Nts.WaterSupply'
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryItem'
       additionalProperties: false
     Microsoft.AspNetCore.Mvc.ProblemDetails:
       type: object
@@ -3317,22 +3259,6 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    Alto.Inventory.Api.Models.Responses.Name:
-      type: object
-      properties:
-        title:
-          type:
-          - string
-          - 'null'
-        forename:
-          type:
-          - string
-          - 'null'
-        surname:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     Alto.Internal.Nts.Accessibility:
       enum:
       - LateralLiving
@@ -3348,6 +3274,109 @@ components:
       - LevelAccessShower
       - VariableHeightKitchenSurfaces
       type: string
+    Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventoryItem'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Inventory.Api.Models.Responses.Phone:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        type:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.WaterSupply:
+      enum:
+      - Mains
+      - PrivateWell
+      - PrivateSpring
+      - PrivateBorehole
+      - PublicWell
+      - PublicSpring
+      - PublicBorehole
+      - Other
+      type: string
+    Alto.Inventory.Api.Models.SecurityUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type:
+          - string
+          - 'null'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Inventory.Api.Models.Responses.KeySetPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Inventory.Api.Models.Responses.KeySetPatch'
+      description: Array of operations to perform
+    Alto.Inventory.Api.Models.Responses.Owner:
+      type: object
+      properties:
+        ownerId:
+          type:
+          - string
+          - 'null'
+        contactId:
+          type: integer
+          format: int32
+        name:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Name'
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.EmailAddress'
+      additionalProperties: false
     Alto.Internal.Nts.Construction:
       type: object
       properties:
@@ -3358,50 +3387,68 @@ components:
           items:
             type: string
       additionalProperties: false
-    Alto.Inventory.Api.Models.Responses.Address:
+    Alto.Inventory.Api.Models.Requests.Lease:
       type: object
       properties:
-        subDwelling:
+        tenure:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.PropertyTenureType'
+          description: The tenure of the long lease.
+        remainingTerm:
           type:
-          - string
+          - integer
           - 'null'
-        nameNo:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postcode:
-          type:
-          - string
-          - 'null'
-        countryCode:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Inventory.Api.Models.Requests.AddInventoryOwner:
-      type: object
-      properties:
-        contactId:
-          type: integer
-          description: '[Required] The contact id to associate with the property'
+          description: The remaining term in years of the long lease. You must supply either this or and end date.
           format: int32
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: The end date of the long lease. You must supply either this or a remaining term.
+          format: date-time
       additionalProperties: false
+    Alto.Internal.Nts.HeatingSource:
+      enum:
+      - BiomassBoiler
+      - Communal
+      - ElectricMains
+      - ElectricRoomHeaters
+      - GasMains
+      - HeatPumpAirSource
+      - HeatPumpGroundSource
+      - Lpg
+      - NightStorageHeaters
+      - Oil
+      - Other
+      - SolarPanels
+      - SolarPhotovoltaicThermal
+      - SolarThermal
+      - UnderFloorHeating
+      - WoodBurner
+      - OpenFire
+      type: string
+    Alto.Internal.Nts.Water:
+      type: object
+      properties:
+        supply:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Internal.Nts.WaterSupply'
+      additionalProperties: false
+    Alto.Internal.Nts.BroadbandSupply:
+      enum:
+      - Adsl
+      - Cable
+      - FixedWireless
+      - Fttc
+      - Fttp
+      - Mobile
+      - None
+      - Other
+      - Satellite
+      type: string
     Alto.Inventory.Api.Models.Responses.Epc:
       type: object
       properties:
@@ -3429,38 +3476,43 @@ components:
           description: Reason for an EPC Exemption
       additionalProperties: false
       description: Energy Performance Certificate
-    Alto.Services.SDK.Models.ItemCollection1_Alto.Inventory.Api.Models.Responses.InventoryDetailItem:
+    Alto.Inventory.Api.Models.Responses.Name:
       type: object
       properties:
-        totalCount:
-          type: integer
-          format: int32
-        items:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Internal.Nts.FloodingSources:
+      type: object
+      properties:
+        source:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryDetailItem'
-      additionalProperties: false
-    Alto.Inventory.Api.Models.Requests.Lease:
-      type: object
-      properties:
-        tenure:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.PropertyTenureType'
-          description: The tenure of the long lease.
-        remainingTerm:
-          type:
-          - integer
-          - 'null'
-          description: The remaining term in years of the long lease. You must supply either this or and end date.
-          format: int32
-        endDate:
-          type:
-          - string
-          - 'null'
-          description: The end date of the long lease. You must supply either this or a remaining term.
-          format: date-time
+            $ref: '#/components/schemas/Alto.Internal.Nts.SourceOfFlooding'
       additionalProperties: false
     Alto.Inventory.Api.Models.Requests.AddInventory:
       type: object
@@ -3493,108 +3545,64 @@ components:
           - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Requests.Lease'
           description: The long lease on leasehold property.
       additionalProperties: false
-    Alto.Services.SDK.Models.Address:
+    Alto.Internal.Nts.AccessibilityRequirements:
       type: object
       properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNumber:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postcode:
-          type:
-          - string
-          - 'null'
-        countryCode:
-          type:
-          - string
-          - 'null'
-        uprn:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Internal.Nts.ParkingType:
-      enum:
-      - DoubleGarage
-      - OffStreetParking
-      - ResidentsParking
-      - SingleGarage
-      - Underground
-      - CommunalCarParkAllocatedSpace
-      - CommunalCarParkNoAllocatedSpace
-      - DisabledParkingAvailable
-      - DisabledParkingNotAvailable
-      - DrivewayPrivate
-      - DrivewayShared
-      - EvChargingPrivate
-      - EvChargingShared
-      - Garage
-      - GarageBloc
-      - GarageCarport
-      - GarageDetached
-      - GarageIntegral
-      - GatedParking
-      - NoParkingAvailable
-      - RearOfProperty
-      - StreetParkingPermitNotRequired
-      - StreetParkingPermitRequired
-      - Undercroft
-      - UndergroundParkingAllocatedSpace
-      - UndergroundParkingNoAllocatedSpace
-      - Other
-      type: string
-    Alto.Inventory.Api.Models.Responses.InventoryPagedResults:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Meta'
-        items:
+        accessibility:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.InventoryItem'
+            $ref: '#/components/schemas/Alto.Internal.Nts.Accessibility'
       additionalProperties: false
-    Alto.Inventory.Api.Models.Responses.Search.InventorySearchResults:
+    Alto.Internal.Nts.Restrictions:
       type: object
       properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.Meta'
-        items:
+        conservationArea:
           type:
-          - array
+          - boolean
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Inventory.Api.Models.Responses.Search.InventoryItem'
+        leaseRestrictions:
+          type:
+          - boolean
+          - 'null'
+        listedBuilding:
+          type:
+          - boolean
+          - 'null'
+        permittedDevelopment:
+          type:
+          - boolean
+          - 'null'
+        realBurdens:
+          type:
+          - boolean
+          - 'null'
+        holidayHomeRental:
+          type:
+          - boolean
+          - 'null'
+        restrictiveCovenant:
+          type:
+          - boolean
+          - 'null'
+        businessFromProperty:
+          type:
+          - boolean
+          - 'null'
+        propertySubletting:
+          type:
+          - boolean
+          - 'null'
+        treePreservationOrder:
+          type:
+          - boolean
+          - 'null'
+        other:
+          type:
+          - boolean
+          - 'null'
       additionalProperties: false
-    Alto.Inventory.Api.Enums.PropertyCategoryType:
-      enum:
-      - Unspecified
-      - Residential
-      - Commercial
-      type: string
     Alto.Internal.Nts.Broadband:
       type: object
       properties:
@@ -3609,16 +3617,7 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.Internal.Nts.ElectricitySupply:
-      enum:
-      - MainsSupply
-      - PrivateSupply
-      - SolarPvPanels
-      - WindTurbine
-      - Generator
-      - Other
-      type: string
-    Alto.Internal.Nts.Electricity:
+    Alto.Internal.Nts.Sewerage:
       type: object
       properties:
         supply:
@@ -3626,24 +3625,25 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Internal.Nts.ElectricitySupply'
+            $ref: '#/components/schemas/Alto.Internal.Nts.SewerageSupply'
       additionalProperties: false
-    Alto.Inventory.Api.Enums.PropertyRecordType:
-      enum:
-      - Unspecified
-      - Sale
-      - Rent
-      type: string
-    Alto.Internal.Nts.BuildingSafety:
+    Alto.Inventory.Api.Models.Responses.EmailAddress:
       type: object
       properties:
-        issue:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: string
       additionalProperties: false
+    Alto.Inventory.Api.Enums.PropertyCategoryType:
+      enum:
+      - Unspecified
+      - Residential
+      - Commercial
+      type: string
   securitySchemes:
     Bearer:
       type: apiKey

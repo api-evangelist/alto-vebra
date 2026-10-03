@@ -225,6 +225,19 @@ paths:
         - alto/route:get-parameters-property-types
 components:
   schemas:
+    DiaryEventSubType:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the general appointment sub-type
+          format: int32
+        displayName:
+          type:
+          - string
+          - 'null'
+          description: The name of the general appointment sub-type
+      additionalProperties: false
     Alto.Contacts.Api.Models.Responses.ParameterValue:
       type: object
       properties:
@@ -262,19 +275,6 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    DiaryEventSubType:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The unique identifier of the general appointment sub-type
-          format: int32
-        displayName:
-          type:
-          - string
-          - 'null'
-          description: The name of the general appointment sub-type
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

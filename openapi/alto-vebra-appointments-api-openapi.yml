@@ -747,6 +747,87 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ExternalPartnerAppointmentPagedResponse:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerAppointment'
+          description: The collection of items in the response.
+      additionalProperties: false
+      description: Represents a paged response containing metadata and a collection of items.
+    ViewingPatchOperation:
+      type: object
+      properties:
+        op:
+          enum:
+          - replace
+          type: string
+        value:
+          type: string
+        path:
+          enum:
+          - /status
+          - /startDate
+          - /endDate
+          - /negotiatorId
+          - /notes
+          - /applicantFeedback
+          - /internalNotes
+          type: string
+      example: '[ { "path": "/status", "op": "replace", "value": "CancelledByOffice" }, { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorId", "op": "replace", "value": 47141 } ]'
+    ExternalPartnerUserAppointments:
+      type: object
+      properties:
+        negotiatorId:
+          type: integer
+          description: The unique identifier of the negotiator
+          format: int32
+          example: 67890
+        appointments:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerAppointment'
+          description: A collection of appointments belonging to the negotiator; if there are no appointments, then returns an empty collection
+      additionalProperties: false
+    ExternalPartnerNegotiator:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the negotiator
+          example: '45678'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: 'Links to related negotiator;
+
+            NOTE: This is currently set to an empty collection as no api is currently available for retrieving negotiator details'
+      additionalProperties: false
     GeneralAppointmentRequest:
       required:
       - endDate
@@ -835,6 +916,61 @@ components:
           description: 'Optional: Additional notes to accompany the appointment being created.'
           example: Here are some optional notes
       additionalProperties: false
+    ExternalPartnerContact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the contact
+          example: '123456'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related contact.
+      additionalProperties: false
+    GeneralAppointmentPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/GeneralAppointmentPatchOperation'
+      description: Array of operations to perform
+    GeneralAppointmentPatchOperation:
+      type: object
+      properties:
+        op:
+          enum:
+          - replace
+          type: string
+        value:
+          type: string
+        path:
+          enum:
+          - /startDate
+          - /endDate
+          - /negotiatorIds
+          - /status
+          type: string
+      example: '[ { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorIds", "op": "replace", "value": [47141, 48734] }, { "path": "/status", "op": "replace", "value": "CancelledByOffice" } ]'
+    ExternalPartnerViewingDetails:
+      type: object
+      properties:
+        internalNotes:
+          type:
+          - string
+          - 'null'
+          description: The internal notes of the appointment.
+          example: Internal notes
+        applicantFeedback:
+          type:
+          - string
+          - 'null'
+          description: The feedback of the appointment.
+          example: Feedback
+      additionalProperties: false
     ViewingRequest:
       required:
       - applicantIds
@@ -916,48 +1052,6 @@ components:
 
             Default if not set: AtTheProperty'
           example: Unspecified
-      additionalProperties: false
-    ExternalPartnerViewingDetails:
-      type: object
-      properties:
-        internalNotes:
-          type:
-          - string
-          - 'null'
-          description: The internal notes of the appointment.
-          example: Internal notes
-        applicantFeedback:
-          type:
-          - string
-          - 'null'
-          description: The feedback of the appointment.
-          example: Feedback
-      additionalProperties: false
-    ExternalPartnerAppointmentPagedResponse:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ExternalPartnerAppointment'
-          description: The collection of items in the response.
-      additionalProperties: false
-      description: Represents a paged response containing metadata and a collection of items.
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
     ExternalPartnerAppointment:
       type: object
@@ -1068,6 +1162,40 @@ components:
         viewingDetails:
           $ref: '#/components/schemas/ExternalPartnerViewingDetails'
       additionalProperties: false
+    ExternalPartnerProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the property
+          example: '112233'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related property.
+      additionalProperties: false
+    ViewingPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/ViewingPatchOperation'
+      description: Array of operations to perform
+    Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     ProblemDetails:
       type: object
       properties:
@@ -1093,93 +1221,6 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    GeneralAppointmentPatchOperation:
-      type: object
-      properties:
-        op:
-          enum:
-          - replace
-          type: string
-        value:
-          type: string
-        path:
-          enum:
-          - /startDate
-          - /endDate
-          - /negotiatorIds
-          - /status
-          type: string
-      example: '[ { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorIds", "op": "replace", "value": [47141, 48734] }, { "path": "/status", "op": "replace", "value": "CancelledByOffice" } ]'
-    ExternalPartnerUserAppointments:
-      type: object
-      properties:
-        negotiatorId:
-          type: integer
-          description: The unique identifier of the negotiator
-          format: int32
-          example: 67890
-        appointments:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ExternalPartnerAppointment'
-          description: A collection of appointments belonging to the negotiator; if there are no appointments, then returns an empty collection
-      additionalProperties: false
-    Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ExternalPartnerContact:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the contact
-          example: '123456'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-          description: Links to related contact.
-      additionalProperties: false
-    ViewingPatchOperation:
-      type: object
-      properties:
-        op:
-          enum:
-          - replace
-          type: string
-        value:
-          type: string
-        path:
-          enum:
-          - /status
-          - /startDate
-          - /endDate
-          - /negotiatorId
-          - /notes
-          - /applicantFeedback
-          - /internalNotes
-          type: string
-      example: '[ { "path": "/status", "op": "replace", "value": "CancelledByOffice" }, { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorId", "op": "replace", "value": 47141 } ]'
-    GeneralAppointmentPatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/GeneralAppointmentPatchOperation'
-      description: Array of operations to perform
     CreateAppointmentData:
       type: object
       properties:
@@ -1188,25 +1229,6 @@ components:
           description: The unique identifier of the viewing appointment that has been created
           format: int64
           example: 123456
-      additionalProperties: false
-    ExternalPartnerNegotiator:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the negotiator
-          example: '45678'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-          description: 'Links to related negotiator;
-
-            NOTE: This is currently set to an empty collection as no api is currently available for retrieving negotiator details'
       additionalProperties: false
     ExternalPartnerUserAppointmentsPagedResponse:
       type: object
@@ -1222,28 +1244,6 @@ components:
           description: The collection of items in the response.
       additionalProperties: false
       description: Represents a paged response containing metadata and a collection of items.
-    ViewingPatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/ViewingPatchOperation'
-      description: Array of operations to perform
-    ExternalPartnerProperty:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the property
-          example: '112233'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-          description: Links to related property.
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

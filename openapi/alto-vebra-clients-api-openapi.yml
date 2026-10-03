@@ -64,72 +64,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Phone:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        type:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        number:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    Person:
-      type: object
-      properties:
-        personNo:
-          type: integer
-          format: int32
-        name:
-          allOf:
-          - $ref: '#/components/schemas/Name'
-        phoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Phone'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EmailAddress'
-      additionalProperties: false
     Name:
       type: object
       properties:
@@ -145,27 +79,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        address:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ClientDataItemCollection:
-      type: object
-      properties:
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ClientData'
       additionalProperties: false
     Address:
       type: object
@@ -207,6 +120,61 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    Phone:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        type:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
     ClientData:
       type: object
       properties:
@@ -228,6 +196,38 @@ components:
         address:
           allOf:
           - $ref: '#/components/schemas/Address'
+      additionalProperties: false
+    Person:
+      type: object
+      properties:
+        personNo:
+          type: integer
+          format: int32
+        name:
+          allOf:
+          - $ref: '#/components/schemas/Name'
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EmailAddress'
+      additionalProperties: false
+    ClientDataItemCollection:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ClientData'
       additionalProperties: false
   securitySchemes:
     Bearer:

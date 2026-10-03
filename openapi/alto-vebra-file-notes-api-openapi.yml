@@ -199,11 +199,6 @@ paths:
         - alto/route:get-inventory-propertyid-file-notes
 components:
   schemas:
-    FileNotePatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/FileNotePatchOperation'
-      description: Array of operations to perform
     GetFileNoteResponse:
       type: object
       properties:
@@ -558,6 +553,11 @@ components:
           - 'null'
           description: '[Optional] The type of file note to create'
       additionalProperties: false
+    FileNotePatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/FileNotePatchOperation'
+      description: Array of operations to perform
   securitySchemes:
     Bearer:
       type: apiKey

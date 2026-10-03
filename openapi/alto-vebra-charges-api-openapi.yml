@@ -385,18 +385,6 @@ components:
             $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
           readOnly: true
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.TenancyCharge:
       type: object
       properties:
@@ -526,6 +514,18 @@ components:
           - string
           - 'null'
           format: date-time
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.PropertyCharge:
       type: object

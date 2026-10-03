@@ -1005,14 +1005,11 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Alto.Contacts.Api.Models.Responses.Phone:
+    Alto.Contacts.Api.Models.Requests.Phone:
+      required:
+      - number
       type: object
       properties:
-        preferenceOrder:
-          type: integer
-          description: The numerical order in which phone numbers are to be selected.
-          format: int32
-          example: 1
         type:
           enum:
           - Unspecified
@@ -1023,355 +1020,23 @@ components:
           - Work
           - ISDN
           type: string
-          description: The type of phone number.
+          description: 'The type of phone number. Default if not set: "Home".'
           example: Mobile
         number:
-          type:
-          - string
-          - 'null'
-          description: The telephone number for the Contact.
-          example: 01234567891
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of the phone number
-          example: John's mobile
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactListItem:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        contactType:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactType'
-          description: The Category and persona for the contact
-          example:
-            category: Client
-            persona:
-            - Applicant
-        contactInformation:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactInformation'
-          description: 'A list of contact information, with one entry per person associated with the contact.
-
-            Only the first phone number and email address (as recorded in Alto) are included for each person.'
-          example:
-          - title: Mr
-            foreName: T
-            surname: Potter
-            phoneNumber: 07972846284
-            emailAddress: 23705219_test@propertysoftwaregroup.local
-        position:
-          type:
-          - string
-          - 'null'
-          description: The position of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-positions
-          example: '"In Rented"'
-        intention:
-          type:
-          - string
-          - 'null'
-          description: The intention of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-intentions
-          example: '"Buy"'
-        disposal:
-          type:
-          - string
-          - 'null'
-          description: The disposal of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-disposal-status
-          example: '"Not applicable"'
-        branch:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Core.Models.Domain.Branch'
-          description: The branch of the contact.
-          example:
-            id: '3156'
-        leadSource:
-          type:
-          - string
-          - 'null'
-          description: This contact originated from a lead (enquiry)
-          example: Publication - newspaper
-        isActive:
-          type: boolean
-          description: Whether the contact is active or archived.
-          example: true
-        potentialVendor:
-          type: boolean
-          description: Indicates whether the contact has been flagged as a potential vendor.
-          example: false
-        potentialLandlord:
-          type: boolean
-          description: Indicates whether the contact has been flagged as a potential landlord.
-          example: false
-        createdAt:
-          type: string
-          description: When the contact was created.
-          format: date-time
-          example: '2016-12-14T15:03:30.0000000+00:00'
-        modifiedAt:
-          type: string
-          description: When the contact was last modified.
-          format: date-time
-          example: '2017-12-25T15:03:30.0000000+00:00'
-        notes:
-          type:
-          - string
-          - 'null'
-          description: The notes for the contact.
-        companyName:
-          type:
-          - string
-          - 'null'
-          description: The company name associated with the contact.
-          example: Acme Corporation
-        applicantRequirements:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ApplicantRequirement'
-          description: The applicant requirements associated with the contact.
-      additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Contacts.Api.Models.Requests.PatchApplicantRequirement:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchApplicantRequirement'
-      description: Array of operations to perform
-    Alto.Api.Material.Hateoas.Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactRelationshipResponse:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        relationshipType:
-          enum:
-          - TenantGuarantor
-          - ForwardingAddress
-          type: string
-          description: The Relationship's type
-          example: TenantGuarantor
-        contactId:
-          type:
-          - string
-          - 'null'
-          description: The identifier of the Contact we added a relationship to
-        relatedContactId:
-          type:
-          - string
-          - 'null'
-          description: 'The ID of the contact we will create a relationship with. This will have to be created
-
-            using POST /contact with a Category - ContactRelationship'
-      additionalProperties: false
-    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.ContactSearchItemResponse:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchItemResponse'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          description: The numerical order in which email addresses are to be selected.
-          format: int32
-          example: 2
-        type:
-          enum:
-          - Unknown
-          - Personal
-          - Business
-          type: string
-          description: The type of email address.
-          example: Business
-        address:
-          type:
-          - string
-          - 'null'
-          description: The email address.
-          example: john.doe@business.com
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.Person:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        title:
-          type:
-          - string
-          - 'null'
-          description: The formal title of the Person.
-          example: Ms
-        forename:
-          type:
-          - string
-          - 'null'
-          description: The first or given name of the Person.
-          example: Jane
-        surname:
-          type:
-          - string
-          - 'null'
-          description: The surname of the Person.
-          example: Doe
-        phoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Phone'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.EmailAddress'
-      additionalProperties: false
-    Alto.Api.Material.Models.Responses.Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.PostContactRequest:
-      required:
-      - branchId
-      - people
-      type: object
-      properties:
-        negotiatorId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the negotiator
-          example: '1234'
-        branchId:
           minLength: 1
+          pattern: ^[\+]?[0-9\s]{10,20}$
           type: string
-          description: The Contact's BranchId.
-          example: '1234'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Address'
-          description: The Contact's Address details.
-        people:
-          maxItems: 2
-          minItems: 1
-          type: array
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Person'
-          description: The Person(s) on the Contact. Each Contact must have at least one Person but no more than two People.
-        lead:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Lead'
-          description: This contact originated from a lead (enquiry)
-        position:
+          description: The telephone number for the Person.
+          example: +44 7 267 789 134
+        description:
+          maxLength: 50
           type:
           - string
           - 'null'
-          description: The position of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-positions
-        intention:
-          type:
-          - string
-          - 'null'
-          description: The intention of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-intentions
-        disposal:
-          type:
-          - string
-          - 'null'
-          description: The disposal of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-disposal-status
-        notes:
-          type:
-          - string
-          - 'null'
-          description: The notes for the contact
-        companyName:
-          type:
-          - string
-          - 'null'
-          description: The company name associated with the contact
-        category:
-          enum:
-          - Unknown
-          - Client
-          - ContactRelationship
-          type: string
-          description: The contact's category type
-          example: Client, ContactRelationship
-        potentialVendor:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the contact is a potential vendor.
-          example: true
-        potentialLandlord:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the contact is a potential landlord.
-          example: true
+          description: The description of the telephone number.
+          example: Evenings and weekends only!
       additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactSearchRentalIntention:
+    Alto.Contacts.Api.Models.Responses.RentalIntention:
       type: object
       properties:
         priceQualifier:
@@ -1400,337 +1065,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.PostApplicantRequirementRequest:
-      required:
-      - profileIntention
-      type: object
-      properties:
-        profileIntention:
-          enum:
-          - Buy
-          - Rent
-          type: string
-          description: The Applicant's intention.
-          example: Buy
-        isNewBuild:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the Applicant requires a new build Property.
-          example: true
-        isActiveProfile:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the Requirement is active in the Applicant's profile.
-          example: true
-        priceFrom:
-          maximum: 2147483647
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: The minimum price of the Property.
-          format: int32
-          example: 50000
-        priceTo:
-          maximum: 2147483647
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: The maximum price of the Property.
-          format: int32
-          example: 100000
-        bedsMin:
-          maximum: 10
-          minimum: 0
-          type:
-          - integer
-          - 'null'
-          description: The minimum number of bedrooms of the Property.
-          format: int32
-          example: 2
-        rentalPriceQualifier:
-          enum:
-          - Weekly
-          - Monthly
-          type:
-          - string
-          - 'null'
-          description: The frequency of the rental payment.
-          example: Monthly
-        rentalFurnishing:
-          enum:
-          - Furnished
-          - PartFurnished
-          - Unfurnished
-          - Unspecified
-          type:
-          - string
-          - 'null'
-          description: The furnishing requirement of the desired property.
-          example: Furnished
-        tenureType:
-          enum:
-          - Freehold
-          - Leasehold
-          - Unspecified
-          type:
-          - string
-          - 'null'
-          description: The tenure the Applicant is looking for.
-          example: Freehold
-        notes:
-          type:
-          - string
-          - 'null'
-          description: Free-text notes for the Requirement.
-          example: Looking for a garden and off-street parking.
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.Lead:
-      required:
-      - source
-      type: object
-      properties:
-        source:
-          minLength: 1
-          type: string
-          description: The Id for this AgencyRef chosen from /parameters/lead-sources
-        id:
-          type:
-          - string
-          - 'null'
-          description: The numeric Id of the lead record that is being converted into a contact
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.Contact:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Models.Address'
-        branch:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Core.Models.Domain.Branch'
-        people:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Person'
-        category:
-          enum:
-          - Unknown
-          - Client
-          - Solicitor
-          - BuildingSociety
-          - Bank
-          - Publication
-          - EstateAgent
-          - ManagingAgent
-          - Developer
-          - Builder
-          - Utility
-          - Service
-          - PreviousClient
-          - Miscellaneous
-          - FinancialAdvisor
-          - Maintenance
-          - OnSiteSales
-          - ExternalPrinter
-          - OtherCategory1
-          - EstateAgentLocal
-          - Surveyor
-          - Supplier
-          - Accountant
-          type: string
-        lead:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Lead'
-          description: This contact originated from a lead (enquiry)
-        position:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
-          description: The position of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-positions
-        intention:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
-          description: The intention of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-intentions
-        disposal:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
-          description: The disposal of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-disposal-status
-        notes:
-          type:
-          - string
-          - 'null'
-          description: The notes for the contact
-        archived:
-          type: boolean
-          description: The archived status of the contact.
-        companyName:
-          type:
-          - string
-          - 'null'
-          description: The company name associated with the contact.
-        potentialVendor:
-          type: boolean
-          description: Indicates whether the contact has been flagged as a potential vendor.
-        potentialLandlord:
-          type: boolean
-          description: Indicates whether the contact has been flagged as a potential landlord.
-        applicantRequirements:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ApplicantRequirement'
-        modifiedDate:
-          type: string
-          description: When the contact was last modified.
-          format: date-time
-          example: '2017-12-25T15:03:30.0000000+00:00'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.Address:
-      type: object
-      properties:
-        subDwelling:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The sub-dwelling of the address, such as a flat or apartment number.
-          example: The Flats
-        nameNumber:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The name or number of the building or property.
-          example: '12'
-        street:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The name of the street.
-          example: Fulham Road
-        locality:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The locality, such as a village or neighborhood.
-          example: Fulham
-        town:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The town or city of the address.
-          example: London
-        county:
-          maxLength: 50
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The county or region of the address.
-          example: Greater London
-        postcode:
-          maxLength: 20
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: The postal code of the address.
-          example: SW10 0BF
-        countryCode:
-          maxLength: 2
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The country code of the address.
-
-            Default if not set: GB'
-          example: GB
-        uprn:
-          maxLength: 12
-          minLength: 0
-          type:
-          - string
-          - 'null'
-          description: 'The Unique Property Reference Number (UPRN) for the address.
-
-            This is an optional field for backward compatibility.'
-          example: '100123456789'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactType:
-      type: object
-      properties:
-        category:
-          enum:
-          - Unknown
-          - Client
-          - Solicitor
-          - BuildingSociety
-          - Bank
-          - Publication
-          - EstateAgent
-          - ManagingAgent
-          - Developer
-          - Builder
-          - Utility
-          - Service
-          - PreviousClient
-          - Miscellaneous
-          - FinancialAdvisor
-          - Maintenance
-          - OnSiteSales
-          - ExternalPrinter
-          - OtherCategory1
-          - EstateAgentLocal
-          - Surveyor
-          - Supplier
-          - ContactRelationship
-          - Accountant
-          type: string
-          description: The Category of the contact
-          example: '"Client"'
-        persona:
-          type:
-          - array
-          - 'null'
-          items:
-            enum:
-            - Applicant
-            - Vendor
-            - Landlord
-            - Tenant
-            type: string
-          description: The Persona(s) of the contact
-          example:
-          - Landlord
-          - Vendor
       additionalProperties: false
     SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchContactRequest:
       anyOf:
@@ -1830,246 +1164,73 @@ components:
             example: /PotentialLandlord
         description: "\n            Indicates whether the contact is a potential landlord.\n            "
         example: "\n{ \n    \"path\": \"/PotentialLandlord\", \n    \"op\": \"replace\", \n    \"value\": true\n}"
-    Alto.Contacts.Core.Models.Domain.BankAccount:
+    Alto.Contacts.Api.Models.Responses.ContactSearchEmailResponse:
       type: object
       properties:
-        accountHolderName:
+        emailAddressId:
           type:
           - string
           - 'null'
-        accountName:
+          description: The unique identifier for the email address.
+        emailAddress:
           type:
           - string
           - 'null'
-        accountNumber:
-          type:
-          - string
-          - 'null'
-        bicNumber:
-          type:
-          - string
-          - 'null'
-        branchCode:
-          type:
-          - string
-          - 'null'
-        branchName:
-          type:
-          - string
-          - 'null'
-        ibanNumber:
-          type:
-          - string
-          - 'null'
+          description: The email address for the person.
+          example: john.doe@business.com
       additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.RentalIntention:
+    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.ContactSearchItemResponse:
       type: object
       properties:
-        priceQualifier:
-          enum:
-          - Unknown
-          - Weekly
-          - Monthly
-          - Quarterly
-          - Yearly
-          - AdHoc
-          - Daily
-          - Fortnightly
-          - FourWeekly
-          - MonthlyOnLastDay
-          - QuarterlyOnQuarterDays
-          - HalfYearly
-          - HalfYearlyOnQuarterDays
-          type: string
-        furnishing:
-          enum:
-          - Unspecified
-          - Unfurnished
-          - PartFurnished
-          - Furnished
-          - FurnishedOrUnfurnished
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactSearchApplicantRequirementResponse:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        profileIntention:
-          enum:
-          - Unspecified
-          - Buy
-          - Rent
-          type: string
-        isNewBuild:
-          type:
-          - boolean
-          - 'null'
-        priceFrom:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        priceTo:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        bedsMin:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        isActiveProfile:
-          type: boolean
-        rentalIntention:
+        meta:
           allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchRentalIntention'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactSearchPhoneResponse:
-      type: object
-      properties:
-        phoneNumberId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the phone number.
-        phoneNumber:
-          type:
-          - string
-          - 'null'
-          description: The telephone number for the Person.
-          example: 01234567891
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactRelationship:
-      type: object
-      properties:
-        relationshipId:
-          type: integer
-          format: int32
-        relationshipType:
-          enum:
-          - TenantGuarantor
-          - ForwardingAddress
-          type: string
-        relatedContactId:
-          type: integer
-          format: int32
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.PostContactConsentPreferencesRequestItem:
-      type: object
-      properties:
-        type:
-          enum:
-          - PropertyMatching
-          - GeneralMarketing
-          - FinancialServices
-          - ConveyancingServices
-          - RelocationAgentNetwork
-          - KeyfloViewingNotifications
-          type:
-          - string
-          - 'null'
-        optIn:
-          enum:
-          - Denied
-          - Granted
-          type:
-          - string
-          - 'null'
-        notes:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactSearchPropertyResponse:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
+        items:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        propertyId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the property.
-        displayAddress:
-          type:
-          - string
-          - 'null'
-          description: The display address for the property.
-        market:
-          enum:
-          - Unspecified
-          - Sale
-          - Rent
-          type: string
-          description: The market type for the property.
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchItemResponse'
       additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.Person:
-      required:
-      - surname
+    Alto.Services.SDK.Models.Address:
       type: object
       properties:
-        title:
-          maxLength: 20
-          minLength: 0
+        subDwelling:
           type:
           - string
           - 'null'
-          description: The formal title of the Person.
-          example: Ms
-        forename:
-          maxLength: 50
-          minLength: 0
+        nameNumber:
           type:
           - string
           - 'null'
-          description: The first or given name of the Person.
-          example: Jane
-        surname:
-          maxLength: 50
-          minLength: 0
-          type: string
-          description: The surname of the Person.
-          example: Doe
-        phoneNumbers:
-          maxItems: 4
+        street:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Phone'
-          description: A list of the Person's phone numbers.
-        emailAddresses:
-          maxItems: 2
+        locality:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.EmailAddress'
-          description: A list of the Person's email addresses
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+        uprn:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchApplicantRequirement:
       anyOf:
@@ -2248,151 +1409,6 @@ components:
             example: /Notes
         description: "\n            Free-text notes for the Requirement.\n            "
         example: "\n{ \n    \"path\": \"/Notes\", \n    \"op\": \"replace\", \n    \"value\": \"Looking for a garden and off-street parking.\"\n}"
-    Alto.Contacts.Api.Models.Responses.PatchPersonResponse:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        title:
-          type:
-          - string
-          - 'null'
-          description: The formal title of the Person.
-          example: Ms
-        forename:
-          type:
-          - string
-          - 'null'
-          description: The first or given name of the Person.
-          example: Jane
-        surname:
-          type:
-          - string
-          - 'null'
-          description: The surname of the Person.
-          example: Doe
-        phoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Phone'
-          description: A list of the Person's phone numbers.
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.EmailAddress'
-          description: A list of the Person's email addresses
-      additionalProperties: false
-    Alto.Api.Material.Models.Responses.ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Models.Responses.Error'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ParameterValue:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.PersonSingle:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        title:
-          type:
-          - string
-          - 'null'
-          description: The formal title of the Person.
-          example: Ms
-        forename:
-          type:
-          - string
-          - 'null'
-          description: The first or given name of the Person.
-          example: Jane
-        surname:
-          type:
-          - string
-          - 'null'
-          description: The surname of the Person.
-          example: Doe
-        phoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Phone'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.EmailAddress'
-        isContactArchived:
-          type: boolean
-          description: The archived status of the contact this person belongs to.
-      additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Contacts.Api.Models.Requests.PatchContactRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchContactRequest'
-      description: Array of operations to perform
-    Alto.Contacts.Core.Models.Domain.Branch:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.ContactListItem:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactListItem'
-      additionalProperties: false
     Alto.Contacts.Api.Models.Responses.ApplicantRequirement:
       type: object
       properties:
@@ -2453,17 +1469,283 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.Lead:
+    Alto.Contacts.Api.Models.Responses.PatchPersonResponse:
       type: object
       properties:
-        source:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
         id:
           type:
-          - integer
+          - string
           - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        title:
+          type:
+          - string
+          - 'null'
+          description: The formal title of the Person.
+          example: Ms
+        forename:
+          type:
+          - string
+          - 'null'
+          description: The first or given name of the Person.
+          example: Jane
+        surname:
+          type:
+          - string
+          - 'null'
+          description: The surname of the Person.
+          example: Doe
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Phone'
+          description: A list of the Person's phone numbers.
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.EmailAddress'
+          description: A list of the Person's email addresses
+      additionalProperties: false
+    Alto.Api.Material.Models.Responses.Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Services.SDK.Pagination.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Contacts.Api.Models.Requests.PatchApplicantRequirement:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchApplicantRequirement'
+      description: Array of operations to perform
+    Alto.Contacts.Api.Models.Responses.GetContactRelationshipResponse:
+      type: object
+      properties:
+        contactId:
+          type: integer
           format: int32
+        relationships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactRelationship'
+      additionalProperties: false
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Contacts.Api.Models.Requests.PatchContactRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchContactRequest'
+      description: Array of operations to perform
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.Contacts.Api.Models.Requests.PatchPersonRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchPersonRequest'
+      description: Array of operations to perform
+    Alto.Contacts.Api.Models.Responses.ParameterValue:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.PostContactRelationshipRequest:
+      required:
+      - relatedContactId
+      - relationshipType
+      type: object
+      properties:
+        relationshipType:
+          enum:
+          - TenantGuarantor
+          - ForwardingAddress
+          type: string
+          description: The Relationship's type
+          example: TenantGuarantor
+        relatedContactId:
+          minLength: 1
+          type: string
+          description: 'The ID of the contact we will create a relationship with. This will have to be created
+
+            using POST /contact with a Category - ContactRelationship'
+          example: '1234'
+      additionalProperties: false
+    Alto.Api.Material.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Models.Responses.Error'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.PostContactConsentPreferencesRequestItem:
+      type: object
+      properties:
+        type:
+          enum:
+          - PropertyMatching
+          - GeneralMarketing
+          - FinancialServices
+          - ConveyancingServices
+          - RelocationAgentNetwork
+          - KeyfloViewingNotifications
+          type:
+          - string
+          - 'null'
+        optIn:
+          enum:
+          - Denied
+          - Granted
+          type:
+          - string
+          - 'null'
+        notes:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.ContactListItem:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactListItem'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.PostContactRequest:
+      required:
+      - branchId
+      - people
+      type: object
+      properties:
+        negotiatorId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the negotiator
+          example: '1234'
+        branchId:
+          minLength: 1
+          type: string
+          description: The Contact's BranchId.
+          example: '1234'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Address'
+          description: The Contact's Address details.
+        people:
+          maxItems: 2
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Person'
+          description: The Person(s) on the Contact. Each Contact must have at least one Person but no more than two People.
+        lead:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Lead'
+          description: This contact originated from a lead (enquiry)
+        position:
+          type:
+          - string
+          - 'null'
+          description: The position of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-positions
+        intention:
+          type:
+          - string
+          - 'null'
+          description: The intention of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-intentions
+        disposal:
+          type:
+          - string
+          - 'null'
+          description: The disposal of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-disposal-status
+        notes:
+          type:
+          - string
+          - 'null'
+          description: The notes for the contact
+        companyName:
+          type:
+          - string
+          - 'null'
+          description: The company name associated with the contact
+        category:
+          enum:
+          - Unknown
+          - Client
+          - ContactRelationship
+          type: string
+          description: The contact's category type
+          example: Client, ContactRelationship
+        potentialVendor:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the contact is a potential vendor.
+          example: true
+        potentialLandlord:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the contact is a potential landlord.
+          example: true
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.PostForwardingAddressRequest:
+      required:
+      - address
+      - branchId
+      type: object
+      properties:
+        negotiatorId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the negotiator
+          example: '1234'
+        branchId:
+          minLength: 1
+          type: string
+          description: The Contact's BranchId.
+          example: '1234'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Address'
+          description: The Contact's Address details.
       additionalProperties: false
     Alto.Contacts.Api.Models.Requests.EmailAddress:
       required:
@@ -2477,20 +1759,37 @@ components:
           format: email
           example: john.doe@business.com
       additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactSearchEmailResponse:
+    Alto.Contacts.Core.Models.Domain.BankAccount:
       type: object
       properties:
-        emailAddressId:
+        accountHolderName:
           type:
           - string
           - 'null'
-          description: The unique identifier for the email address.
-        emailAddress:
+        accountName:
           type:
           - string
           - 'null'
-          description: The email address for the person.
-          example: john.doe@business.com
+        accountNumber:
+          type:
+          - string
+          - 'null'
+        bicNumber:
+          type:
+          - string
+          - 'null'
+        branchCode:
+          type:
+          - string
+          - 'null'
+        branchName:
+          type:
+          - string
+          - 'null'
+        ibanNumber:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     Alto.Contacts.Api.Models.Responses.PatchApplicantRequirement:
       type: object
@@ -2573,6 +1872,722 @@ components:
           description: Free-text notes for the Requirement.
           example: Looking for a garden and off-street parking.
       additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.Lead:
+      required:
+      - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: The Id for this AgencyRef chosen from /parameters/lead-sources
+        id:
+          type:
+          - string
+          - 'null'
+          description: The numeric Id of the lead record that is being converted into a contact
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.PersonSingle:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        title:
+          type:
+          - string
+          - 'null'
+          description: The formal title of the Person.
+          example: Ms
+        forename:
+          type:
+          - string
+          - 'null'
+          description: The first or given name of the Person.
+          example: Jane
+        surname:
+          type:
+          - string
+          - 'null'
+          description: The surname of the Person.
+          example: Doe
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.EmailAddress'
+        isContactArchived:
+          type: boolean
+          description: The archived status of the contact this person belongs to.
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.Contact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Models.Address'
+        branch:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Core.Models.Domain.Branch'
+        people:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Person'
+        category:
+          enum:
+          - Unknown
+          - Client
+          - Solicitor
+          - BuildingSociety
+          - Bank
+          - Publication
+          - EstateAgent
+          - ManagingAgent
+          - Developer
+          - Builder
+          - Utility
+          - Service
+          - PreviousClient
+          - Miscellaneous
+          - FinancialAdvisor
+          - Maintenance
+          - OnSiteSales
+          - ExternalPrinter
+          - OtherCategory1
+          - EstateAgentLocal
+          - Surveyor
+          - Supplier
+          - Accountant
+          type: string
+        lead:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Lead'
+          description: This contact originated from a lead (enquiry)
+        position:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+          description: The position of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-positions
+        intention:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+          description: The intention of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-intentions
+        disposal:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
+          description: The disposal of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-disposal-status
+        notes:
+          type:
+          - string
+          - 'null'
+          description: The notes for the contact
+        archived:
+          type: boolean
+          description: The archived status of the contact.
+        companyName:
+          type:
+          - string
+          - 'null'
+          description: The company name associated with the contact.
+        potentialVendor:
+          type: boolean
+          description: Indicates whether the contact has been flagged as a potential vendor.
+        potentialLandlord:
+          type: boolean
+          description: Indicates whether the contact has been flagged as a potential landlord.
+        applicantRequirements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ApplicantRequirement'
+        modifiedDate:
+          type: string
+          description: When the contact was last modified.
+          format: date-time
+          example: '2017-12-25T15:03:30.0000000+00:00'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.PostApplicantRequirementRequest:
+      required:
+      - profileIntention
+      type: object
+      properties:
+        profileIntention:
+          enum:
+          - Buy
+          - Rent
+          type: string
+          description: The Applicant's intention.
+          example: Buy
+        isNewBuild:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the Applicant requires a new build Property.
+          example: true
+        isActiveProfile:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the Requirement is active in the Applicant's profile.
+          example: true
+        priceFrom:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The minimum price of the Property.
+          format: int32
+          example: 50000
+        priceTo:
+          maximum: 2147483647
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The maximum price of the Property.
+          format: int32
+          example: 100000
+        bedsMin:
+          maximum: 10
+          minimum: 0
+          type:
+          - integer
+          - 'null'
+          description: The minimum number of bedrooms of the Property.
+          format: int32
+          example: 2
+        rentalPriceQualifier:
+          enum:
+          - Weekly
+          - Monthly
+          type:
+          - string
+          - 'null'
+          description: The frequency of the rental payment.
+          example: Monthly
+        rentalFurnishing:
+          enum:
+          - Furnished
+          - PartFurnished
+          - Unfurnished
+          - Unspecified
+          type:
+          - string
+          - 'null'
+          description: The furnishing requirement of the desired property.
+          example: Furnished
+        tenureType:
+          enum:
+          - Freehold
+          - Leasehold
+          - Unspecified
+          type:
+          - string
+          - 'null'
+          description: The tenure the Applicant is looking for.
+          example: Freehold
+        notes:
+          type:
+          - string
+          - 'null'
+          description: Free-text notes for the Requirement.
+          example: Looking for a garden and off-street parking.
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactType:
+      type: object
+      properties:
+        category:
+          enum:
+          - Unknown
+          - Client
+          - Solicitor
+          - BuildingSociety
+          - Bank
+          - Publication
+          - EstateAgent
+          - ManagingAgent
+          - Developer
+          - Builder
+          - Utility
+          - Service
+          - PreviousClient
+          - Miscellaneous
+          - FinancialAdvisor
+          - Maintenance
+          - OnSiteSales
+          - ExternalPrinter
+          - OtherCategory1
+          - EstateAgentLocal
+          - Surveyor
+          - Supplier
+          - ContactRelationship
+          - Accountant
+          type: string
+          description: The Category of the contact
+          example: '"Client"'
+        persona:
+          type:
+          - array
+          - 'null'
+          items:
+            enum:
+            - Applicant
+            - Vendor
+            - Landlord
+            - Tenant
+            type: string
+          description: The Persona(s) of the contact
+          example:
+          - Landlord
+          - Vendor
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.Address:
+      type: object
+      properties:
+        subDwelling:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The sub-dwelling of the address, such as a flat or apartment number.
+          example: The Flats
+        nameNumber:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The name or number of the building or property.
+          example: '12'
+        street:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The name of the street.
+          example: Fulham Road
+        locality:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The locality, such as a village or neighborhood.
+          example: Fulham
+        town:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The town or city of the address.
+          example: London
+        county:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The county or region of the address.
+          example: Greater London
+        postcode:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The postal code of the address.
+          example: SW10 0BF
+        countryCode:
+          maxLength: 2
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The country code of the address.
+
+            Default if not set: GB'
+          example: GB
+        uprn:
+          maxLength: 12
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: 'The Unique Property Reference Number (UPRN) for the address.
+
+            This is an optional field for backward compatibility.'
+          example: '100123456789'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Requests.Person:
+      required:
+      - surname
+      type: object
+      properties:
+        title:
+          maxLength: 20
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The formal title of the Person.
+          example: Ms
+        forename:
+          maxLength: 50
+          minLength: 0
+          type:
+          - string
+          - 'null'
+          description: The first or given name of the Person.
+          example: Jane
+        surname:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: The surname of the Person.
+          example: Doe
+        phoneNumbers:
+          maxItems: 4
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Phone'
+          description: A list of the Person's phone numbers.
+        emailAddresses:
+          maxItems: 2
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.EmailAddress'
+          description: A list of the Person's email addresses
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactListItem:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        contactType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactType'
+          description: The Category and persona for the contact
+          example:
+            category: Client
+            persona:
+            - Applicant
+        contactInformation:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactInformation'
+          description: 'A list of contact information, with one entry per person associated with the contact.
+
+            Only the first phone number and email address (as recorded in Alto) are included for each person.'
+          example:
+          - title: Mr
+            foreName: T
+            surname: Potter
+            phoneNumber: 07972846284
+            emailAddress: 23705219_test@propertysoftwaregroup.local
+        position:
+          type:
+          - string
+          - 'null'
+          description: The position of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-positions
+          example: '"In Rented"'
+        intention:
+          type:
+          - string
+          - 'null'
+          description: The intention of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-intentions
+          example: '"Buy"'
+        disposal:
+          type:
+          - string
+          - 'null'
+          description: The disposal of the contact, defined as the Id for this AgencyRef chosen from /parameters/client-disposal-status
+          example: '"Not applicable"'
+        branch:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Core.Models.Domain.Branch'
+          description: The branch of the contact.
+          example:
+            id: '3156'
+        leadSource:
+          type:
+          - string
+          - 'null'
+          description: This contact originated from a lead (enquiry)
+          example: Publication - newspaper
+        isActive:
+          type: boolean
+          description: Whether the contact is active or archived.
+          example: true
+        potentialVendor:
+          type: boolean
+          description: Indicates whether the contact has been flagged as a potential vendor.
+          example: false
+        potentialLandlord:
+          type: boolean
+          description: Indicates whether the contact has been flagged as a potential landlord.
+          example: false
+        createdAt:
+          type: string
+          description: When the contact was created.
+          format: date-time
+          example: '2016-12-14T15:03:30.0000000+00:00'
+        modifiedAt:
+          type: string
+          description: When the contact was last modified.
+          format: date-time
+          example: '2017-12-25T15:03:30.0000000+00:00'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: The notes for the contact.
+        companyName:
+          type:
+          - string
+          - 'null'
+          description: The company name associated with the contact.
+          example: Acme Corporation
+        applicantRequirements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ApplicantRequirement'
+          description: The applicant requirements associated with the contact.
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactSearchPropertyResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the property.
+        displayAddress:
+          type:
+          - string
+          - 'null'
+          description: The display address for the property.
+        market:
+          enum:
+          - Unspecified
+          - Sale
+          - Rent
+          type: string
+          description: The market type for the property.
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactSearchApplicantRequirementResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        profileIntention:
+          enum:
+          - Unspecified
+          - Buy
+          - Rent
+          type: string
+        isNewBuild:
+          type:
+          - boolean
+          - 'null'
+        priceFrom:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        priceTo:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        bedsMin:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        isActiveProfile:
+          type: boolean
+        rentalIntention:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchRentalIntention'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactSearchPersonResponse:
+      type: object
+      properties:
+        personId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the person within the contact.
+          example: '1'
+        title:
+          type:
+          - string
+          - 'null'
+          description: The formal title of the Person.
+          example: Mr
+        forename:
+          type:
+          - string
+          - 'null'
+          description: The first or given name of the Person.
+          example: John
+        surname:
+          type:
+          - string
+          - 'null'
+          description: The surname of the Person.
+          example: Doe
+        emails:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchEmailResponse'
+          description: The email addresses for the Person.
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchPhoneResponse'
+          description: The phone numbers for the Person.
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactRelationshipResponse:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        relationshipType:
+          enum:
+          - TenantGuarantor
+          - ForwardingAddress
+          type: string
+          description: The Relationship's type
+          example: TenantGuarantor
+        contactId:
+          type:
+          - string
+          - 'null'
+          description: The identifier of the Contact we added a relationship to
+        relatedContactId:
+          type:
+          - string
+          - 'null'
+          description: 'The ID of the contact we will create a relationship with. This will have to be created
+
+            using POST /contact with a Category - ContactRelationship'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactSearchPhoneResponse:
+      type: object
+      properties:
+        phoneNumberId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the phone number.
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          description: The telephone number for the Person.
+          example: 01234567891
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     Alto.Contacts.Api.Models.Requests.PostContactConsentPreferencesRequest:
       type: object
       properties:
@@ -2583,27 +2598,141 @@ components:
           items:
             $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.PostContactConsentPreferencesRequestItem'
       additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.PostForwardingAddressRequest:
-      required:
-      - address
-      - branchId
+    Alto.Internal.DomainModels.Contacts.ContactConsentPreference:
       type: object
       properties:
-        negotiatorId:
+        id:
+          type: integer
+          format: int32
+        recordId:
+          type: integer
+          format: int32
+        groupId:
+          type: integer
+          format: int32
+        versionNumber:
+          type: integer
+          format: int32
+        contactId:
+          type: integer
+          format: int32
+        dateActioned:
           type:
           - string
           - 'null'
-          description: The unique identifier of the negotiator
-          example: '1234'
-        branchId:
-          minLength: 1
+          format: date-time
+        optInStatus:
+          enum:
+          - Denied
+          - Granted
+          - Unknown
+          - GrantedOrUnknown
           type: string
-          description: The Contact's BranchId.
-          example: '1234'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Requests.Address'
-          description: The Contact's Address details.
+        type:
+          enum:
+          - PropertyMatching
+          - GeneralMarketing
+          - FinancialServices
+          - ConveyancingServices
+          - MoveIt
+          - RelocationAgentNetwork
+          - KeyfloViewingNotifications
+          type: string
+        actionedBy:
+          type:
+          - string
+          - 'null'
+        additionalInformation:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.Phone:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          description: The numerical order in which phone numbers are to be selected.
+          format: int32
+          example: 1
+        type:
+          enum:
+          - Unspecified
+          - Home
+          - Business
+          - Mobile
+          - Fax
+          - Work
+          - ISDN
+          type: string
+          description: The type of phone number.
+          example: Mobile
+        number:
+          type:
+          - string
+          - 'null'
+          description: The telephone number for the Contact.
+          example: 01234567891
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of the phone number
+          example: John's mobile
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.Person:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        title:
+          type:
+          - string
+          - 'null'
+          description: The formal title of the Person.
+          example: Ms
+        forename:
+          type:
+          - string
+          - 'null'
+          description: The first or given name of the Person.
+          example: Jane
+        surname:
+          type:
+          - string
+          - 'null'
+          description: The surname of the Person.
+          example: Doe
+        phoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Phone'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.EmailAddress'
+      additionalProperties: false
+    Alto.Contacts.Core.Models.Domain.Branch:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     Alto.Contacts.Api.Models.Responses.ContactSearchItemResponse:
       type: object
@@ -2715,157 +2844,35 @@ components:
           description: The date and time when the contact was last modified.
           format: date-time
       additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.Contacts.Api.Models.Requests.PatchPersonRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.Contacts.Api.Models.Requests.PatchPersonRequest'
-      description: Array of operations to perform
-    Alto.Contacts.Api.Models.Responses.GetContactRelationshipResponse:
+    Alto.Contacts.Api.Models.Responses.ContactSearchRentalIntention:
       type: object
       properties:
-        contactId:
-          type: integer
-          format: int32
-        relationships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactRelationship'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.Phone:
-      required:
-      - number
-      type: object
-      properties:
-        type:
+        priceQualifier:
+          enum:
+          - Unknown
+          - Weekly
+          - Monthly
+          - Quarterly
+          - Yearly
+          - AdHoc
+          - Daily
+          - Fortnightly
+          - FourWeekly
+          - MonthlyOnLastDay
+          - QuarterlyOnQuarterDays
+          - HalfYearly
+          - HalfYearlyOnQuarterDays
+          type: string
+        furnishing:
           enum:
           - Unspecified
-          - Home
-          - Business
-          - Mobile
-          - Fax
-          - Work
-          - ISDN
-          type: string
-          description: 'The type of phone number. Default if not set: "Home".'
-          example: Mobile
-        number:
-          minLength: 1
-          pattern: ^[\+]?[0-9\s]{10,20}$
-          type: string
-          description: The telephone number for the Person.
-          example: +44 7 267 789 134
-        description:
-          maxLength: 50
+          - Unfurnished
+          - PartFurnished
+          - Furnished
+          - FurnishedOrUnfurnished
           type:
           - string
           - 'null'
-          description: The description of the telephone number.
-          example: Evenings and weekends only!
-      additionalProperties: false
-    Alto.Services.SDK.Models.Address:
-      type: object
-      properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNumber:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postcode:
-          type:
-          - string
-          - 'null'
-        countryCode:
-          type:
-          - string
-          - 'null'
-        uprn:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.ContactSearchPersonResponse:
-      type: object
-      properties:
-        personId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the person within the contact.
-          example: '1'
-        title:
-          type:
-          - string
-          - 'null'
-          description: The formal title of the Person.
-          example: Mr
-        forename:
-          type:
-          - string
-          - 'null'
-          description: The first or given name of the Person.
-          example: John
-        surname:
-          type:
-          - string
-          - 'null'
-          description: The surname of the Person.
-          example: Doe
-        emails:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchEmailResponse'
-          description: The email addresses for the Person.
-        phoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ContactSearchPhoneResponse'
-          description: The phone numbers for the Person.
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Requests.PostContactRelationshipRequest:
-      required:
-      - relatedContactId
-      - relationshipType
-      type: object
-      properties:
-        relationshipType:
-          enum:
-          - TenantGuarantor
-          - ForwardingAddress
-          type: string
-          description: The Relationship's type
-          example: TenantGuarantor
-        relatedContactId:
-          minLength: 1
-          type: string
-          description: 'The ID of the contact we will create a relationship with. This will have to be created
-
-            using POST /contact with a Category - ContactRelationship'
-          example: '1234'
       additionalProperties: false
     Alto.Contacts.Api.Models.Responses.ContactInformation:
       type: object
@@ -2887,14 +2894,6 @@ components:
           - string
           - 'null'
         emailAddress:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Services.SDK.Pagination.Meta:
-      type: object
-      properties:
-        nextToken:
           type:
           - string
           - 'null'
@@ -2981,54 +2980,55 @@ components:
             example: /EmailAddresses/-
         description: A list of the Person's email addresses.
         example: "\n{ \n    \"path\": \"/EmailAddresses/-\", \n    \"op\": \"add\", \n    \"value\": {\"Address\": \"testingtester@testingtester.test\"}\n}"
-    Alto.Internal.DomainModels.Contacts.ContactConsentPreference:
+    Alto.Contacts.Api.Models.Responses.Lead:
       type: object
       properties:
+        source:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.ParameterValue'
         id:
-          type: integer
-          format: int32
-        recordId:
-          type: integer
-          format: int32
-        groupId:
-          type: integer
-          format: int32
-        versionNumber:
-          type: integer
-          format: int32
-        contactId:
-          type: integer
-          format: int32
-        dateActioned:
           type:
-          - string
+          - integer
           - 'null'
-          format: date-time
-        optInStatus:
-          enum:
-          - Denied
-          - Granted
-          - Unknown
-          - GrantedOrUnknown
-          type: string
+          format: int32
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          description: The numerical order in which email addresses are to be selected.
+          format: int32
+          example: 2
         type:
           enum:
-          - PropertyMatching
-          - GeneralMarketing
-          - FinancialServices
-          - ConveyancingServices
-          - MoveIt
-          - RelocationAgentNetwork
-          - KeyfloViewingNotifications
+          - Unknown
+          - Personal
+          - Business
           type: string
-        actionedBy:
+          description: The type of email address.
+          example: Business
+        address:
           type:
           - string
           - 'null'
-        additionalInformation:
-          type:
-          - string
-          - 'null'
+          description: The email address.
+          example: john.doe@business.com
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.ContactRelationship:
+      type: object
+      properties:
+        relationshipId:
+          type: integer
+          format: int32
+        relationshipType:
+          enum:
+          - TenantGuarantor
+          - ForwardingAddress
+          type: string
+        relatedContactId:
+          type: integer
+          format: int32
       additionalProperties: false
   securitySchemes:
     Bearer:
