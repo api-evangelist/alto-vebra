@@ -64,6 +64,17 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    EmailAddress:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        address:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     Name:
       type: object
       properties:
@@ -120,36 +131,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Phone:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        type:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        number:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        address:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     ProblemDetails:
       type: object
       properties:
@@ -175,6 +156,16 @@ components:
           - string
           - 'null'
       additionalProperties: {}
+    ClientDataItemCollection:
+      type: object
+      properties:
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ClientData'
+      additionalProperties: false
     ClientData:
       type: object
       properties:
@@ -219,15 +210,24 @@ components:
           items:
             $ref: '#/components/schemas/EmailAddress'
       additionalProperties: false
-    ClientDataItemCollection:
+    Phone:
       type: object
       properties:
-        items:
+        preferenceOrder:
+          type: integer
+          format: int32
+        type:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/ClientData'
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

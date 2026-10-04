@@ -123,84 +123,62 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    BranchAddressResponse:
+    PartnerIntegrationStatus:
+      enum:
+      - Pending
+      - Active
+      type: string
+    EntityOptOutStatus:
+      enum:
+      - OptedIn
+      - OptedOut
+      type: string
+    OptOutResponse:
       type: object
       properties:
-        subDwelling:
+        linkedType:
+          allOf:
+          - $ref: '#/components/schemas/ModelType'
+        linkedId:
+          type: integer
+          format: int64
+        optOutStatus:
+          allOf:
+          - $ref: '#/components/schemas/EntityOptOutStatus'
+        optedOutAt:
           type:
           - string
           - 'null'
-        nameNumber:
+          format: date-time
+        optedOutBy:
           type:
-          - string
+          - integer
           - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postCode:
-          type:
-          - string
-          - 'null'
+          format: int32
       additionalProperties: false
-    IntegrationStateResponse:
+    UpdateIntegrationStatusResponse:
       type: object
       properties:
-        integrationId:
+        partnerIntegrationStatus:
+          allOf:
+          - $ref: '#/components/schemas/PartnerIntegrationStatus'
+        partnerIntegrationStatusDescription:
+          type:
+          - string
+          - 'null'
+        partnerIntegrationStatusUpdatedOn:
           type: string
-          format: uuid
-        integrationName:
-          type:
-          - string
-          - 'null'
-        agencyName:
-          type:
-          - string
-          - 'null'
-        requestedBy:
-          type:
-          - string
-          - 'null'
-        agencyIntegrationData: {}
-        branches:
+          format: date-time
+        updatedRecordCount:
+          type: integer
+          format: int32
+        updatedBranchIds:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/IntegrationBranchResponse'
-      additionalProperties: false
-    IntegrationBranchResponse:
-      type: object
-      properties:
-        branchRef:
-          type:
-          - string
-          - 'null'
-        branchId:
-          type: integer
-          format: int32
-        branchName:
-          type:
-          - string
-          - 'null'
-        branchAddress:
-          allOf:
-          - $ref: '#/components/schemas/BranchAddressResponse'
-        overridesAgencyIntegrationData:
-          type: boolean
-        integrationData: {}
+            type: integer
+            format: int32
       additionalProperties: false
     ModelType:
       enum:
@@ -406,62 +384,63 @@ components:
       - AccountsDataExport
       - SecurityAttribute
       type: string
-    EntityOptOutStatus:
-      enum:
-      - OptedIn
-      - OptedOut
-      type: string
-    UpdateIntegrationStatusResponse:
+    IntegrationStateResponse:
       type: object
       properties:
-        partnerIntegrationStatus:
-          allOf:
-          - $ref: '#/components/schemas/PartnerIntegrationStatus'
-        partnerIntegrationStatusDescription:
+        integrationId:
+          type: string
+          format: uuid
+        integrationName:
           type:
           - string
           - 'null'
-        partnerIntegrationStatusUpdatedOn:
-          type: string
-          format: date-time
-        updatedRecordCount:
-          type: integer
-          format: int32
-        updatedBranchIds:
+        agencyName:
+          type:
+          - string
+          - 'null'
+        requestedBy:
+          type:
+          - string
+          - 'null'
+        agencyIntegrationData: {}
+        branches:
           type:
           - array
           - 'null'
           items:
-            type: integer
-            format: int32
+            $ref: '#/components/schemas/IntegrationBranchResponse'
       additionalProperties: false
-    PartnerIntegrationStatus:
-      enum:
-      - Pending
-      - Active
-      type: string
-    OptOutResponse:
+    BranchAddressResponse:
       type: object
       properties:
-        linkedType:
-          allOf:
-          - $ref: '#/components/schemas/ModelType'
-        linkedId:
-          type: integer
-          format: int64
-        optOutStatus:
-          allOf:
-          - $ref: '#/components/schemas/EntityOptOutStatus'
-        optedOutAt:
+        subDwelling:
           type:
           - string
           - 'null'
-          format: date-time
-        optedOutBy:
+        nameNumber:
           type:
-          - integer
+          - string
           - 'null'
-          format: int32
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postCode:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     UpdateIntegrationStatusRequest:
       type: object
@@ -474,6 +453,27 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    IntegrationBranchResponse:
+      type: object
+      properties:
+        branchRef:
+          type:
+          - string
+          - 'null'
+        branchId:
+          type: integer
+          format: int32
+        branchName:
+          type:
+          - string
+          - 'null'
+        branchAddress:
+          allOf:
+          - $ref: '#/components/schemas/BranchAddressResponse'
+        overridesAgencyIntegrationData:
+          type: boolean
+        integrationData: {}
       additionalProperties: false
   securitySchemes:
     Bearer:

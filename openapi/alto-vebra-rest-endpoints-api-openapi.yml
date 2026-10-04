@@ -158,6 +158,52 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ListingDetailsAddress:
+      type: object
+      properties:
+        countryCode:
+          type: string
+          x-go-name: CountryCode
+        locality:
+          type: string
+          x-go-name: Locality
+        postcode:
+          type: string
+          x-go-name: Postcode
+        propertyNumberOrName:
+          type: string
+          x-go-name: PropertyNumberOrName
+        streetName:
+          type: string
+          x-go-name: StreetName
+        townOrCity:
+          type: string
+          x-go-name: TownOrCity
+      x-go-name: AddressView
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing
+    Estimate:
+      type: object
+      properties:
+        confidence:
+          type: integer
+          format: int64
+          x-go-name: Confidence
+        confidenceBand:
+          $ref: '#/components/schemas/ConfidenceBand'
+        lowerRange:
+          type: integer
+          format: int64
+          x-go-name: LowerRange
+        upperRange:
+          type: integer
+          format: int64
+          x-go-name: UpperRange
+        value:
+          type: integer
+          format: int64
+          x-go-name: Value
+      x-go-name: View
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/property/estimate
     AppraisalList:
       type: object
       properties:
@@ -168,6 +214,26 @@ components:
           x-go-name: Appraisals
       x-go-name: ListView
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/appraisal
+    ApplicantList:
+      type: object
+      properties:
+        applicants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Applicant'
+          x-go-name: Applicants
+      x-go-name: ListView
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/applicant
+    LifeCycleStatus:
+      description: LifeCycleStatus is an enum representing the current status of the listing at the time of the enquiry
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing/lifeCycleStatus
+    Tenure:
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/property/attributes
+    ContactMethod:
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact/contactMethod
     Property:
       type: object
       properties:
@@ -354,26 +420,6 @@ components:
           x-go-name: UPRN
       x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/property
-    LifeCycleStatus:
-      description: LifeCycleStatus is an enum representing the current status of the listing at the time of the enquiry
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing/lifeCycleStatus
-    Urgency:
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/enquiry/urgency
-    ImageView:
-      type: object
-      properties:
-        cdnUrl:
-          type: string
-          x-go-name: CdnURL
-        filename:
-          type: string
-          x-go-name: Filename
-        original:
-          type: string
-          x-go-name: Original
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing
     Applicant:
       type: object
       properties:
@@ -493,99 +539,10 @@ components:
           x-go-name: ViewingTimes
       x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/applicant
-    Estimate:
-      type: object
-      properties:
-        confidence:
-          type: integer
-          format: int64
-          x-go-name: Confidence
-        confidenceBand:
-          $ref: '#/components/schemas/ConfidenceBand'
-        lowerRange:
-          type: integer
-          format: int64
-          x-go-name: LowerRange
-        upperRange:
-          type: integer
-          format: int64
-          x-go-name: UpperRange
-        value:
-          type: integer
-          format: int64
-          x-go-name: Value
-      x-go-name: View
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/property/estimate
     TransactionType:
       description: TransactionType is an enum representing the type financial transaction that would occur for a given listing
       type: string
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing/transactionType
-    ConfidenceBand:
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/property/estimate
-    ListingDetailsAddress:
-      type: object
-      properties:
-        countryCode:
-          type: string
-          x-go-name: CountryCode
-        locality:
-          type: string
-          x-go-name: Locality
-        postcode:
-          type: string
-          x-go-name: Postcode
-        propertyNumberOrName:
-          type: string
-          x-go-name: PropertyNumberOrName
-        streetName:
-          type: string
-          x-go-name: StreetName
-        townOrCity:
-          type: string
-          x-go-name: TownOrCity
-      x-go-name: AddressView
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing
-    LocationView:
-      type: object
-      properties:
-        alias:
-          type: string
-          x-go-name: Alias
-        area:
-          type: string
-          x-go-name: Area
-        areaStreet:
-          type: string
-          x-go-name: AreaStreet
-        country:
-          type: string
-          x-go-name: Country
-        countryCode:
-          type: string
-          x-go-name: CountryCode
-        countyArea:
-          type: string
-          x-go-name: CountyArea
-        district:
-          type: string
-          x-go-name: District
-        incode:
-          type: string
-          x-go-name: Incode
-        outcode:
-          type: string
-          x-go-name: Outcode
-        postTown:
-          type: string
-          x-go-name: PostTown
-        postalArea:
-          type: string
-          x-go-name: PostalArea
-        region:
-          type: string
-          x-go-name: Region
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/searchCriteria
     ErrorContent:
       type: object
       properties:
@@ -677,34 +634,6 @@ components:
           $ref: '#/components/schemas/Urgency'
       x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/appraisal
-    Energy:
-      type: object
-      properties:
-        efficiency:
-          type: integer
-          format: uint8
-          x-go-name: Efficiency
-        rating:
-          type: string
-          x-go-name: Rating
-      x-go-name: EnergyView
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/property
-    Tenure:
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/property/attributes
-    ContactMethod:
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact/contactMethod
-    ApplicantList:
-      type: object
-      properties:
-        applicants:
-          type: array
-          items:
-            $ref: '#/components/schemas/Applicant'
-          x-go-name: Applicants
-      x-go-name: ListView
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/applicant
     ListingDetails:
       type: object
       properties:
@@ -894,12 +823,46 @@ components:
           x-go-name: URL
       x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing
-    ApplicantSource:
-      description: 'ApplicantSource is an enum representing the mechanism by which the lead was ingested
-
-        either a portal or social media product'
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/applicant/applicantSource
+    LocationView:
+      type: object
+      properties:
+        alias:
+          type: string
+          x-go-name: Alias
+        area:
+          type: string
+          x-go-name: Area
+        areaStreet:
+          type: string
+          x-go-name: AreaStreet
+        country:
+          type: string
+          x-go-name: Country
+        countryCode:
+          type: string
+          x-go-name: CountryCode
+        countyArea:
+          type: string
+          x-go-name: CountyArea
+        district:
+          type: string
+          x-go-name: District
+        incode:
+          type: string
+          x-go-name: Incode
+        outcode:
+          type: string
+          x-go-name: Outcode
+        postTown:
+          type: string
+          x-go-name: PostTown
+        postalArea:
+          type: string
+          x-go-name: PostalArea
+        region:
+          type: string
+          x-go-name: Region
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/searchCriteria
     Pricing:
       type: object
       properties:
@@ -916,9 +879,6 @@ components:
           $ref: '#/components/schemas/TransactionType'
       x-go-name: PricingView
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing
-    TimePreference:
-      type: string
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact/timePreference
     SearchCriteria:
       type: object
       properties:
@@ -1089,31 +1049,48 @@ components:
           x-go-name: Radius
       x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/searchCriteria
+    ApplicantSource:
+      description: 'ApplicantSource is an enum representing the mechanism by which the lead was ingested
+
+        either a portal or social media product'
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/applicant/applicantSource
+    ContactPreferences:
+      type: object
+      properties:
+        method:
+          $ref: '#/components/schemas/ContactMethod'
+        time:
+          $ref: '#/components/schemas/TimePreference'
+      x-go-name: PreferencesView
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact
+    Energy:
+      type: object
+      properties:
+        efficiency:
+          type: integer
+          format: uint8
+          x-go-name: Efficiency
+        rating:
+          type: string
+          x-go-name: Rating
+      x-go-name: EnergyView
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/property
+    Urgency:
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/enquiry/urgency
     AppraisalSource:
       description: 'AppraisalSource is an enum representing the mechanism by which the lead was ingested
 
         either a portal or social media product'
       type: string
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/appraisal/appraisalSource
-    Contact:
-      type: object
-      properties:
-        email:
-          type: string
-          x-go-name: Email
-        firstName:
-          type: string
-          x-go-name: FirstName
-        lastName:
-          type: string
-          x-go-name: LastName
-        phoneNumber:
-          type: string
-          x-go-name: PhoneNumber
-        preferences:
-          $ref: '#/components/schemas/ContactPreferences'
-      x-go-name: View
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact
+    ConfidenceBand:
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/property/estimate
+    TimePreference:
+      type: string
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact/timePreference
     ViewingTime:
       type: object
       properties:
@@ -1127,6 +1104,16 @@ components:
           x-go-name: Latest
       x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/viewingTime
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorContent'
+          x-go-name: Errors
+      x-go-name: ErrorResponse
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/services/lead-poll-service/internal/response
     PropertyDetailsAddress:
       type: object
       properties:
@@ -1150,24 +1137,37 @@ components:
           x-go-name: Town
       x-go-name: AddressView
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/property
-    Error:
+    ImageView:
       type: object
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorContent'
-          x-go-name: Errors
-      x-go-name: ErrorResponse
-      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/services/lead-poll-service/internal/response
-    ContactPreferences:
+        cdnUrl:
+          type: string
+          x-go-name: CdnURL
+        filename:
+          type: string
+          x-go-name: Filename
+        original:
+          type: string
+          x-go-name: Original
+      x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/zoopla/listing
+    Contact:
       type: object
       properties:
-        method:
-          $ref: '#/components/schemas/ContactMethod'
-        time:
-          $ref: '#/components/schemas/TimePreference'
-      x-go-name: PreferencesView
+        email:
+          type: string
+          x-go-name: Email
+        firstName:
+          type: string
+          x-go-name: FirstName
+        lastName:
+          type: string
+          x-go-name: LastName
+        phoneNumber:
+          type: string
+          x-go-name: PhoneNumber
+        preferences:
+          $ref: '#/components/schemas/ContactPreferences'
+      x-go-name: View
       x-go-package: gitlab.com/zoopla/internal/zoopla-software/leads/lead-services/internal/schemas/contact
     RentFrequency:
       description: RentFrequency is an enum representing how often the rent is required for a listing

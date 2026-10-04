@@ -334,74 +334,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Document:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the document
-        type:
-          type:
-          - string
-          - 'null'
-          description: The type of the document e.g. Property, Tenancy, Contact or Work Order
-        fileName:
-          type:
-          - string
-          - 'null'
-          description: The file name of the document
-        fileType:
-          type:
-          - string
-          - 'null'
-          description: The file type of the document
-        url:
-          type:
-          - string
-          - 'null'
-          description: The URL for the document, if applicable
-        caption:
-          type:
-          - string
-          - 'null'
-          description: The caption of the document
-        createdDate:
-          type:
-          - string
-          - 'null'
-          description: The date the document was created
-          format: date-time
-        modifiedDate:
-          type:
-          - string
-          - 'null'
-          description: The date the document was modified
-          format: date-time
-      additionalProperties: false
-    CreateDocumentResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The unique identifier of the new document.
-          format: int64
-          example: 12345
-      additionalProperties: false
-      description: Response describing a newly created document.
     MediaType:
       enum:
       - Photo
@@ -464,6 +396,74 @@ components:
           - string
           - 'null'
       additionalProperties: {}
+    Document:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the document
+        type:
+          type:
+          - string
+          - 'null'
+          description: The type of the document e.g. Property, Tenancy, Contact or Work Order
+        fileName:
+          type:
+          - string
+          - 'null'
+          description: The file name of the document
+        fileType:
+          type:
+          - string
+          - 'null'
+          description: The file type of the document
+        url:
+          type:
+          - string
+          - 'null'
+          description: The URL for the document, if applicable
+        caption:
+          type:
+          - string
+          - 'null'
+          description: The caption of the document
+        createdDate:
+          type:
+          - string
+          - 'null'
+          description: The date the document was created
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          description: The date the document was modified
+          format: date-time
+      additionalProperties: false
+    CreateDocumentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the new document.
+          format: int64
+          example: 12345
+      additionalProperties: false
+      description: Response describing a newly created document.
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

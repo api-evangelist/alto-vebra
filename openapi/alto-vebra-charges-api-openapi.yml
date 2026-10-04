@@ -374,16 +374,91 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+    Alto.PropertyManagement.Api.Models.Responses.PropertyCharge:
       type: object
       properties:
-        errors:
+        id:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
+        supplierId:
+          type:
+          - string
+          - 'null'
+        chargeType:
+          enum:
+          - Maintenance
+          - Deposit
+          - DepositToLandlord
+          - ReferencingFee
+          - AdministrationFee
+          - CheckInFee
+          - CheckOutFee
+          - TenancyAgreementFee
+          - CapitalExpenditure
+          - Cleaning
+          - Electrical
+          - Gardening
+          - Plumbing
+          - GasSafetyCheck
+          - EPC
+          - MaintenanceExpense
+          - InsuranceBuildings
+          - InsuranceContents
+          - InsuranceRentProtection
+          - UtilitiesWater
+          - UtilitiesCouncilTax
+          - UtilitiesElectricity
+          - UtilitiesGas
+          - Decorating
+          - BankCharges
+          - ServiceCharge
+          - GroundRent
+          - ElectricalSafetyCheck
+          - Appliances
+          - KeysLocksmith
+          - Inventory
+          - Furniture
+          - PortableApplianceTest
+          - LeadTest
+          type: string
+        totalNet:
+          type: number
+          format: float
+        totalVat:
+          type: number
+          format: float
+        vatRateType:
+          enum:
+          - Exempt
+          - Standard
+          - Reduced
+          - Zero
+          - StandardROI
+          type: string
+        invoiceReference:
+          type:
+          - string
+          - 'null'
+        invoiceDocumentId:
+          type:
+          - string
+          - 'null'
+        workOrderId:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        chargeDate:
+          type: string
+          format: date-time
+        propertyId:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.TenancyCharge:
       type: object
@@ -527,91 +602,16 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.PropertyCharge:
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
       type: object
       properties:
-        id:
+        errors:
           type:
-          - string
+          - array
           - 'null'
-        supplierId:
-          type:
-          - string
-          - 'null'
-        chargeType:
-          enum:
-          - Maintenance
-          - Deposit
-          - DepositToLandlord
-          - ReferencingFee
-          - AdministrationFee
-          - CheckInFee
-          - CheckOutFee
-          - TenancyAgreementFee
-          - CapitalExpenditure
-          - Cleaning
-          - Electrical
-          - Gardening
-          - Plumbing
-          - GasSafetyCheck
-          - EPC
-          - MaintenanceExpense
-          - InsuranceBuildings
-          - InsuranceContents
-          - InsuranceRentProtection
-          - UtilitiesWater
-          - UtilitiesCouncilTax
-          - UtilitiesElectricity
-          - UtilitiesGas
-          - Decorating
-          - BankCharges
-          - ServiceCharge
-          - GroundRent
-          - ElectricalSafetyCheck
-          - Appliances
-          - KeysLocksmith
-          - Inventory
-          - Furniture
-          - PortableApplianceTest
-          - LeadTest
-          type: string
-        totalNet:
-          type: number
-          format: float
-        totalVat:
-          type: number
-          format: float
-        vatRateType:
-          enum:
-          - Exempt
-          - Standard
-          - Reduced
-          - Zero
-          - StandardROI
-          type: string
-        invoiceReference:
-          type:
-          - string
-          - 'null'
-        invoiceDocumentId:
-          type:
-          - string
-          - 'null'
-        workOrderId:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        chargeDate:
-          type: string
-          format: date-time
-        propertyId:
-          type:
-          - string
-          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
       additionalProperties: false
   securitySchemes:
     Bearer:

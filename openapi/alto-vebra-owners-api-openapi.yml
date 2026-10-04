@@ -94,83 +94,6 @@ paths:
         - alto/route:get-owners
 components:
   schemas:
-    Alto.Api.Material.Hateoas.Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Services.SDK.Pagination.Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Owner'
-      additionalProperties: false
-    Alto.Contacts.Api.Models.Responses.OwnerContact:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        branchId:
-          type:
-          - string
-          - 'null'
-          description: Represents the branch identifier associated with the contact owner.
-      additionalProperties: false
-      description: Represents a contact that owns a property.
-    Alto.Contacts.Api.Models.Responses.OwnerProperty:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier for the resource.
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
-          description: Links to related entities.
-        branchId:
-          type:
-          - string
-          - 'null'
-          description: Represents the branch identifier associated with the property.
-      additionalProperties: false
-      description: Represents a property belonging to a contact.
     Alto.Contacts.Api.Models.Responses.Owner:
       type: object
       properties:
@@ -217,6 +140,83 @@ components:
           description: The date and time when the owner's details were last modified.
           format: date-time
       additionalProperties: false
+    Alto.Services.SDK.Pagination.PagedResponse1_Alto.Contacts.Api.Models.Responses.Owner:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Pagination.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Contacts.Api.Models.Responses.Owner'
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.OwnerContact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: Represents the branch identifier associated with the contact owner.
+      additionalProperties: false
+      description: Represents a contact that owns a property.
+    Alto.Services.SDK.Pagination.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.Contacts.Api.Models.Responses.OwnerProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier for the resource.
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
+          description: Links to related entities.
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: Represents the branch identifier associated with the property.
+      additionalProperties: false
+      description: Represents a property belonging to a contact.
   securitySchemes:
     Bearer:
       type: apiKey

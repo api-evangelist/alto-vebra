@@ -75,6 +75,28 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Error'
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     Offer:
       type: object
       properties:
@@ -140,28 +162,6 @@ components:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Error'
       additionalProperties: false
   securitySchemes:
     Bearer:

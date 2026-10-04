@@ -93,64 +93,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    BranchStatus:
-      enum:
-      - Unknown
-      - Active
-      - Inactive
-      type: string
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Address:
-      type: object
-      properties:
-        subDwelling:
-          type:
-          - string
-          - 'null'
-        nameNumber:
-          type:
-          - string
-          - 'null'
-        street:
-          type:
-          - string
-          - 'null'
-        locality:
-          type:
-          - string
-          - 'null'
-        town:
-          type:
-          - string
-          - 'null'
-        county:
-          type:
-          - string
-          - 'null'
-        postcode:
-          type:
-          - string
-          - 'null'
-        countryCode:
-          type:
-          - string
-          - 'null'
-        uprn:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     PropertyRecordType:
       enum:
       - Unspecified
@@ -196,6 +138,46 @@ components:
           description: The default market of the branch.
       additionalProperties: false
       description: Represents a branch.
+    Address:
+      type: object
+      properties:
+        subDwelling:
+          type:
+          - string
+          - 'null'
+        nameNumber:
+          type:
+          - string
+          - 'null'
+        street:
+          type:
+          - string
+          - 'null'
+        locality:
+          type:
+          - string
+          - 'null'
+        town:
+          type:
+          - string
+          - 'null'
+        county:
+          type:
+          - string
+          - 'null'
+        postcode:
+          type:
+          - string
+          - 'null'
+        countryCode:
+          type:
+          - string
+          - 'null'
+        uprn:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     BranchPagedResponse:
       type: object
       properties:
@@ -208,6 +190,24 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/Branch'
+      additionalProperties: false
+    BranchStatus:
+      enum:
+      - Unknown
+      - Active
+      - Inactive
+      type: string
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

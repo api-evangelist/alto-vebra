@@ -183,6 +183,12 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
+      description: Array of operations to perform
+    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
     Alto.PropertyManagement.Api.Models.Responses.WorkOrder:
       type: object
       properties:
@@ -337,23 +343,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.WorkOrderPatch:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch'
-      description: Array of operations to perform
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
-      additionalProperties: false
-    SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.WorkOrderPatch: {}
     Alto.PropertyManagement.Api.Models.WorkOrderActor:
       type: object
       properties:
@@ -367,6 +356,17 @@ components:
           - string
           - 'null'
           description: The unique identifier for the related party, or null for Agency
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
       additionalProperties: false
   securitySchemes:
     Bearer:

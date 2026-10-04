@@ -321,22 +321,16 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.ManagementEventPatch:
-      type: array
-      items:
-        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
-      description: Array of operations to perform
-    Alto.PropertyManagement.Api.Models.Responses.Error:
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
       type: object
       properties:
-        code:
+        nextToken:
           type:
           - string
           - 'null'
-        message:
-          type:
-          - string
-          - 'null'
+        totalItems:
+          type: integer
+          format: int32
       additionalProperties: false
     SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.ManagementEventPatch:
       anyOf:
@@ -420,28 +414,22 @@ components:
             example: /notes
         description: "\n            Agent defined notes for the event.\n            "
         example: "\n        {\n            \"path\": \"/notes\",\n            \"op\": \"replace\",\n            \"value\": \"Gas safety certificate requested from engineer.\"\n        }"
-    Alto.PropertyManagement.Api.Models.Responses.ManagementEventType:
+    SystemTextJsonPatch.JsonPatchDocument1_Alto.PropertyManagement.Api.Models.ManagementEventPatch:
+      type: array
+      items:
+        $ref: '#/components/schemas/SystemTextJsonPatch.Operations.Operation1_Alto.PropertyManagement.Api.Models.ManagementEventPatch'
+      description: Array of operations to perform
+    Alto.PropertyManagement.Api.Models.Responses.Error:
       type: object
       properties:
-        key:
+        code:
           type:
           - string
           - 'null'
-        label:
+        message:
           type:
           - string
           - 'null'
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
       additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
       type: object
@@ -517,18 +505,6 @@ components:
           - 'null'
           format: date-time
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Requests.CreateManagementEventRequest:
       required:
       - eventType
@@ -567,16 +543,40 @@ components:
           description: Additional notes for the management event.
       additionalProperties: false
       description: Request model for creating a new management event
-    Alto.PropertyManagement.Api.Models.Responses.Meta:
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.ManagementEvent:
       type: object
       properties:
-        nextToken:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.ManagementEvent'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ManagementEventType:
+      type: object
+      properties:
+        key:
           type:
           - string
           - 'null'
-        totalItems:
-          type: integer
-          format: int32
+        label:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
+      type: object
+      properties:
+        errors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
       additionalProperties: false
   securitySchemes:
     Bearer:

@@ -747,19 +747,129 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Meta:
+    ViewingPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/ViewingPatchOperation'
+      description: Array of operations to perform
+    ExternalPartnerUserAppointments:
       type: object
       properties:
-        nextToken:
+        negotiatorId:
+          type: integer
+          description: The unique identifier of the negotiator
+          format: int32
+          example: 67890
+        appointments:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ExternalPartnerAppointment'
+          description: A collection of appointments belonging to the negotiator; if there are no appointments, then returns an empty collection
+      additionalProperties: false
+    Link:
+      type: object
+      properties:
+        href:
           type:
           - string
           - 'null'
-        previousToken:
+        rel:
           type:
           - string
           - 'null'
       additionalProperties: false
-    ExternalPartnerAppointmentPagedResponse:
+    ExternalPartnerProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the property
+          example: '112233'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related property.
+      additionalProperties: false
+    ExternalPartnerViewingDetails:
+      type: object
+      properties:
+        internalNotes:
+          type:
+          - string
+          - 'null'
+          description: The internal notes of the appointment.
+          example: Internal notes
+        applicantFeedback:
+          type:
+          - string
+          - 'null'
+          description: The feedback of the appointment.
+          example: Feedback
+      additionalProperties: false
+    CreateAppointmentData:
+      type: object
+      properties:
+        appointmentId:
+          type: integer
+          description: The unique identifier of the viewing appointment that has been created
+          format: int64
+          example: 123456
+      additionalProperties: false
+    GeneralAppointmentPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/GeneralAppointmentPatchOperation'
+      description: Array of operations to perform
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    GeneralAppointmentPatchOperation:
+      type: object
+      properties:
+        op:
+          enum:
+          - replace
+          type: string
+        value:
+          type: string
+        path:
+          enum:
+          - /startDate
+          - /endDate
+          - /negotiatorIds
+          - /status
+          type: string
+      example: '[ { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorIds", "op": "replace", "value": [47141, 48734] }, { "path": "/status", "op": "replace", "value": "CancelledByOffice" } ]'
+    ExternalPartnerUserAppointmentsPagedResponse:
       type: object
       properties:
         meta:
@@ -769,10 +879,27 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ExternalPartnerAppointment'
+            $ref: '#/components/schemas/ExternalPartnerUserAppointments'
           description: The collection of items in the response.
       additionalProperties: false
       description: Represents a paged response containing metadata and a collection of items.
+    ExternalPartnerContact:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the contact
+          example: '123456'
+        links:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Link'
+          description: Links to related contact.
+      additionalProperties: false
     ViewingPatchOperation:
       type: object
       properties:
@@ -793,22 +920,6 @@ components:
           - /internalNotes
           type: string
       example: '[ { "path": "/status", "op": "replace", "value": "CancelledByOffice" }, { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorId", "op": "replace", "value": 47141 } ]'
-    ExternalPartnerUserAppointments:
-      type: object
-      properties:
-        negotiatorId:
-          type: integer
-          description: The unique identifier of the negotiator
-          format: int32
-          example: 67890
-        appointments:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ExternalPartnerAppointment'
-          description: A collection of appointments belonging to the negotiator; if there are no appointments, then returns an empty collection
-      additionalProperties: false
     ExternalPartnerNegotiator:
       type: object
       properties:
@@ -827,6 +938,88 @@ components:
           description: 'Links to related negotiator;
 
             NOTE: This is currently set to an empty collection as no api is currently available for retrieving negotiator details'
+      additionalProperties: false
+    ViewingRequest:
+      required:
+      - applicantIds
+      - endDate
+      - negotiatorId
+      - propertyId
+      - startDate
+      type: object
+      properties:
+        negotiatorId:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: 'Required: The unique identifer of the negotiator'
+          format: int32
+          example: 123456
+        branchId:
+          type:
+          - integer
+          - 'null'
+          description: 'Optional: The branch in which to record the viewing diary event.
+
+            When omitted, defaults to the negotiator''s default branch.'
+          format: int32
+          example: 12345
+        applicantIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: 'Required: The unique identifer of the applicant(s)'
+          example:
+          - 7891011
+          - 7891025
+        propertyId:
+          maximum: 2147483647
+          minimum: 0
+          type: integer
+          description: 'Required: The unique identifer of the property'
+          format: int32
+          example: 121314
+        startDate:
+          type: string
+          description: 'Required: The start date and time in ISO 8601 format of the viewing appointment to be created.
+
+            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+          format: date-time
+          example: '2023-01-01T10:15:00.0000000+00:00'
+        endDate:
+          type: string
+          description: 'Required: The end date and time in ISO 8601 format of the viewing appointment to be created.
+
+            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
+
+            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
+          format: date-time
+          example: '2023-01-01T10:30:00.0000000+00:00'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: 'Optional: Additional notes to accompany the viewing appointment being created.'
+          example: Here are some optional notes
+        isConfirmed:
+          type: boolean
+          description: 'Optional: Marks viewing as confirmed; this will NOT send out confirmation emails and texts
+
+            Default if not set: false'
+          example: true
+        meetingPlaceType:
+          enum:
+          - Unspecified
+          - AtTheOffice
+          - AtTheProperty
+          type: string
+          description: 'Optional: Sets where the negotiator will meet for the viewing;
+
+            Default if not set: AtTheProperty'
+          example: Unspecified
       additionalProperties: false
     GeneralAppointmentRequest:
       required:
@@ -915,143 +1108,6 @@ components:
           - 'null'
           description: 'Optional: Additional notes to accompany the appointment being created.'
           example: Here are some optional notes
-      additionalProperties: false
-    ExternalPartnerContact:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the contact
-          example: '123456'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-          description: Links to related contact.
-      additionalProperties: false
-    GeneralAppointmentPatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/GeneralAppointmentPatchOperation'
-      description: Array of operations to perform
-    GeneralAppointmentPatchOperation:
-      type: object
-      properties:
-        op:
-          enum:
-          - replace
-          type: string
-        value:
-          type: string
-        path:
-          enum:
-          - /startDate
-          - /endDate
-          - /negotiatorIds
-          - /status
-          type: string
-      example: '[ { "path": "/startDate", "op": "replace", "value": "2024-05-27T10:30:00" }, { "path": "/negotiatorIds", "op": "replace", "value": [47141, 48734] }, { "path": "/status", "op": "replace", "value": "CancelledByOffice" } ]'
-    ExternalPartnerViewingDetails:
-      type: object
-      properties:
-        internalNotes:
-          type:
-          - string
-          - 'null'
-          description: The internal notes of the appointment.
-          example: Internal notes
-        applicantFeedback:
-          type:
-          - string
-          - 'null'
-          description: The feedback of the appointment.
-          example: Feedback
-      additionalProperties: false
-    ViewingRequest:
-      required:
-      - applicantIds
-      - endDate
-      - negotiatorId
-      - propertyId
-      - startDate
-      type: object
-      properties:
-        negotiatorId:
-          maximum: 2147483647
-          minimum: 0
-          type: integer
-          description: 'Required: The unique identifer of the negotiator'
-          format: int32
-          example: 123456
-        branchId:
-          type:
-          - integer
-          - 'null'
-          description: 'Optional: The branch in which to record the viewing diary event.
-
-            When omitted, defaults to the negotiator''s default branch.'
-          format: int32
-          example: 12345
-        applicantIds:
-          type: array
-          items:
-            type: integer
-            format: int32
-          description: 'Required: The unique identifer of the applicant(s)'
-          example:
-          - 7891011
-          - 7891025
-        propertyId:
-          maximum: 2147483647
-          minimum: 0
-          type: integer
-          description: 'Required: The unique identifer of the property'
-          format: int32
-          example: 121314
-        startDate:
-          type: string
-          description: 'Required: The start date and time in ISO 8601 format of the viewing appointment to be created.
-
-            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
-
-            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
-          format: date-time
-          example: '2023-01-01T10:15:00.0000000+00:00'
-        endDate:
-          type: string
-          description: 'Required: The end date and time in ISO 8601 format of the viewing appointment to be created.
-
-            Interpreted as UK local diary time: a value with a UTC marker (a trailing `Z`) or an explicit offset
-
-            is converted to UK local time (Europe/London); a plain local value with no offset is taken as-is.'
-          format: date-time
-          example: '2023-01-01T10:30:00.0000000+00:00'
-        notes:
-          type:
-          - string
-          - 'null'
-          description: 'Optional: Additional notes to accompany the viewing appointment being created.'
-          example: Here are some optional notes
-        isConfirmed:
-          type: boolean
-          description: 'Optional: Marks viewing as confirmed; this will NOT send out confirmation emails and texts
-
-            Default if not set: false'
-          example: true
-        meetingPlaceType:
-          enum:
-          - Unspecified
-          - AtTheOffice
-          - AtTheProperty
-          type: string
-          description: 'Optional: Sets where the negotiator will meet for the viewing;
-
-            Default if not set: AtTheProperty'
-          example: Unspecified
       additionalProperties: false
     ExternalPartnerAppointment:
       type: object
@@ -1162,75 +1218,19 @@ components:
         viewingDetails:
           $ref: '#/components/schemas/ExternalPartnerViewingDetails'
       additionalProperties: false
-    ExternalPartnerProperty:
+    Meta:
       type: object
       properties:
-        id:
+        nextToken:
           type:
           - string
           - 'null'
-          description: The unique identifier of the property
-          example: '112233'
-        links:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Link'
-          description: Links to related property.
-      additionalProperties: false
-    ViewingPatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/ViewingPatchOperation'
-      description: Array of operations to perform
-    Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
+        previousToken:
           type:
           - string
           - 'null'
       additionalProperties: false
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    CreateAppointmentData:
-      type: object
-      properties:
-        appointmentId:
-          type: integer
-          description: The unique identifier of the viewing appointment that has been created
-          format: int64
-          example: 123456
-      additionalProperties: false
-    ExternalPartnerUserAppointmentsPagedResponse:
+    ExternalPartnerAppointmentPagedResponse:
       type: object
       properties:
         meta:
@@ -1240,7 +1240,7 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ExternalPartnerUserAppointments'
+            $ref: '#/components/schemas/ExternalPartnerAppointment'
           description: The collection of items in the response.
       additionalProperties: false
       description: Represents a paged response containing metadata and a collection of items.

@@ -162,6 +162,57 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Supplier'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Person:
+      type: object
+      properties:
+        title:
+          type:
+          - string
+          - 'null'
+        forename:
+          type:
+          - string
+          - 'null'
+        surname:
+          type:
+          - string
+          - 'null'
+        emailAddresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        telephoneNumbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.Supplier:
       type: object
       properties:
@@ -196,54 +247,6 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
-      type: object
-      properties:
-        errors:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
-          readOnly: true
-      additionalProperties: false
-    Microsoft.AspNetCore.Mvc.ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
     Alto.PropertyManagement.Api.Models.Responses.Address:
       type: object
       properties:
@@ -280,56 +283,53 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.PagedResults1_Alto.PropertyManagement.Api.Models.Responses.Supplier:
+    Alto.PropertyManagement.Api.Models.Responses.Error:
       type: object
       properties:
-        meta:
-          $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Meta'
-        items:
+        code:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Supplier'
+        message:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Person:
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
       type: object
       properties:
+        type:
+          type:
+          - string
+          - 'null'
         title:
           type:
           - string
           - 'null'
-        forename:
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
           type:
           - string
           - 'null'
-        surname:
+        instance:
           type:
           - string
           - 'null'
-        emailAddresses:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        telephoneNumbers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Meta:
+      additionalProperties: {}
+    Alto.PropertyManagement.Api.Models.Responses.ErrorsResponse:
       type: object
       properties:
-        nextToken:
+        errors:
           type:
-          - string
+          - array
           - 'null'
-        totalItems:
-          type: integer
-          format: int32
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Error'
+          readOnly: true
       additionalProperties: false
   securitySchemes:
     Bearer:

@@ -91,85 +91,6 @@ paths:
         - alto/route:patch-inventory-propertyid-appraisal
 components:
   schemas:
-    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
-      enum:
-      - Unspecified
-      - FreeMarketAppraisal
-      - BuildingSociety
-      - ABIData
-      - AgencyScheme
-      - Agricultural
-      - InsuranceCompany
-      - Bank
-      - ChargeableValuation
-      - Commercial
-      - CompulsoryPurchaseOrder
-      - Development
-      - Divorce
-      - FamilyDivision
-      - FormalMarketValuation
-      - HomebuyersPrivate
-      - HomebuyersReport
-      - Industrial
-      - Matrimonial
-      - PartExchange
-      - Probate
-      - ReMortgage
-      - Rental
-      - Repossession
-      - RevenueAndCustoms
-      - RightToBuy
-      type: string
-    Alto.Appraisal.Api.Models.Requests.CreateAppraisalRequest:
-      type: object
-      properties:
-        propertyId:
-          type:
-          - string
-          - 'null'
-          description: '[Required] The unique identifier of the property to associate to the appraisal'
-        startDate:
-          type:
-          - string
-          - 'null'
-          description: '[Required] The start date and time of the appraisal'
-          default: '2023-12-11T15:15:40'
-        endDate:
-          type:
-          - string
-          - 'null'
-          description: '[Required] The end date and time of the appraisal'
-          default: '2023-12-11T15:45:40'
-        appraiserIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: '[Required] The unique identifiers of the appraisers, maximum of two appraisers'
-        type:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType'
-          description: '[Required] The valuation type, please see <a href="https://developers.vebraalto.com/alto-data/appraisal-types">Appraisal Types</a>'
-        notes:
-          type:
-          - string
-          - 'null'
-          description: '[Optional] Diary notes for the appraisal'
-        reminderMinutes:
-          type: integer
-          description: '[Optional] Reminder minutes prior to the appraisal'
-          format: int32
-        reminderDeliveryType:
-          allOf:
-          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType'
-          description: '[Optional] Type of reminder when reminder minutes provided'
-        requestingUserId:
-          type:
-          - string
-          - 'null'
-          description: '[Required] The unique identifier of the requesting user'
-      additionalProperties: false
     SystemTextJsonPatch.JsonPatchDocument1_Alto.Appraisal.Api.Models.Requests.PatchAppraisalRequest:
       type: array
       items:
@@ -486,6 +407,85 @@ components:
       - Screen
       - SMS
       - Both
+      type: string
+    Alto.Appraisal.Api.Models.Requests.CreateAppraisalRequest:
+      type: object
+      properties:
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The unique identifier of the property to associate to the appraisal'
+        startDate:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The start date and time of the appraisal'
+          default: '2023-12-11T15:15:40'
+        endDate:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The end date and time of the appraisal'
+          default: '2023-12-11T15:45:40'
+        appraiserIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: '[Required] The unique identifiers of the appraisers, maximum of two appraisers'
+        type:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType'
+          description: '[Required] The valuation type, please see <a href="https://developers.vebraalto.com/alto-data/appraisal-types">Appraisal Types</a>'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] Diary notes for the appraisal'
+        reminderMinutes:
+          type: integer
+          description: '[Optional] Reminder minutes prior to the appraisal'
+          format: int32
+        reminderDeliveryType:
+          allOf:
+          - $ref: '#/components/schemas/Alto.Services.SDK.Enums.DiaryEvent.DiaryReminderDeliveryType'
+          description: '[Optional] Type of reminder when reminder minutes provided'
+        requestingUserId:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The unique identifier of the requesting user'
+      additionalProperties: false
+    Alto.Services.SDK.Enums.DiaryEvent.Valuation.ValuationType:
+      enum:
+      - Unspecified
+      - FreeMarketAppraisal
+      - BuildingSociety
+      - ABIData
+      - AgencyScheme
+      - Agricultural
+      - InsuranceCompany
+      - Bank
+      - ChargeableValuation
+      - Commercial
+      - CompulsoryPurchaseOrder
+      - Development
+      - Divorce
+      - FamilyDivision
+      - FormalMarketValuation
+      - HomebuyersPrivate
+      - HomebuyersReport
+      - Industrial
+      - Matrimonial
+      - PartExchange
+      - Probate
+      - ReMortgage
+      - Rental
+      - Repossession
+      - RevenueAndCustoms
+      - RightToBuy
       type: string
   securitySchemes:
     Bearer:
