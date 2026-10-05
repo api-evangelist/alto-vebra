@@ -1,0 +1,12 @@
+{
+ "url": "https://api-docs.vebraalto.com/merged.json",
+ "requested_url": "https://api-docs.vebraalto.com/merged.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 755158,
+ "sha256": "4e578b07e093b21105b02e496384e4dbd31426e1b61419b61b4cec12a56a3f4b",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.966), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
