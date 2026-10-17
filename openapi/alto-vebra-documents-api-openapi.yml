@@ -334,17 +334,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    MediaType:
-      enum:
-      - Photo
-      - Floorplan
-      - VirtualTour
-      - File
-      - Document
-      - Brochure
-      - EPC
-      - WebLink
-      type: string
     DocumentPagedResults:
       type: object
       properties:
@@ -358,44 +347,6 @@ components:
           items:
             $ref: '#/components/schemas/Document'
       additionalProperties: false
-    FileType:
-      enum:
-      - JPG
-      - PDF
-      - PNG
-      - GIF
-      - TXT
-      - DOC
-      - DOCX
-      - XLSX
-      - XLS
-      - CSV
-      type: string
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
     Document:
       type: object
       properties:
@@ -442,6 +393,17 @@ components:
           description: The date the document was modified
           format: date-time
       additionalProperties: false
+    MediaType:
+      enum:
+      - Photo
+      - Floorplan
+      - VirtualTour
+      - File
+      - Document
+      - Brochure
+      - EPC
+      - WebLink
+      type: string
     CreateDocumentResponse:
       type: object
       properties:
@@ -464,6 +426,44 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    FileType:
+      enum:
+      - JPG
+      - PDF
+      - PNG
+      - GIF
+      - TXT
+      - DOC
+      - DOCX
+      - XLSX
+      - XLS
+      - CSV
+      type: string
   securitySchemes:
     Bearer:
       type: apiKey

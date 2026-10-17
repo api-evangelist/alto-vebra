@@ -147,6 +147,18 @@ components:
       - Pending
       - Completed
       type: string
+    Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        previousToken:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     ProblemDetails:
       type: object
       properties:
@@ -172,38 +184,6 @@ components:
           - string
           - 'null'
       additionalProperties: {}
-    ReferenceCheckPagedResultsDto:
-      type: object
-      properties:
-        meta:
-          $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReferenceCheckDto'
-      additionalProperties: false
-    PatchReferenceCheckRequest:
-      type: object
-      properties:
-        status:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     ReferenceCheckDto:
       type: object
       properties:
@@ -231,6 +211,26 @@ components:
           - 'null'
           format: date-time
         modifiedBy:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ReferenceCheckPagedResultsDto:
+      type: object
+      properties:
+        meta:
+          $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReferenceCheckDto'
+      additionalProperties: false
+    PatchReferenceCheckRequest:
+      type: object
+      properties:
+        status:
           type:
           - string
           - 'null'

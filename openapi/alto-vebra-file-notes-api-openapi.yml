@@ -199,6 +199,96 @@ paths:
         - alto/route:get-inventory-propertyid-file-notes
 components:
   schemas:
+    CreateFileNoteRequest:
+      type: object
+      properties:
+        negotiatorId:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The unique identifier of a negotiator'
+        propertyId:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The unique identifier of the property to associate to the file note'
+        tenancyId:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The unique identifier of the tenancy to associate to the file note'
+        ownerIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: '[Optional] The unique identifiers (contact id) of the property owner(s) to associate to the file note'
+        contactIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: '[Optional] The unique identifiers of additional contact(s) to associate to the file note'
+        title:
+          type:
+          - string
+          - 'null'
+          description: '[Optional] Title of the file note - not currently visible to users'
+        notes:
+          type:
+          - string
+          - 'null'
+          description: '[Required] The body/content of the file note'
+        updateLastContactedDate:
+          type: boolean
+          description: When set to true the Last Contacted Date of Owners and Contacts will be updated
+        fileNoteType:
+          enum:
+          - Unspecified
+          - DetailsToVendor
+          - DetailsApproved
+          - FileNote
+          - PhoneCall
+          - EMail
+          type:
+          - string
+          - 'null'
+          description: '[Optional] The type of file note to create'
+      additionalProperties: false
+    FileNotePatchOperation:
+      anyOf:
+      - title: Title
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /Title
+        description: "\n             Title of the file note\n            \n             [Note] This field is not currently visible to users, and cannot be longer than 50 characters.\n             "
+        example: "\n{ \n    \"path\": \"/Title\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
+      - title: Notes
+        type: object
+        properties:
+          op:
+            enum:
+            - replace
+            type: string
+          value:
+            type: string
+            example: '""'
+          path:
+            type: string
+            default: /Notes
+        description: "\n             The body/content of the file note.\n            \n             [Note] This endpoint only supports fully replacing the notes text, if you need to append you must first load the existing value via the GET file note by ID endpoint, update the notes value returned, and then PATCH the updated value.\n             "
+        example: "\n{ \n    \"path\": \"/Notes\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
     GetFileNoteResponse:
       type: object
       properties:
@@ -463,101 +553,11 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    CreateFileNoteRequest:
-      type: object
-      properties:
-        negotiatorId:
-          type:
-          - string
-          - 'null'
-          description: '[Optional] The unique identifier of a negotiator'
-        propertyId:
-          type:
-          - string
-          - 'null'
-          description: '[Optional] The unique identifier of the property to associate to the file note'
-        tenancyId:
-          type:
-          - string
-          - 'null'
-          description: '[Optional] The unique identifier of the tenancy to associate to the file note'
-        ownerIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: '[Optional] The unique identifiers (contact id) of the property owner(s) to associate to the file note'
-        contactIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: '[Optional] The unique identifiers of additional contact(s) to associate to the file note'
-        title:
-          type:
-          - string
-          - 'null'
-          description: '[Optional] Title of the file note - not currently visible to users'
-        notes:
-          type:
-          - string
-          - 'null'
-          description: '[Required] The body/content of the file note'
-        updateLastContactedDate:
-          type: boolean
-          description: When set to true the Last Contacted Date of Owners and Contacts will be updated
-        fileNoteType:
-          enum:
-          - Unspecified
-          - DetailsToVendor
-          - DetailsApproved
-          - FileNote
-          - PhoneCall
-          - EMail
-          type:
-          - string
-          - 'null'
-          description: '[Optional] The type of file note to create'
-      additionalProperties: false
     FileNotePatchJsonPatchDocument:
       type: array
       items:
         $ref: '#/components/schemas/FileNotePatchOperation'
       description: Array of operations to perform
-    FileNotePatchOperation:
-      anyOf:
-      - title: Title
-        type: object
-        properties:
-          op:
-            enum:
-            - replace
-            type: string
-          value:
-            type: string
-            example: '""'
-          path:
-            type: string
-            default: /Title
-        description: "\n             Title of the file note\n            \n             [Note] This field is not currently visible to users, and cannot be longer than 50 characters.\n             "
-        example: "\n{ \n    \"path\": \"/Title\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
-      - title: Notes
-        type: object
-        properties:
-          op:
-            enum:
-            - replace
-            type: string
-          value:
-            type: string
-            example: '""'
-          path:
-            type: string
-            default: /Notes
-        description: "\n             The body/content of the file note.\n            \n             [Note] This endpoint only supports fully replacing the notes text, if you need to append you must first load the existing value via the GET file note by ID endpoint, update the notes value returned, and then PATCH the updated value.\n             "
-        example: "\n{ \n    \"path\": \"/Notes\", \n    \"op\": \"replace\", \n    \"value\": \"\"\n}"
   securitySchemes:
     Bearer:
       type: apiKey

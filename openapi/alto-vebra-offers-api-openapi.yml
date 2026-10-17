@@ -85,18 +85,6 @@ components:
           items:
             $ref: '#/components/schemas/Error'
       additionalProperties: false
-    Error:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     Offer:
       type: object
       properties:
@@ -159,6 +147,18 @@ components:
           - string
           - 'null'
         contactsJson:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        message:
           type:
           - string
           - 'null'

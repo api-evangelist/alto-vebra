@@ -64,17 +64,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    EmailAddress:
-      type: object
-      properties:
-        preferenceOrder:
-          type: integer
-          format: int32
-        address:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
     Name:
       type: object
       properties:
@@ -131,6 +120,47 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    Phone:
+      type: object
+      properties:
+        preferenceOrder:
+          type: integer
+          format: int32
+        type:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ClientData:
+      type: object
+      properties:
+        contactId:
+          type: integer
+          format: int32
+        groupId:
+          type: integer
+          format: int32
+        branchId:
+          type: integer
+          format: int32
+        people:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Person'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+      additionalProperties: false
     ProblemDetails:
       type: object
       properties:
@@ -166,28 +196,6 @@ components:
           items:
             $ref: '#/components/schemas/ClientData'
       additionalProperties: false
-    ClientData:
-      type: object
-      properties:
-        contactId:
-          type: integer
-          format: int32
-        groupId:
-          type: integer
-          format: int32
-        branchId:
-          type: integer
-          format: int32
-        people:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Person'
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Address'
-      additionalProperties: false
     Person:
       type: object
       properties:
@@ -210,21 +218,13 @@ components:
           items:
             $ref: '#/components/schemas/EmailAddress'
       additionalProperties: false
-    Phone:
+    EmailAddress:
       type: object
       properties:
         preferenceOrder:
           type: integer
           format: int32
-        type:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        number:
+        address:
           type:
           - string
           - 'null'

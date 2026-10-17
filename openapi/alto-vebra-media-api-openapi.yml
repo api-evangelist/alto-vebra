@@ -163,13 +163,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PostLinkMediaItemResponse:
-      type: object
-      properties:
-        mediaId:
-          type: integer
-          format: int32
-      additionalProperties: false
     PostMediaItemResponse:
       type: object
       properties:
@@ -227,6 +220,13 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    PostLinkMediaItemResponse:
+      type: object
+      properties:
+        mediaId:
+          type: integer
+          format: int32
       additionalProperties: false
   securitySchemes:
     Bearer:

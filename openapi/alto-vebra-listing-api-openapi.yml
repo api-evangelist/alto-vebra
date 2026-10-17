@@ -514,20 +514,46 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ListingImageResponse:
+    ListingRentalResponse:
       type: object
       properties:
-        order:
-          type: integer
-          format: int32
-        main:
-          type: boolean
-        modifiedDate:
-          type: string
+        frequency:
+          type:
+          - string
+          - 'null'
+        availableFrom:
+          type:
+          - string
+          - 'null'
           format: date-time
-        sizes:
-          allOf:
-          - $ref: '#/components/schemas/ListingSizesResponse'
+        deposit:
+          type:
+          - number
+          - 'null'
+          format: double
+        furnishing:
+          type:
+          - string
+          - 'null'
+        lettingType:
+          type:
+          - string
+          - 'null'
+        children:
+          type: boolean
+          description: Whether children are allowed
+        pets:
+          type: boolean
+          description: Whether pets are allowed
+        smokers:
+          type: boolean
+          description: Whether smokers are allowed
+        termLengthMonths:
+          type:
+          - integer
+          - 'null'
+          description: Term Length (months)
+          format: int32
       additionalProperties: false
     ListingLeaseResponse:
       type: object
@@ -622,160 +648,19 @@ components:
       - Ascending
       - Descending
       type: string
-    PatchListingRoomsRequestJsonPatchDocument:
+    ListingMapLocationResponse:
       type: object
       properties:
-        operations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PatchListingRoomsRequestOperation'
-          readOnly: true
-      additionalProperties: false
-    ListingMappingResponse:
-      type: object
-      properties:
-        mapLocation:
-          allOf:
-          - $ref: '#/components/schemas/ListingMapLocationResponse'
-        streetView:
-          allOf:
-          - $ref: '#/components/schemas/ListingStreetViewResponse'
-      additionalProperties: false
-    ListingImageDetailResponse:
-      type: object
-      properties:
-        src:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ListingSizesResponse:
-      type: object
-      properties:
-        screen:
-          allOf:
-          - $ref: '#/components/schemas/ListingImageDetailResponse'
-        thumbnail:
-          allOf:
-          - $ref: '#/components/schemas/ListingImageDetailResponse'
-        tile:
-          allOf:
-          - $ref: '#/components/schemas/ListingImageDetailResponse'
-      additionalProperties: false
-    PatchListingRoomsRequestOperation:
-      type: object
-      properties:
-        path:
-          type:
-          - string
-          - 'null'
-        op:
-          type:
-          - string
-          - 'null'
-        from:
-          type:
-          - string
-          - 'null'
-        value: {}
-      additionalProperties: false
-    ListingLinkResponse:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
-        modifiedDate:
-          type: string
-          format: date-time
-      additionalProperties: false
-    RoomRecordType:
-      enum:
-      - Unspecified
-      - Room
-      - Paragraph
-      type: string
-    FilterListingResponsePagedResponse:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FilterListingResponse'
-      additionalProperties: false
-    FilterListingResponse:
-      type: object
-      properties:
-        propertyId:
-          type: integer
-          description: The unique identifier of the property.
-          format: int32
-        branchId:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of the branch.
-        status:
-          allOf:
-          - $ref: '#/components/schemas/InventoryStatus'
-          description: The status of the property.
-        bedrooms:
-          type:
-          - integer
-          - 'null'
-          description: The number of bedrooms in the property.
-          format: int32
-        priceQualifier:
-          type:
-          - string
-          - 'null'
-          description: The price qualifier on the property.
-        currency:
-          type:
-          - string
-          - 'null'
-          description: The currency associated with the price.
-        price:
+        latitude:
           type:
           - number
           - 'null'
-          description: The price of the property.
           format: double
-        auction:
+        longitude:
           type:
-          - boolean
+          - number
           - 'null'
-          description: Whether the property is for auction.
-        auctionClosingDate:
-          type:
-          - string
-          - 'null'
-          description: The closing date of the auction.
-          format: date-time
-        createdDate:
-          type:
-          - string
-          - 'null'
-          description: The date and time the property was created.
-          format: date-time
-        modifiedDate:
-          type:
-          - string
-          - 'null'
-          description: The date and time the property was last modified.
-          format: date-time
+          format: double
       additionalProperties: false
     ListingAuctionResponse:
       type: object
@@ -797,89 +682,6 @@ components:
           - 'null'
           description: The reserve amount for the auction.
           format: double
-      additionalProperties: false
-    Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        previousToken:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    PutListingSummaryOperation:
-      type: object
-      properties:
-        path:
-          type:
-          - string
-          - 'null'
-        op:
-          type:
-          - string
-          - 'null'
-        from:
-          type:
-          - string
-          - 'null'
-        value: {}
-      additionalProperties: false
-    ListingSaleResponse:
-      type: object
-      properties:
-        tenure:
-          type:
-          - string
-          - 'null'
-        newHome:
-          type: boolean
-      additionalProperties: false
-    ListingMapLocationResponse:
-      type: object
-      properties:
-        latitude:
-          type:
-          - number
-          - 'null'
-          format: double
-        longitude:
-          type:
-          - number
-          - 'null'
-          format: double
-      additionalProperties: false
-    SortBy:
-      enum:
-      - Modified
-      - Created
-      - Id
-      type: string
-    ListingResponseItemCollection:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ListingResponse'
-      additionalProperties: false
-    ListingBulletResponse:
-      type: object
-      properties:
-        orderIndex:
-          type: integer
-          format: int32
-        content:
-          type:
-          - string
-          - 'null'
       additionalProperties: false
     InventoryStatus:
       enum:
@@ -903,35 +705,12 @@ components:
       - ExternallySold
       - Reserved
       type: string
-    ListingStreetViewResponse:
-      type: object
-      properties:
-        latitude:
-          type:
-          - number
-          - 'null'
-          format: double
-        longitude:
-          type:
-          - number
-          - 'null'
-          format: double
-        heading:
-          type:
-          - number
-          - 'null'
-          format: double
-        pitch:
-          type:
-          - number
-          - 'null'
-          format: double
-        zoom:
-          type:
-          - integer
-          - 'null'
-          format: int32
-      additionalProperties: false
+    RoomRecordType:
+      enum:
+      - Unspecified
+      - Room
+      - Paragraph
+      type: string
     ListingBrochureResponse:
       type: object
       properties:
@@ -949,6 +728,56 @@ components:
         defaultPropertyBrochure:
           type: boolean
       additionalProperties: false
+    ListingMappingResponse:
+      type: object
+      properties:
+        mapLocation:
+          allOf:
+          - $ref: '#/components/schemas/ListingMapLocationResponse'
+        streetView:
+          allOf:
+          - $ref: '#/components/schemas/ListingStreetViewResponse'
+      additionalProperties: false
+    ListingImagesResponse:
+      type: object
+      properties:
+        galleryImages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingImageResponse'
+        virtualTourImages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingImageResponse'
+        virtualTourLinks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingLinkResponse'
+        floorplanImages:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingImageResponse'
+        webLinks:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingLinkResponse'
+        externalBrochures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ListingBrochureResponse'
+      additionalProperties: false
     PutListingSummaryJsonPatchDocument:
       type: object
       properties:
@@ -960,31 +789,107 @@ components:
             $ref: '#/components/schemas/PutListingSummaryOperation'
           readOnly: true
       additionalProperties: false
-    ProblemDetails:
+    Meta:
       type: object
       properties:
-        type:
+        nextToken:
           type:
           - string
           - 'null'
-        title:
+        previousToken:
           type:
           - string
           - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
+      additionalProperties: false
+    ListingRoomResponse:
+      type: object
+      properties:
+        id:
+          type: integer
           format: int32
-        detail:
+        orderIndex:
+          type: integer
+          format: int32
+        name:
           type:
           - string
           - 'null'
-        instance:
+        size:
           type:
           - string
           - 'null'
-      additionalProperties: {}
+        sizeMetric:
+          type:
+          - string
+          - 'null'
+        sizeImperial:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        roomRecordType:
+          allOf:
+          - $ref: '#/components/schemas/RoomRecordType'
+      additionalProperties: false
+    FilterListingResponsePagedResponse:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FilterListingResponse'
+      additionalProperties: false
+    ListingLinkResponse:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        modifiedDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    PatchListingRoomsRequestOperation:
+      type: object
+      properties:
+        path:
+          type:
+          - string
+          - 'null'
+        op:
+          type:
+          - string
+          - 'null'
+        from:
+          type:
+          - string
+          - 'null'
+        value: {}
+      additionalProperties: false
+    PatchListingRoomsRequestJsonPatchDocument:
+      type: object
+      properties:
+        operations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PatchListingRoomsRequestOperation'
+          readOnly: true
+      additionalProperties: false
     ListingResponse:
       type: object
       properties:
@@ -1145,119 +1050,214 @@ components:
           - 'null'
           format: date-time
       additionalProperties: false
-    ListingRentalResponse:
+    SortBy:
+      enum:
+      - Modified
+      - Created
+      - Id
+      type: string
+    ListingBulletResponse:
       type: object
       properties:
-        frequency:
+        orderIndex:
+          type: integer
+          format: int32
+        content:
           type:
           - string
           - 'null'
-        availableFrom:
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
           type:
           - string
           - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    ListingSizesResponse:
+      type: object
+      properties:
+        screen:
+          allOf:
+          - $ref: '#/components/schemas/ListingImageDetailResponse'
+        thumbnail:
+          allOf:
+          - $ref: '#/components/schemas/ListingImageDetailResponse'
+        tile:
+          allOf:
+          - $ref: '#/components/schemas/ListingImageDetailResponse'
+      additionalProperties: false
+    ListingImageResponse:
+      type: object
+      properties:
+        order:
+          type: integer
+          format: int32
+        main:
+          type: boolean
+        modifiedDate:
+          type: string
           format: date-time
-        deposit:
+        sizes:
+          allOf:
+          - $ref: '#/components/schemas/ListingSizesResponse'
+      additionalProperties: false
+    PutListingSummaryOperation:
+      type: object
+      properties:
+        path:
+          type:
+          - string
+          - 'null'
+        op:
+          type:
+          - string
+          - 'null'
+        from:
+          type:
+          - string
+          - 'null'
+        value: {}
+      additionalProperties: false
+    FilterListingResponse:
+      type: object
+      properties:
+        propertyId:
+          type: integer
+          description: The unique identifier of the property.
+          format: int32
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of the branch.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/InventoryStatus'
+          description: The status of the property.
+        bedrooms:
+          type:
+          - integer
+          - 'null'
+          description: The number of bedrooms in the property.
+          format: int32
+        priceQualifier:
+          type:
+          - string
+          - 'null'
+          description: The price qualifier on the property.
+        currency:
+          type:
+          - string
+          - 'null'
+          description: The currency associated with the price.
+        price:
+          type:
+          - number
+          - 'null'
+          description: The price of the property.
+          format: double
+        auction:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the property is for auction.
+        auctionClosingDate:
+          type:
+          - string
+          - 'null'
+          description: The closing date of the auction.
+          format: date-time
+        createdDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time the property was created.
+          format: date-time
+        modifiedDate:
+          type:
+          - string
+          - 'null'
+          description: The date and time the property was last modified.
+          format: date-time
+      additionalProperties: false
+    ListingImageDetailResponse:
+      type: object
+      properties:
+        src:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
+    ListingSaleResponse:
+      type: object
+      properties:
+        tenure:
+          type:
+          - string
+          - 'null'
+        newHome:
+          type: boolean
+      additionalProperties: false
+    ListingStreetViewResponse:
+      type: object
+      properties:
+        latitude:
           type:
           - number
           - 'null'
           format: double
-        furnishing:
+        longitude:
           type:
-          - string
+          - number
           - 'null'
-        lettingType:
+          format: double
+        heading:
           type:
-          - string
+          - number
           - 'null'
-        children:
-          type: boolean
-          description: Whether children are allowed
-        pets:
-          type: boolean
-          description: Whether pets are allowed
-        smokers:
-          type: boolean
-          description: Whether smokers are allowed
-        termLengthMonths:
+          format: double
+        pitch:
+          type:
+          - number
+          - 'null'
+          format: double
+        zoom:
           type:
           - integer
           - 'null'
-          description: Term Length (months)
           format: int32
       additionalProperties: false
-    ListingRoomResponse:
+    ListingResponseItemCollection:
       type: object
       properties:
-        id:
+        totalCount:
           type: integer
           format: int32
-        orderIndex:
-          type: integer
-          format: int32
-        name:
-          type:
-          - string
-          - 'null'
-        size:
-          type:
-          - string
-          - 'null'
-        sizeMetric:
-          type:
-          - string
-          - 'null'
-        sizeImperial:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        roomRecordType:
-          allOf:
-          - $ref: '#/components/schemas/RoomRecordType'
-      additionalProperties: false
-    ListingImagesResponse:
-      type: object
-      properties:
-        galleryImages:
+        items:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/ListingImageResponse'
-        virtualTourImages:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ListingImageResponse'
-        virtualTourLinks:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ListingLinkResponse'
-        floorplanImages:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ListingImageResponse'
-        webLinks:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ListingLinkResponse'
-        externalBrochures:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ListingBrochureResponse'
+            $ref: '#/components/schemas/ListingResponse'
       additionalProperties: false
   securitySchemes:
     Bearer:

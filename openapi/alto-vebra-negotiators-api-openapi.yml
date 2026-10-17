@@ -99,6 +99,19 @@ components:
           - string
           - 'null'
       additionalProperties: false
+    NegotiatorPagedResponse:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Negotiator'
+      additionalProperties: false
     Negotiator:
       type: object
       properties:
@@ -142,19 +155,6 @@ components:
           description: Whether the negotiator is an authorised signatory.
       additionalProperties: false
       description: Represents an negotiator.
-    NegotiatorPagedResponse:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Negotiator'
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

@@ -152,42 +152,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Alto.PropertyManagement.Api.Models.Responses.Meta:
-      type: object
-      properties:
-        nextToken:
-          type:
-          - string
-          - 'null'
-        totalItems:
-          type: integer
-          format: int32
-      additionalProperties: false
-    Alto.Api.Material.Hateoas.Link:
-      type: object
-      properties:
-        href:
-          type:
-          - string
-          - 'null'
-        rel:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.Landlord:
-      type: object
-      properties:
-        totalCount:
-          type: integer
-          format: int32
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Landlord'
-      additionalProperties: false
     Alto.PropertyManagement.Api.Models.Responses.Address:
       type: object
       properties:
@@ -224,9 +188,62 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.Person:
+    Alto.PropertyManagement.Api.Models.DTOs.ItemCollection1_Alto.PropertyManagement.Api.Models.Responses.Landlord:
       type: object
       properties:
+        totalCount:
+          type: integer
+          format: int32
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Landlord'
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.Meta:
+      type: object
+      properties:
+        nextToken:
+          type:
+          - string
+          - 'null'
+        totalItems:
+          type: integer
+          format: int32
+      additionalProperties: false
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        title:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - integer
+          - 'null'
+          format: int32
+        detail:
+          type:
+          - string
+          - 'null'
+        instance:
+          type:
+          - string
+          - 'null'
+      additionalProperties: {}
+    Alto.PropertyManagement.Api.Models.Responses.Landlord:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
         title:
           type:
           - string
@@ -239,44 +256,16 @@ components:
           type:
           - string
           - 'null'
-        emailAddresses:
+        phone:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: string
-        telephoneNumbers:
+        email:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: string
-      additionalProperties: false
-    Alto.PropertyManagement.Api.Models.Responses.LandlordListItem:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        branchId:
-          type: integer
-          format: int32
         address:
           $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Address'
-        people:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Person'
-        properties:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.LandlordProperty'
-        active:
-          type: boolean
         createdDate:
           type:
           - string
@@ -353,38 +342,9 @@ components:
           items:
             $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.LandlordListItem'
       additionalProperties: false
-    Microsoft.AspNetCore.Mvc.ProblemDetails:
+    Alto.PropertyManagement.Api.Models.Responses.Person:
       type: object
       properties:
-        type:
-          type:
-          - string
-          - 'null'
-        title:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - integer
-          - 'null'
-          format: int32
-        detail:
-          type:
-          - string
-          - 'null'
-        instance:
-          type:
-          - string
-          - 'null'
-      additionalProperties: {}
-    Alto.PropertyManagement.Api.Models.Responses.Landlord:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
         title:
           type:
           - string
@@ -397,16 +357,44 @@ components:
           type:
           - string
           - 'null'
-        phone:
+        emailAddresses:
           type:
-          - string
+          - array
           - 'null'
-        email:
+          items:
+            type: string
+        telephoneNumbers:
           type:
-          - string
+          - array
           - 'null'
+          items:
+            type: string
+      additionalProperties: false
+    Alto.PropertyManagement.Api.Models.Responses.LandlordListItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        branchId:
+          type: integer
+          format: int32
         address:
           $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Address'
+        people:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.Person'
+        properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Alto.PropertyManagement.Api.Models.Responses.LandlordProperty'
+        active:
+          type: boolean
         createdDate:
           type:
           - string
@@ -424,6 +412,18 @@ components:
           items:
             $ref: '#/components/schemas/Alto.Api.Material.Hateoas.Link'
           readOnly: true
+      additionalProperties: false
+    Alto.Api.Material.Hateoas.Link:
+      type: object
+      properties:
+        href:
+          type:
+          - string
+          - 'null'
+        rel:
+          type:
+          - string
+          - 'null'
       additionalProperties: false
   securitySchemes:
     Bearer:

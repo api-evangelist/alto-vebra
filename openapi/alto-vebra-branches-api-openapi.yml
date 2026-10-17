@@ -93,51 +93,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    PropertyRecordType:
-      enum:
-      - Unspecified
-      - Sale
-      - Rent
-      type: string
-    Branch:
-      type: object
-      properties:
-        branchId:
-          type:
-          - string
-          - 'null'
-          description: The ID of the branch.
-        createdAt:
-          type:
-          - string
-          - 'null'
-          description: The date and time the branch was created.
-          format: date-time
-        modifiedAt:
-          type:
-          - string
-          - 'null'
-          description: The date and time the branch was last modified.
-          format: date-time
-        name:
-          type:
-          - string
-          - 'null'
-          description: The name of the branch.
-        address:
-          allOf:
-          - $ref: '#/components/schemas/Address'
-          description: The branch address.
-        status:
-          allOf:
-          - $ref: '#/components/schemas/BranchStatus'
-          description: The status of the branch.
-        defaultMarket:
-          allOf:
-          - $ref: '#/components/schemas/PropertyRecordType'
-          description: The default market of the branch.
-      additionalProperties: false
-      description: Represents a branch.
     Address:
       type: object
       properties:
@@ -178,24 +133,56 @@ components:
           - string
           - 'null'
       additionalProperties: false
-    BranchPagedResponse:
-      type: object
-      properties:
-        meta:
-          allOf:
-          - $ref: '#/components/schemas/Meta'
-        items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Branch'
-      additionalProperties: false
     BranchStatus:
       enum:
       - Unknown
       - Active
       - Inactive
+      type: string
+    Branch:
+      type: object
+      properties:
+        branchId:
+          type:
+          - string
+          - 'null'
+          description: The ID of the branch.
+        createdAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the branch was created.
+          format: date-time
+        modifiedAt:
+          type:
+          - string
+          - 'null'
+          description: The date and time the branch was last modified.
+          format: date-time
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the branch.
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          description: The branch address.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BranchStatus'
+          description: The status of the branch.
+        defaultMarket:
+          allOf:
+          - $ref: '#/components/schemas/PropertyRecordType'
+          description: The default market of the branch.
+      additionalProperties: false
+      description: Represents a branch.
+    PropertyRecordType:
+      enum:
+      - Unspecified
+      - Sale
+      - Rent
       type: string
     Meta:
       type: object
@@ -208,6 +195,19 @@ components:
           type:
           - string
           - 'null'
+      additionalProperties: false
+    BranchPagedResponse:
+      type: object
+      properties:
+        meta:
+          allOf:
+          - $ref: '#/components/schemas/Meta'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Branch'
       additionalProperties: false
   securitySchemes:
     Bearer:

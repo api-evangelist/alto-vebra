@@ -149,6 +149,30 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    GetReferralResponse:
+      type: object
+      properties:
+        propertyId:
+          type: integer
+          format: int32
+        refereeId:
+          type: integer
+          format: int32
+        tenancyId:
+          type: integer
+          format: int32
+        offerId:
+          type: integer
+          format: int32
+        status:
+          type:
+          - string
+          - 'null'
+        agentEmail:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     ProblemDetails:
       type: object
       properties:
@@ -174,6 +198,11 @@ components:
           - string
           - 'null'
       additionalProperties: {}
+    ReferralPatchJsonPatchDocument:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReferralPatchOperation'
+      description: Array of operations to perform
     ReferralPatchOperation:
       anyOf:
       - title: /status
@@ -208,35 +237,6 @@ components:
             example: /fees
         description: "\n            The fees amount of the referral\n            "
         example: "\n        {\n            \"path\": \"/fees\",\n            \"op\": \"replace\",\n            \"value\": 100.00\n        }"
-    GetReferralResponse:
-      type: object
-      properties:
-        propertyId:
-          type: integer
-          format: int32
-        refereeId:
-          type: integer
-          format: int32
-        tenancyId:
-          type: integer
-          format: int32
-        offerId:
-          type: integer
-          format: int32
-        status:
-          type:
-          - string
-          - 'null'
-        agentEmail:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    ReferralPatchJsonPatchDocument:
-      type: array
-      items:
-        $ref: '#/components/schemas/ReferralPatchOperation'
-      description: Array of operations to perform
   securitySchemes:
     Bearer:
       type: apiKey
