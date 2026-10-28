@@ -1,4 +1,4 @@
-# Alto (Vebra / Zoopla) (alto-vebra)
+# Alto (Vebra / Zoopla)
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,163 +64,175 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Alto — formerly Vebra Alto, and still trading through vebra.com — is the United Kingdom's most widely deployed estate agency CRM, used by more than 6,000 sales and lettings agencies to run valuations, listings, applicant matching, offers, sales and lettings progression, tenancies, property management, work orders and client accounting. It is owned by Houseful Limited, the parent of the Zoopla portal, which places Alto at the exact chokepoint of the UK residential market — the country has no MLS, so listings reach Rightmove and Zoopla through agency CRM software rather than a shared cooperative database, and Alto is the largest of those pipes. Its API posture is genuinely strong on the contract side and closed on the access side: Alto publishes an open, unauthenticated developer portal at developers.vebraalto.com carrying a complete OpenAPI 3.0.4 document (95 paths across 27 resource families) served verbatim from api-docs.vebraalto.com, alongside 24 documented CloudEvents 1.0 webhook event types. But credentials are partner-only — a developer must register an integration in Alto Connect, be bound by an existing contract with Vebra Solutions, and then wait for an individual agency to activate the integration and issue an AgencyRef before a single call can be made.
+Alto — formerly Vebra Alto, and still trading through vebra.com — is the United Kingdom's most widely deployed estate agency CRM, used by more than 6,000 sales and lettings agency branches to run valuations, listings, applicant matching, offers, sales and lettings progression, tenancies, property management, work orders and client accounting. It is owned by Houseful Limited, the parent of the Zoopla portal, which places Alto at the exact chokepoint of the UK residential market — the country has no MLS, so listings reach Rightmove and Zoopla through agency CRM software rather than a shared cooperative database, and Alto is the largest of those pipes. Its API posture is genuinely strong on the contract side and closed on the access side: Alto publishes an open, unauthenticated developer portal at developers.vebraalto.com carrying a complete OpenAPI 3.0.4 document (95 paths, 112 operations across 27 resource families) served verbatim from api-docs.vebraalto.com, alongside 26 documented CloudEvents 1.0 webhook event types and 101 published OAuth scope strings. But credentials are partner-only — a developer must register an integration in Alto Connect, be bound by an existing contract with Vebra Solutions, and then wait for an individual agency to activate the integration and issue an AgencyRef before a single call can be made. Sibling Zoopla portal product APIs (Leads, Premium Listing Activations, Weekly Featured Property) are documented publicly at developers.zoopla.co.uk with downloadable specs but are likewise restricted to contracted Zoopla agency customers. There is no SDK, CLI, Postman collection, MCP server or status page anywhere in the estate, and no RESO Web API or Data Dictionary certification exists — RESO is a North American NAR-driven standard with no UK counterpart. Alto publishes no open data; the UK's open property layer sits with HM Land Registry and Ordnance Survey, not with the private CRM duopoly feeders.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/alto-vebra/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/alto-vebra/refs/heads/main/apis.yml)
+**Areas:** Real Estate · United Kingdom · PropTech · Property Listings · CRM · Property Management · Rentals · Conveyancing · Estate Agency · Tenancy · Webhook · Event
 
-## Tags
+## Alto (Vebra / Zoopla) on APIs.io
 
-- Real Estate
-- United Kingdom
-- PropTech
-- Property Listings
-- CRM
-- Property Management
-- Rentals
-- Conveyancing
-- Estate Agency
-- Tenancy
+Everything profiled for Alto (Vebra / Zoopla) is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/alto-vebra/](https://apis.io/providers/alto-vebra/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (29)
 
-- **Created:** 2026-07-26
-- **Modified:** 2026-07-26
+- [Alto (Vebra / Zoopla) Appointments API](https://apis.io/apis/alto-vebra/alto-vebra-appointments-api/) — The Appointments API from Alto (Vebra / Zoopla) — 7 operation(s) for appointments.
+- [Alto (Vebra / Zoopla) Appraisals API](https://apis.io/apis/alto-vebra/alto-vebra-appraisals-api/) — The Appraisals API from Alto (Vebra / Zoopla) — 2 operation(s) for appraisals.
+- [Alto (Vebra / Zoopla) Branches API](https://apis.io/apis/alto-vebra/alto-vebra-branches-api/) — The Branches API from Alto (Vebra / Zoopla) — 2 operation(s) for branches.
+- [Alto (Vebra / Zoopla) Charges API](https://apis.io/apis/alto-vebra/alto-vebra-charges-api/) — The Charges API from Alto (Vebra / Zoopla) — 2 operation(s) for charges.
+- [Alto (Vebra / Zoopla) Clients API](https://apis.io/apis/alto-vebra/alto-vebra-clients-api/) — The Clients API from Alto (Vebra / Zoopla) — 1 operation(s) for clients.
+- [Alto (Vebra / Zoopla) Contacts API](https://apis.io/apis/alto-vebra/alto-vebra-contacts-api/) — The Contacts API from Alto (Vebra / Zoopla) — 13 operation(s) for contacts.
+- [Alto (Vebra / Zoopla) Documents API](https://apis.io/apis/alto-vebra/alto-vebra-documents-api/) — The Documents API from Alto (Vebra / Zoopla) — 5 operation(s) for documents.
+- [Alto (Vebra / Zoopla) Inventory API](https://apis.io/apis/alto-vebra/alto-vebra-inventory-api/) — The Inventory API from Alto (Vebra / Zoopla) — 10 operation(s) for inventory.
+- [Alto (Vebra / Zoopla) Landlords API](https://apis.io/apis/alto-vebra/alto-vebra-landlords-api/) — The Landlords API from Alto (Vebra / Zoopla) — 2 operation(s) for landlords.
+- [Alto (Vebra / Zoopla) Leads API](https://apis.io/apis/alto-vebra/alto-vebra-leads-api/) — The Leads API from Alto (Vebra / Zoopla) — 2 operation(s) for leads.
+- [Alto (Vebra / Zoopla) Lettings Progression API](https://apis.io/apis/alto-vebra/alto-vebra-lettingsprogression-api/) — The LettingsProgression API from Alto (Vebra / Zoopla) — 1 operation(s) for lettingsprogression.
+- [Alto (Vebra / Zoopla) Listing API](https://apis.io/apis/alto-vebra/alto-vebra-listing-api/) — The Listing API from Alto (Vebra / Zoopla) — 7 operation(s) for listing.
+- [Alto (Vebra / Zoopla) Management Events API](https://apis.io/apis/alto-vebra/alto-vebra-managementevents-api/) — The ManagementEvents API from Alto (Vebra / Zoopla) — 3 operation(s) for managementevents.
+- [Alto (Vebra / Zoopla) Media API](https://apis.io/apis/alto-vebra/alto-vebra-media-api/) — The Media API from Alto (Vebra / Zoopla) — 3 operation(s) for media.
+- [Alto (Vebra / Zoopla) Negotiators API](https://apis.io/apis/alto-vebra/alto-vebra-negotiators-api/) — The Negotiators API from Alto (Vebra / Zoopla) — 2 operation(s) for negotiators.
+- [Alto (Vebra / Zoopla) Offers API](https://apis.io/apis/alto-vebra/alto-vebra-offers-api/) — The Offers API from Alto (Vebra / Zoopla) — 1 operation(s) for offers.
+- [Alto (Vebra / Zoopla) Owners API](https://apis.io/apis/alto-vebra/alto-vebra-owners-api/) — The Owners API from Alto (Vebra / Zoopla) — 1 operation(s) for owners.
+- [Alto (Vebra / Zoopla) Parameters API](https://apis.io/apis/alto-vebra/alto-vebra-parameters-api/) — The Parameters API from Alto (Vebra / Zoopla) — 6 operation(s) for parameters.
+- [Alto (Vebra / Zoopla) Partners API](https://apis.io/apis/alto-vebra/alto-vebra-partners-api/) — The Partners API from Alto (Vebra / Zoopla) — 3 operation(s) for partners.
+- [Alto (Vebra / Zoopla) Products API](https://apis.io/apis/alto-vebra/alto-vebra-products-api/) — The Products API from Alto (Vebra / Zoopla) — 4 operation(s) for products.
+- [Alto (Vebra / Zoopla) Reference Checks API](https://apis.io/apis/alto-vebra/alto-vebra-referencechecks-api/) — The ReferenceChecks API from Alto (Vebra / Zoopla) — 2 operation(s) for referencechecks.
+- [Alto (Vebra / Zoopla) Referral API](https://apis.io/apis/alto-vebra/alto-vebra-referral-api/) — The Referral API from Alto (Vebra / Zoopla) — 1 operation(s) for referral.
+- [Alto (Vebra / Zoopla) Referrals API](https://apis.io/apis/alto-vebra/alto-vebra-referrals-api/) — The Referrals API from Alto (Vebra / Zoopla) — 1 operation(s) for referrals.
+- [Alto (Vebra / Zoopla) REST Endpoints API](https://apis.io/apis/alto-vebra/alto-vebra-rest-endpoints-api/) — The REST Endpoints API from Alto (Vebra / Zoopla) — 2 operation(s) for rest endpoints.
+- [Alto (Vebra / Zoopla) Sales Progression API](https://apis.io/apis/alto-vebra/alto-vebra-salesprogression-api/) — The SalesProgression API from Alto (Vebra / Zoopla) — 2 operation(s) for salesprogression.
+- [Alto (Vebra / Zoopla) Suppliers API](https://apis.io/apis/alto-vebra/alto-vebra-suppliers-api/) — The Suppliers API from Alto (Vebra / Zoopla) — 3 operation(s) for suppliers.
+- [Alto (Vebra / Zoopla) Tenancies API](https://apis.io/apis/alto-vebra/alto-vebra-tenancies-api/) — The Tenancies API from Alto (Vebra / Zoopla) — 6 operation(s) for tenancies.
+- [Alto (Vebra / Zoopla) File Notes API](https://apis.io/apis/alto-vebra/alto-vebra-file-notes-api/) — The File Notes API from Alto (Vebra / Zoopla) — 4 operation(s) for file notes.
+- [Alto (Vebra / Zoopla) Work Orders API](https://apis.io/apis/alto-vebra/alto-vebra-work-orders-api/) — The Work Orders API from Alto (Vebra / Zoopla) — 3 operation(s) for work orders.
 
-## APIs
+### Published properties
 
-### Alto API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-The full Alto REST API for UK estate agency operations — 95 documented paths across 27 resource families covering contacts and applicants, property inventory, listings and media, appraisals and valuations, appointments and viewings, leads, offers, sales progression, lettings progression, tenancies, landlords and owners, work orders, suppliers, documents, file notes, branches, negotiators and partner integration status. OpenAPI 3.0.4 with a sandbox and a production server, Bearer JWT obtained via OAuth2 client-credentials against the /token endpoint, an AgencyRef header scoping every call to one agency, and route-level scopes of the form `alto/read:contacts` and `alto/route:get-inventory`.
+#### AsyncAPI (2)
 
-- **Human URL:** [https://developers.vebraalto.com/api](https://developers.vebraalto.com/api)
-- **Base URL:** `https://api.alto.zoopla.co.uk`
+Event-driven and webhook contracts.
 
-#### Tags
+- [Alto Webhooks](https://apis.io/asyncapis/alto-vebra/alto-vebra-alto-webhooks-asyncapi/)
+- [Zoopla Lead Push Service](https://apis.io/asyncapis/alto-vebra/alto-vebra-zoopla-leads-push-asyncapi/)
 
-- Real Estate
-- CRM
-- Property Listings
-- Tenancy
-- Property Management
-- United Kingdom
+#### Event channels (2)
 
-#### Properties
+Individual events and webhooks the provider emits.
 
-- [OpenAPI](openapi/alto-api-openapi.json) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Documentation](https://developers.vebraalto.com/)
-- [API Reference](https://developers.vebraalto.com/api)
-- [Authentication](https://developers.vebraalto.com/guides/authenticating-your-requests/)
-- [Webhooks](https://developers.vebraalto.com/guides/webhooks/)
-- [Terms of Service](https://developers.vebraalto.com/api-terms-of-use)
-- [Errors](https://developers.vebraalto.com/guides/error-codes/)
-- [Glossary](https://developers.vebraalto.com/guides/glossary/)
-- [Sandbox](https://developers.vebraalto.com/guides/access-to-sandbox-alto-ui/)
-- [Portal](https://connect.vebraalto.com/connect)
-- [Support](https://partnerfeedback.vebraalto.com/)
+- [/](https://apis.io/channels/alto-vebra/altonotifications/)
+- [/](https://apis.io/channels/alto-vebra/zooplaleads/)
 
-### Zoopla Leads API
+#### MCP servers (1)
 
-Swagger 2.0 poll API for retrieving applicant leads and appraisal (valuation) leads generated on the Zoopla portal, published by Houseful for contracted Zoopla agency customers and their software partners. OAuth2 client-credentials against services-auth.services.zoopla.co.uk with the scopes `leads/list:applicant-leads` and `leads/list:appraisal-leads`. A push variant is documented alongside the poll contract.
+Model Context Protocol servers that expose the API to agents.
 
-- **Human URL:** [https://developers.zoopla.co.uk/leads/reference/api](https://developers.zoopla.co.uk/leads/reference/api)
-- **Base URL:** `https://services.zoopla.co.uk`
+- [alto-vebra](https://apis.io/servers/alto-vebra/alto-vebra/)
 
-#### Tags
+#### Agentic access (1)
 
-- Real Estate
-- Leads
-- Property Listings
-- United Kingdom
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Properties
+- [Alto Vebra Agentic Access](https://apis.io/agentic-access/alto-vebra/alto-vebra-agentic-access/)
 
-- [OpenAPI](openapi/zoopla-leads-api-openapi.json) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Documentation](https://developers.zoopla.co.uk/leads/docs/available-lead-services)
-- [API Reference](https://developers.zoopla.co.uk/leads/reference/api)
-- [Documentation](https://developers.zoopla.co.uk/leads/docs/push-service)
-- [Documentation](https://developers.zoopla.co.uk/leads/docs/field-definitions)
-- [Authentication](https://developers.zoopla.co.uk/docs/authentication)
-- [Terms of Service](https://developers.zoopla.co.uk/docs/terms-of-use)
+#### Collections (4)
 
-### Zoopla Premium Listing Activations API
+Postman and Open Collection request collections.
 
-OpenAPI 3.0.0 contract for activating and inspecting Zoopla Premium Listing products against a property listing, exposed at `/products/premium-listings` and `/products/premium-listings/{uuid}`. OAuth2 client-credentials with the `api/api_access` scope.
+- [Alto API](https://apis.io/collections/alto-vebra/open-alto-api/)
+- [Leads API](https://apis.io/collections/alto-vebra/open-zoopla-leads-api/)
+- [Premium Listing activations](https://apis.io/collections/alto-vebra/open-zoopla-premium-listing-activations/)
+- [Weekly Featured Property (WFP) Activations](https://apis.io/collections/alto-vebra/open-zoopla-weekly-featured-property/)
 
-- **Human URL:** [https://developers.zoopla.co.uk/premium-listings/reference/api](https://developers.zoopla.co.uk/premium-listings/reference/api)
-- **Base URL:** `https://services.zoopla.co.uk`
+#### Overlays (4)
 
-#### Tags
+OpenAPI overlays, including conversational phrasing for each operation.
 
-- Real Estate
-- Property Listings
-- Advertising
-- United Kingdom
+- [Alto Vebra Alto Api Overlay](https://apis.io/overlays/alto-vebra/alto-vebra-alto-api-overlay/)
+- [Alto Vebra Zoopla Leads Api Overlay](https://apis.io/overlays/alto-vebra/alto-vebra-zoopla-leads-api-overlay/)
+- [Alto Vebra Zoopla Premium Listing Activations Overlay](https://apis.io/overlays/alto-vebra/alto-vebra-zoopla-premium-listing-activations-overlay/)
+- [Alto Vebra Zoopla Weekly Featured Property Overlay](https://apis.io/overlays/alto-vebra/alto-vebra-zoopla-weekly-featured-property-overlay/)
 
-#### Properties
+#### Security (3)
 
-- [OpenAPI](openapi/zoopla-premium-listing-activations-openapi.json) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Documentation](https://developers.zoopla.co.uk/docs/premium-listings)
-- [API Reference](https://developers.zoopla.co.uk/premium-listings/reference/api)
-- [Errors](https://developers.zoopla.co.uk/docs/premium-listings-error-codes-register)
-- [Authentication](https://developers.zoopla.co.uk/docs/authentication)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Zoopla Weekly Featured Property (WFP) Activations API
+- [Alto Vebra Authentication](https://apis.io/security/alto-vebra/alto-vebra-authentication/)
+- [Alto Vebra Domain Security](https://apis.io/security/alto-vebra/alto-vebra-domain-security/)
+- [Alto Vebra Vulnerability Disclosure](https://apis.io/security/alto-vebra/alto-vebra-vulnerability-disclosure/)
 
-OpenAPI 3.0.0 contract for activating Zoopla Weekly Featured Property placements against a listing, exposed at `/products/weekly-featured-properties` and `/products/weekly-featured-properties/{uuid}`. OAuth2 client-credentials with the `api/api_access` scope.
+#### OAuth scopes (1)
 
-- **Human URL:** [https://developers.zoopla.co.uk/wfp/reference/api](https://developers.zoopla.co.uk/wfp/reference/api)
-- **Base URL:** `https://services.zoopla.co.uk`
+The permissions the API asks for.
 
-#### Tags
+- [Alto Vebra Scopes](https://apis.io/scopes/alto-vebra/alto-vebra-scopes/)
 
-- Real Estate
-- Property Listings
-- Advertising
-- United Kingdom
+## Where to find this API
 
-#### Properties
-
-- [OpenAPI](openapi/zoopla-weekly-featured-property-openapi.json) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Documentation](https://developers.zoopla.co.uk/docs/weekly-featured-properties)
-- [API Reference](https://developers.zoopla.co.uk/wfp/reference/api)
-- [Errors](https://developers.zoopla.co.uk/docs/weekly-featured-properties-error-code-register)
-- [Authentication](https://developers.zoopla.co.uk/docs/authentication)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.altosoftware.co.uk/)
 - [Documentation](https://developers.vebraalto.com/)
-- [Portal](https://connect.vebraalto.com/connect)
-- [Blog](https://www.altosoftware.co.uk/blog/)
-- [Blog RSS](https://www.altosoftware.co.uk/feed/)
-- [Integrations](https://www.altosoftware.co.uk/integrations/)
-- [Terms of Service](https://developers.vebraalto.com/api-terms-of-use)
+- [Getting started](https://developers.vebraalto.com/guides/authenticating-your-requests/)
+- [API reference](https://developers.vebraalto.com/api)
+- [Sign up](https://www.altosoftware.co.uk/become-a-partner/)
 - [Support](https://partnerfeedback.vebraalto.com/)
-- [GitHub Organization](https://github.com/AltoSoftware)
-- [GitHub Organization](https://github.com/zoopla-eng)
+- [Blog](https://www.altosoftware.co.uk/blog/)
+- [Security](https://www.zoopla.co.uk/vulnerability-disclosure/)
+- [Terms of service](https://developers.vebraalto.com/api-terms-of-use)
+- [Privacy policy](https://www.altosoftware.co.uk/privacy-notice/)
+- [GitHub](https://github.com/AltoSoftware)
 
-## RESO Posture
+## API Evangelist rating
 
-**Not RESO certified.** No RESO reference of any kind — Web API certification, Data Dictionary certification, certification directory listing, OData `$metadata` document, or Universal Property Identifier (UPI) — was found in Alto, Vebra, or Zoopla developer material. RESO is a North American standard driven by NAR and MLS participation, and the United Kingdom has no MLS for a RESO endpoint to sit in front of. The nearest UK analogue is the proprietary Rightmove BLM / Real Time Data Feed and portal-specific feeds, which are bilateral commercial contracts rather than an industry-body-mandated machine-readable standard. Alto keys properties on internal integer identifiers scoped by an `AgencyRef` header, not on a UPI.
+**Kin Score 49.5** — developing · rubric 0.25.0 · scored 2026-10-23
 
-## Access Gate
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 54.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 36.8 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 34.2 |
 
-**partner-only.** A developer cannot sign up and call these APIs. The documentation and the specs are genuinely open — the full OpenAPI was downloaded anonymously with no key and no login — but credentials require, in order: an integration registered in Alto Connect (a partner login, not a public signup); an existing contract with Vebra Solutions, which the [API Terms of Use](https://developers.vebraalto.com/api-terms-of-use) make binding by describing the API as "a service that allows Vebra Solutions customers to order additional products and services"; and finally a per-agency activation, after which the partner receives the `AgencyRef` by email that scopes every subsequent call. Zoopla's product APIs follow the same pattern for contracted Zoopla agency customers. **Certification-style openness of the contract does not imply reachability of the data.**
+**Agent readiness 41.6** — agent-ready (gated down from agent-native)
 
-## Open Data
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
 
-**None.** Alto publishes no open, unlicensed, publicly callable dataset. Listing, contact, tenancy and transaction data behind the Alto API belongs to individual agencies and is contractually licensed. The UK's genuinely open property layer sits entirely in the public sector — HM Land Registry Price Paid Data and ownership datasets under the Open Government Licence, and Ordnance Survey open products for addressing and mapping — and is a separate matter from this organization. Alto sits squarely on the private, closed side of that divide.
+**Regulatory alignment 40.2** — Horizontal (data, software, accessibility, platform)
 
-## Authentication
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/alto-vebra/](https://apis.io/providers/alto-vebra/).
 
-OAuth 2.0 client credentials producing a Bearer JWT. Base64-encode `clientId:clientSecret`, POST it as an HTTP Basic `Authorization` header to the token endpoint with `grant_type=client_credentials`, then send `Authorization: Bearer <token>` plus an `AgencyRef: <YOUR_AGENCY_REF>` header on every request. 101 distinct scope strings are embedded in the OpenAPI operation descriptions across two naming generations — semantic (`alto/read:contacts`) and mechanical per-route (`alto/route:get-inventory-inventoryid-tenancies`). No `/.well-known/openid-configuration` is served on either the Alto or the Zoopla auth host.
+## How this profile is made
 
-## Webhooks
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
 
-24 documented event types delivered as CloudEvents 1.0 JSON, covering contacts, properties, branches, appointments, tenancies, offers, sales progression, leads and integration lifecycle. Subscriptions are **not** self-serve and **not** API-driven — a partner emails Alto support with the integration name, endpoint URL, event types and preferred callback authentication (`x-signature` shared secret, HTTP Basic, or OAuth 2.0 client credentials), and Alto configures it manually.
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Alto (Vebra / Zoopla): the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
 
-## Notes
+## Open an issue
 
-No official SDKs, Postman collections, CLI tools, or MCP server are published. For a CRM with 6,000+ agencies and 40+ named PropTech integrations, that absence is itself a finding: the entire integration story is hand-rolled REST against a well-formed spec. A sandbox exists (`https://api.alto.zoopladev.co.uk`, plus a sandbox Alto UI at `sandbox.altotest.co.uk`) but is granted to onboarded partners only.
-
-See [review.yml](review.yml) for the full probe log, RESO posture, access gate, auth model and harvest provenance.
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/alto-vebra/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
